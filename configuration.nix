@@ -40,7 +40,10 @@
     };
     zsh = {
       enable = true;
-    }
+    };
+    starship = {
+      enable = true;
+    };
   };
 
   security.sudo = {
