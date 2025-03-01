@@ -25,6 +25,7 @@
   users.users.s-show = {
     isNormalUser = true;
     extraGroups = [ "wheel" ];
+    shell = pkgs.zsh;
   };
 
   nixpkgs.config.allowUnfree = true;
@@ -37,6 +38,9 @@
       enable = true;
       defaultEditor = true;
     };
+    zsh = {
+      enable = true;
+    }
   };
 
   security.sudo = {
