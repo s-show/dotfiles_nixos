@@ -22,6 +22,7 @@
       ABBR_SET_LINE_CURSOR=1
       compinit
       zstyle ':completion:*:default' menu select=1
+      eval "$(direnv hook zsh)"
     '';
     # shellAliases = {
     #   cat = "bat";

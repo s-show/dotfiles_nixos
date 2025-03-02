@@ -38,6 +38,8 @@
     clang-tools
     zsh-abbr
     nb
+    deno
+    nix-direnv
     nerd-fonts.jetbrains-mono
     # # It is sometimes useful to fine-tune packages, for example, by applying
     # # overrides. You can do that directly here, just don't forget the
@@ -101,6 +103,7 @@
     ./fzf.nix
     ./git.nix
     ./starship.nix
+    ./direnv.nix
   ];
 }
 
