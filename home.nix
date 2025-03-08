@@ -97,6 +97,11 @@
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
+  
+  home.file = {
+    # ".config".source = config.lib.file.mkOutOfStoreSymlink "${builtins.toString config.home.homeDirectory}/.dotfiles/starship.toml";
+    ".config/superfile".source = config.lib.file.mkOutOfStoreSymlink "${builtins.toString config.home.homeDirectory}/.dotfiles/superfile";
+  };
 
   imports = [
     ./zsh.nix
