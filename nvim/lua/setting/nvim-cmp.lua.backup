@@ -1,0 +1,132 @@
+local cmp = require("cmp")
+cmp.setup({
+  snippet = {
+    expand = function(args)
+      require('luasnip').lsp_expand(args.body)
+    end,
+  },
+  window = {
+    completion = cmp.config.window.bordered({
+      border = 'rounded'
+    }),
+    documentation = cmp.config.window.bordered({
+      border = 'rounded'
+    }),
+  },
+  sources = {
+    -- { name = "nvim_lsp" },
+    -- { name = "buffer" },
+    { name = "path" },
+  },
+  -- mapping = cmp.mapping.preset.insert({
+  mapping = {
+    ["<C-p>"] = cmp.mapping.select_prev_item(),
+    ["<Up>"] = cmp.mapping.select_prev_item(),
+    ["<C-n>"] = cmp.mapping.select_next_item(),
+    ["<Down>"] = cmp.mapping.select_next_item(),
+    -- ['<C-l>'] = cmp.mapping.complete(),
+    ['<C-e>'] = cmp.mapping.abort(),
+    ["<CR>"] = cmp.mapping.confirm { select = true },
+    -- }),
+  },
+  -- nvim-cmp で1つ目の候補に自動でフォーカスを当てるための設定
+  completion = {
+    completeopt = "menu,menuone,noinsert", -- "noselect"を除外した残り
+  },
+  experimental = {
+    ghost_text = false,
+  },
+  -- Disabling completion in certain contexts, such as comments
+  -- https://github.com/hrsh7th/nvim-cmp/wiki/Advanced-techniques#disabling-completion-in-certain-contexts-such-as-comments
+  enabled = function()
+    -- disable completion in comments
+    local context = require 'cmp.config.context'
+    -- keep command mode completion enabled when cursor is in a comment
+    if vim.api.nvim_get_mode().mode == 'c' then
+      return true
+    else
+      return not context.in_treesitter_capture("comment")
+          and not context.in_syntax_group("Comment")
+    end
+  end,
+  -- formatting = {
+  --   format = function(entry, vim_item)
+  --     -- Kind icons
+  --     vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind) -- This concatenates the icons with the name of the item kind
+  --     -- Source
+  --     vim_item.menu = ({
+  --       nvim_lsp = "[LSP]",
+  --       buffer = "[Buffer]",
+  --       luasnip = "[LuaSnip]",
+  --       nvim_lua = "[Lua]",
+  --       latex_symbols = "[LaTeX]",
+  --     })[entry.source.name]
+  --     return vim_item
+  --   end
+  -- },
+})
+
+
+-- cmp.setup.cmdline('/', {
+--   -- cmp.mapping.preset.cmdline の引数にキーマッピングの
+--   -- テーブルを渡すと、デフォルトのキーマップに任意のキーを
+--   -- 追加できる。
+--   mapping = cmp.mapping.preset.cmdline({
+--     ['<Down>'] = {
+--       c = function(fallback)
+--         local cmp = require('cmp')
+--         if cmp.visible() then
+--           cmp.select_next_item()
+--         else
+--           fallback()
+--         end
+--       end,
+--     },
+--     ['<Up>'] = {
+--       c = function(fallback)
+--         local cmp = require('cmp')
+--         if cmp.visible() then
+--           cmp.select_prev_item()
+--         else
+--           fallback()
+--         end
+--       end,
+--     },
+--   }),
+--   sources = {
+--     { name = 'buffer' }
+--   }
+-- })
+-- cmp.setup.cmdline(":", {
+--   mapping = cmp.mapping.preset.cmdline({
+--     ['<Down>'] = {
+--       c = function(fallback)
+--         local cmp = require('cmp')
+--         if cmp.visible() then
+--           cmp.select_next_item()
+--         else
+--           fallback()
+--         end
+--       end,
+--     },
+--     ['<Up>'] = {
+--       c = function(fallback)
+--         local cmp = require('cmp')
+--         if cmp.visible() then
+--           cmp.select_prev_item()
+--         else
+--           fallback()
+--         end
+--       end,
+--     },
+--   }),
+--   -- mapping = cmp.mapping.preset.cmdline(),
+--   sources = {
+--     { name = "cmdline_history" },
+--     { name = "path" },
+--     { name = "cmdline" },
+--   },
+--   completion = {
+--     completeopt = "menu,menuone,noinsert,noselect",
+--   }
+-- })

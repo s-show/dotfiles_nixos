@@ -1,0 +1,37 @@
+-- vim.api.nvim_exec(
+-- [[
+--   function! CreateOutlineBuffer()
+--     let QuickfixWindowExists = QuickfixWindowExists()
+--     if QuickfixWindowExists == "true"
+--       let windowLayout = winsaveview()
+--       call DoVimgrep(&filetype)
+--       copen
+--       execute winrestview(windowLayout)
+--     else
+--       call DoVimgrep(&filetype)
+--       copen
+--       wincmd L
+--     endif
+--   endfunction
+--
+--   function! QuickfixWindowExists() abort
+--     let bufferNoList = tabpagebuflist()
+--     for bufferNo in bufferNoList
+--       if getwininfo(bufwinid(bufferNo))['variables']['quickfix'] == 1
+--         return "true"
+--       endif
+--     endfor
+--     return "false"
+--   endfunction
+--
+--   function! DoVimgrep(filetype) abort
+--     if (a:filetype=='review')
+--       vimgrep /^=\+ / %
+--     elseif (a:filetype=='markdown')
+--       vimgrep /^#\+ / %
+--     endif
+--   endfunction
+-- ]],
+-- true)
+
+-- vim.keymap.set('n', ';o', '<Cmd>call CreateOutlineBuffer()<CR><CR>', {silent=true})
