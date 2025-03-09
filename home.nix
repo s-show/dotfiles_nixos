@@ -99,7 +99,7 @@
   programs.home-manager.enable = true;
   
   home.file = {
-    # ".config".source = config.lib.file.mkOutOfStoreSymlink "${builtins.toString config.home.homeDirectory}/.dotfiles/starship.toml";
+    ".config/starship.toml".source = config.lib.file.mkOutOfStoreSymlink "${builtins.toString config.home.homeDirectory}/.dotfiles/starship.toml";
     ".config/superfile".source = config.lib.file.mkOutOfStoreSymlink "${builtins.toString config.home.homeDirectory}/.dotfiles/superfile";
   };
 
@@ -107,7 +107,7 @@
     ./zsh.nix
     ./fzf.nix
     ./git.nix
-    ./starship.nix
+    # ./starship.nix
     ./direnv.nix
   ];
 }
