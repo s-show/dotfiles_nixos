@@ -40,6 +40,8 @@
     nb
     deno
     nix-direnv
+    nil
+    nixfmt-rfc-style
     nerd-fonts.jetbrains-mono
     # # It is sometimes useful to fine-tune packages, for example, by applying
     # # overrides. You can do that directly here, just don't forget the
@@ -55,22 +57,7 @@
     # '')
   ];
 
-  # Home Manager is pretty good at managing dotfiles. The primary way to manage
-  # plain files is through 'home.file'.
-  home.file = {
-    # # Building this configuration will create a copy of 'dotfiles/screenrc' in
-    # # the Nix store. Activating the configuration will then make '~/.screenrc' a
-    # # symlink to the Nix store copy.
-    # ".screenrc".source = dotfiles/screenrc;
-
-    # # You can also set the file content immediately.
-    # ".gradle/gradle.properties".text = ''
-    #   org.gradle.console=verbose
-    #   org.gradle.daemon.idletimeout=3600000
-    # '';
-  };
-
-  # Home Manager can also manage your environment variables through
+# Home Manager can also manage your environment variables through
   # 'home.sessionVariables'. These will be explicitly sourced when using a
   # shell provided by Home Manager. If you don't want to manage your shell
   # through Home Manager then you have to manually source 'hm-session-vars.sh'
@@ -92,12 +79,14 @@
 
   # setting Neovim
   programs.neovim.plugins = [
-    (pkgs.vimPlugins.nvim-treesitter.withPlugins (p: [ p.c p.javascript p.html p.typescript p.lua p.python p.css p.markdown ]))
+    pkgs.vimPlugins.nvim-treesitter.withAllGrammars
   ];
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
   
+  # Home Manager is pretty good at managing dotfiles. The primary way to manage
+  # plain files is through 'home.file'.
   home.file = {
     ".config/starship.toml".source = config.lib.file.mkOutOfStoreSymlink "${builtins.toString config.home.homeDirectory}/.dotfiles/starship.toml";
     ".config/superfile".source = config.lib.file.mkOutOfStoreSymlink "${builtins.toString config.home.homeDirectory}/.dotfiles/superfile";

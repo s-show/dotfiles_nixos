@@ -98,6 +98,17 @@ require'lspconfig'.ts_ls.setup {
 
 require'lspconfig'.eslint.setup({})
 require'lspconfig'.emmet_language_server.setup{}
+-- Nix 言語の LSP 設定
+-- LSP は `nil_ls`, Formatter は `nixfmt`.
+require'lspconfig'.nil_ls.setup({
+  settings = {
+    ['nil'] = {
+      formatting = {
+        command = { "nixfmt" }
+      }
+    }
+  }
+})
 
 -- 2. key mapping
 -- `require("mason-lspconfig").setup_handlers{}` の内側でキーマッピングを設定すると
