@@ -7,8 +7,14 @@
 
   outputs = inputs: {
     nixosConfigurations = {
-      myNixOS = inputs.nixpkgs.lib.nixosSystem {
+      myNixOS_x86_64-linux = inputs.nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
+        modules = [
+          ./configuration.nix
+        ];
+      };
+      myNixOS_aarch64-linux = inputs.nixpkgs.lib.nixosSystem {
+        system = "aarch64-linux";
         modules = [
           ./configuration.nix
         ];
