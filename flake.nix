@@ -21,9 +21,21 @@
       };
     };
     homeConfigurations = {
-      myHome = inputs.home-manager.lib.homeManagerConfiguration {
+      myHome_x86_64-linux = inputs.home-manager.lib.homeManagerConfiguration {
         pkgs = import inputs.nixpkgs {
           system = "x86_64-linux";
+          config.allowUnfree = true; # プロプライエタリなパッケージを許可
+        };
+        extraSpecialArgs = {
+          inherit inputs;
+        };
+        modules = [
+          ./home.nix
+        ];
+      };
+      myHome_aarch64-linux = inputs.home-manager.lib.homeManagerConfiguration {
+        pkgs = import inputs.nixpkgs {
+          system = "aarch64-linux";
           config.allowUnfree = true; # プロプライエタリなパッケージを許可
         };
         extraSpecialArgs = {
