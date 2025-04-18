@@ -7,13 +7,13 @@
 
   outputs = inputs: {
     nixosConfigurations = {
-      myNixOS_x86_64-linux = inputs.nixpkgs.lib.nixosSystem {
+      desktop = inputs.nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
           ./configuration.nix
         ];
       };
-      myNixOS_aarch64-linux = inputs.nixpkgs.lib.nixosSystem {
+      zenbook = inputs.nixpkgs.lib.nixosSystem {
         system = "aarch64-linux";
         modules = [
           ./configuration.nix
@@ -21,7 +21,7 @@
       };
     };
     homeConfigurations = {
-      myHome_x86_64-linux = inputs.home-manager.lib.homeManagerConfiguration {
+      "s-show@desktop" = inputs.home-manager.lib.homeManagerConfiguration {
         pkgs = import inputs.nixpkgs {
           system = "x86_64-linux";
           config.allowUnfree = true; # プロプライエタリなパッケージを許可
@@ -33,7 +33,7 @@
           ./home.nix
         ];
       };
-      myHome_aarch64-linux = inputs.home-manager.lib.homeManagerConfiguration {
+      "s-show@zenbook" = inputs.home-manager.lib.homeManagerConfiguration {
         pkgs = import inputs.nixpkgs {
           system = "aarch64-linux";
           config.allowUnfree = true; # プロプライエタリなパッケージを許可
