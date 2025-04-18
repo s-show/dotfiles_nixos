@@ -17,6 +17,11 @@
       gitc = "git clone '%'";
       mkdir = "mkdir -p %";
     };
+    initExtraFirst = ''
+      ABBR_DEFAULT_BINDINGS=0
+      bindkey "^E" abbr-expand-and-insert
+      bindkey "Enter" abbr-expand-and-accept
+    '';
     initExtra = ''
       ABBR_SET_EXPANSION_CURSOR=1
       ABBR_SET_LINE_CURSOR=1
