@@ -6,8 +6,17 @@
 # https://github.com/nix-community/NixOS-WSL
 
 { config, lib, pkgs, ... }:
+  let
+    hostname = if pkgs.system == "x86_64-linux" then
+      "desktop"
+    else if pkgs.system == "aarch64-linux" then
+      "zenbook"
+    else
+      "generic";
+  in
+  {
+    networking.hostName = hostname;
 
-{
   imports = [
     # include NixOS-WSL modules
     <nixos-wsl/modules>
