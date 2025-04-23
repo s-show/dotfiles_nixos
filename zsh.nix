@@ -16,12 +16,13 @@
       gitm = "git commit -m '%'";
       gitc = "git clone '%'";
       mkdir = "mkdir -p %";
+      apply = "git add . && home-manager switch --flake .";
     };
-    initExtraFirst = ''
-      ABBR_DEFAULT_BINDINGS=0
-      bindkey "^E" abbr-expand-and-insert
-      bindkey "Enter" abbr-expand-and-accept
-    '';
+    # initExtraFirst = ''
+      # ABBR_DEFAULT_BINDINGS=0
+      # bindkey "^ " abbr-expand-and-insert
+      # bindkey "Enter" abbr-expand-and-accept
+    # '';
     initExtra = ''
       ABBR_SET_EXPANSION_CURSOR=1
       ABBR_SET_LINE_CURSOR=1
@@ -29,6 +30,7 @@
       zstyle ':completion:*:default' menu select=1
       eval "$(direnv hook zsh)"
     '';
+
     # shellAliases = {
     #   cat = "bat";
     #   grep = "rg '%' %";
@@ -37,7 +39,5 @@
     #   ll = "eza --icons always --long --all --git ";
     #   tree = "eza --icons always --classify always --tree";
     # };
-
   };
 }
-

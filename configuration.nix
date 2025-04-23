@@ -45,7 +45,7 @@
     };
     neovim = {
       enable = true;
-      defaultEditor = true;
+      # defaultEditor = true;
     };
     zsh = {
       enable = true;

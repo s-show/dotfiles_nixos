@@ -36,14 +36,16 @@
     vim-language-server
     vscode-langservers-extracted
     clang-tools
+    nil
+    nixfmt-rfc-style
     zsh-abbr
     nb
     deno
     nix-direnv
-    nil
-    nixfmt-rfc-style
     libsixel
     timg
+    go
+    chafa
     nerd-fonts.jetbrains-mono
     # # It is sometimes useful to fine-tune packages, for example, by applying
     # # overrides. You can do that directly here, just don't forget the
@@ -75,9 +77,9 @@
   #
   #  /etc/profiles/per-user/s-show/etc/profile.d/hm-session-vars.sh
   #
-  home.sessionVariables = {
-    EDITOR = "nvim";
-  };
+  # home.sessionVariables = {
+  #   EDITOR = "nvim";
+  # };
 
   # setting Neovim
   programs.neovim.plugins = [

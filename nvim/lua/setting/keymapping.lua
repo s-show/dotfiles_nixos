@@ -2,8 +2,8 @@
 vim.g.mapleader = ","
 
 -- カーソル操作系
-vim.api.nvim_set_keymap('n', 'j', 'gj', { noremap = true })
-vim.api.nvim_set_keymap('n', 'k', 'gk', { noremap = true })
+-- vim.api.nvim_set_keymap('n', 'j', 'gj', { noremap = true })
+-- vim.api.nvim_set_keymap('n', 'k', 'gk', { noremap = true })
 vim.api.nvim_set_keymap('n', '<Up>', 'gk', { noremap = true })
 vim.api.nvim_set_keymap('n', '<Down>', 'gj', { noremap = true })
 -- nvim-cmp が上下キーを使うので「Ctrl + 上下」で移動する
@@ -17,9 +17,10 @@ vim.opt.whichwrap:append {
   h = true,
   l = true,
 }
+vim.cmd('source ~/.config/nvim/lua/setting/keymapping.vim')
 
 -- ファイル操作系
--- ;w で保存
+-- ,ww で保存
 vim.api.nvim_set_keymap('n', '<leader>ww', "<Cmd>update<CR>", { noremap = true })
 
 -- ウィンドウ操作系
@@ -60,21 +61,21 @@ vim.api.nvim_set_keymap('n', '<Plug>(Esc)<Esc>', 'i', { noremap = true })
 -- vim.api.nvim_set_keymap('n', ';;', ':', { noremap = true })
 
 -- 大文字の Y で行末までヤンク
-vim.api.nvim_set_keymap('n', 'Y', 'y$', {silent = true, noremap = true})
+vim.api.nvim_set_keymap('n', 'Y', 'y$', { silent = true, noremap = true })
 
 -- i<space>でWORD選択
-vim.api.nvim_set_keymap('x', 'i<leader>', 'iW', {silent = true, noremap = true})
-vim.api.nvim_set_keymap('o', 'i<leader>', 'iW', {silent = true, noremap = true})
+vim.api.nvim_set_keymap('x', 'i<leader>', 'iW', { silent = true, noremap = true })
+vim.api.nvim_set_keymap('o', 'i<leader>', 'iW', { silent = true, noremap = true })
 
 -- 大文字の U でリドゥ
-vim.api.nvim_set_keymap('n', 'U', '<c-r>', {silent = true, noremap = true})
+vim.api.nvim_set_keymap('n', 'U', '<c-r>', { silent = true, noremap = true })
 
 -- Visual コピー時にカーソル位置を保存
-vim.api.nvim_set_keymap('x', 'y', 'mzy`z', {silent = true, noremap = true})
+vim.api.nvim_set_keymap('x', 'y', 'mzy`z', { silent = true, noremap = true })
 
 -- 大文字の X で行末まで削除
-vim.api.nvim_set_keymap('n', 'X', '"_D$', {silent = true, noremap = true})
+vim.api.nvim_set_keymap('n', 'X', '"_D$', { silent = true, noremap = true })
 
 -- Visual <, >で連続してインデントを操作
-vim.api.nvim_set_keymap('x', '<', '<gv', {silent = true, noremap = true})
-vim.api.nvim_set_keymap('x', '>', '>gv', {silent = true, noremap = true})
+vim.api.nvim_set_keymap('x', '<', '<gv', { silent = true, noremap = true })
+vim.api.nvim_set_keymap('x', '>', '>gv', { silent = true, noremap = true })
