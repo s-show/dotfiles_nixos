@@ -37,13 +37,27 @@
     shell = pkgs.zsh;
   };
 
-  nixpkgs.config.allowUnfree = true;
+  nixpkgs.config = {
+    allowUnfree = true;
+    packageOverrides = pkgs: let
+      pkgs' = import <nixpkgs-unstable> {
+        inherit (pkgs) system;
+        overrays = [
+          (import (builtins.fetchTarball {
+            url = "https://github.com/nix-community/neovim-nightly-overlay/archive/master.tar.gz";
+          }))
+        ];
+      };
+    in {
+      inherit (pkgs') neovim;
+    };
+  };
 
   programs = {
     git = {
       enable = true;
     };
-    neovim = {
+    vim = {
       enable = true;
       # defaultEditor = true;
     };
@@ -60,7 +74,7 @@
   };
 
   environment.systemPackages = with pkgs;[
-    neovim
+    vim
     git
   ];
 

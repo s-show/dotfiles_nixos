@@ -1,18 +1,23 @@
-{ config, pkgs, ... }:
-
+{ config, pkgs, inputs, ... }:
 {
-  # Home Manager needs a bit of information about you and the paths it should
-  # manage.
+  # Home Manager needs a bit of information about you and the paths it should manage.
   home = rec {
     username = "s-show";
     homeDirectory = "/home/${username}";
     stateVersion = "25.05";
   };
 
+  # nixpkgs = {
+  #   overlays = [
+  #     inputs.neovim-nightly-overlay.overlays.default
+  #   ];
+  # };
+  #
   home.packages = with pkgs; [
     # # Adds the 'hello' command to your environment. It prints a friendly
     # # "Hello, world!" when run.
     # pkgs.hello
+    neovim
     wget
     gh
     fd
@@ -61,7 +66,7 @@
     # '')
   ];
 
-# Home Manager can also manage your environment variables through
+  # Home Manager can also manage your environment variables through
   # 'home.sessionVariables'. These will be explicitly sourced when using a
   # shell provided by Home Manager. If you don't want to manage your shell
   # through Home Manager then you have to manually source 'hm-session-vars.sh'
@@ -88,13 +93,16 @@
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
-  
+
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.
   home.file = {
-    ".config/starship.toml".source = config.lib.file.mkOutOfStoreSymlink "${builtins.toString config.home.homeDirectory}/.dotfiles/starship.toml";
-    ".config/superfile".source = config.lib.file.mkOutOfStoreSymlink "${builtins.toString config.home.homeDirectory}/.dotfiles/superfile";
-    ".config/nvim".source = config.lib.file.mkOutOfStoreSymlink "${builtins.toString config.home.homeDirectory}/.dotfiles/nvim";
+    ".config/starship.toml".source =
+      config.lib.file.mkOutOfStoreSymlink "${builtins.toString config.home.homeDirectory}/.dotfiles/starship.toml";
+    ".config/superfile".source =
+      config.lib.file.mkOutOfStoreSymlink "${builtins.toString config.home.homeDirectory}/.dotfiles/superfile";
+    ".config/nvim".source =
+      config.lib.file.mkOutOfStoreSymlink "${builtins.toString config.home.homeDirectory}/.dotfiles/nvim";
   };
 
   imports = [
@@ -105,4 +113,3 @@
     ./direnv.nix
   ];
 }
-
