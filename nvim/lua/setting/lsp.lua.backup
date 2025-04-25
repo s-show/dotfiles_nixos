@@ -1,4 +1,5 @@
 local capabilities = require("ddc_source_lsp").make_client_capabilities()
+-- local capabilities = require("cmp_nvim_lsp").default_capabilities()
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 
 -- You will likely want to reduce updatetime which affects CursorHold

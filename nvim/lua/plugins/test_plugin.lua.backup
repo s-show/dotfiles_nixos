@@ -1,4 +1,0 @@
-return {
-  dir = '~/my_neovim_plugins/test_plugin',
-  -- opts = {},
-}

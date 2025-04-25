@@ -30,18 +30,18 @@ return {
             end,
             section = 'terminal',
             cmd =
-            'chafa ~/.dotfiles/nvim/dashboard_logo_528x528.png --size 30 -c full --symbols vhalf; sleep .1',
-            height = 30,
+            'chafa /home/s-show/.dotfiles/nvim/dashboard_logo_500x500.png --size 48 -c full --symbols vhalf; sleep .1',
+            height = 48,
             -- width = 36,
             padding = 1,
           },
-          {
-            section = 'startup',
-            padding = 1,
-            enabled = function()
-              return vim.o.columns > 130
-            end,
-          },
+          -- {
+          --   section = 'startup',
+          --   padding = 1,
+          --   enabled = function()
+          --     return vim.o.columns > 130
+          --   end,
+          -- },
         },
         {
           pane = 2,
