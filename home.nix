@@ -17,7 +17,7 @@
     # # Adds the 'hello' command to your environment. It prints a friendly
     # # "Hello, world!" when run.
     # pkgs.hello
-    neovim
+    # neovim
     wget
     gh
     fd
@@ -103,6 +103,10 @@
       config.lib.file.mkOutOfStoreSymlink "${builtins.toString config.home.homeDirectory}/.dotfiles/superfile";
     ".config/nvim".source =
       config.lib.file.mkOutOfStoreSymlink "${builtins.toString config.home.homeDirectory}/.dotfiles/nvim";
+  };
+  home.file.".local/bin/home-update.sh" = {
+    source = config.lib.file.mkOutOfStoreSymlink "${builtins.toString config.home.homeDirectory}/.dotfiles/home-update.sh";
+    # recursive = true;
   };
 
   imports = [

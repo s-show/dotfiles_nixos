@@ -6,16 +6,21 @@
 # https://github.com/nix-community/NixOS-WSL
 
 { config, lib, pkgs, ... }:
-  let
-    hostname = if pkgs.system == "x86_64-linux" then
+let
+  hostname =
+    if pkgs.system == "x86_64-linux" then
       "desktop"
     else if pkgs.system == "aarch64-linux" then
       "zenbook"
     else
       "generic";
-  in
-  {
-    networking.hostName = hostname;
+  unstable-tarball = builtins.fetchTarball "https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz";
+  unstable = import unstable-tarball {
+    config = config.nixpkgs.config;
+  };
+in
+{
+  networking.hostName = hostname;
 
   imports = [
     # include NixOS-WSL modules
@@ -27,7 +32,10 @@
 
   nix = {
     settings = {
-      experimental-features = ["nix-command" "flakes"];
+      experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
     };
   };
 
@@ -39,18 +47,18 @@
 
   nixpkgs.config = {
     allowUnfree = true;
-    packageOverrides = pkgs: let
-      pkgs' = import <nixpkgs-unstable> {
-        inherit (pkgs) system;
-        overrays = [
-          (import (builtins.fetchTarball {
-            url = "https://github.com/nix-community/neovim-nightly-overlay/archive/master.tar.gz";
-          }))
-        ];
-      };
-    in {
-      inherit (pkgs') neovim;
-    };
+      # packageOverrides = pkgs: let
+      #   pkgs' = import <nixpkgs-unstable> {
+      #     inherit (pkgs) system;
+      #     overrays = [
+      #       (import (builtins.fetchTarball {
+      #         url = "https://github.com/nix-community/neovim-nightly-overlay/archive/master.tar.gz";
+      #       }))
+      #     ];
+      #   };
+      # in {
+      #   inherit (pkgs') neovim;
+      # };
   };
 
   programs = {
@@ -67,16 +75,24 @@
     starship = {
       enable = true;
     };
+    ssh = {
+      startAgent = true;
+    };
+    neovim = {
+      enable = true;
+    };
   };
 
   security.sudo = {
     enable = true;
   };
 
-  environment.systemPackages = with pkgs;[
+  environment.systemPackages = with pkgs; [
     vim
     git
+    unstable.neovim
   ];
+  environment.localBinInPath = true;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
@@ -86,6 +102,6 @@
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "24.11"; # Did you read the comment?
 
-  # Timezon
+  # Timezone
   time.timeZone = "Asia/Tokyo";
 }
