@@ -67,9 +67,9 @@ in
     ssh = {
       startAgent = true;
     };
-    neovim = {
-     enable = true;
-    };
+    # neovim = {
+    #  enable = true;
+    # };
   };
 
   security.sudo = {
@@ -80,7 +80,7 @@ in
     vim
     git
     #neovim
-    unstable.neovim
+    # unstable.neovim
   ];
   environment.localBinInPath = true;
 

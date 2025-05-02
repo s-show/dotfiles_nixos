@@ -56,7 +56,7 @@ local lsp_names = {
   'ts_ls',
   'eslint',
   'emmet_language_server',
-  'nil_ls',
+  'nixd',
 }
 
 vim.lsp.enable(lsp_names)

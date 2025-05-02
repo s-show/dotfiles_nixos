@@ -53,6 +53,15 @@
     bun
     nodejs_22
     nerd-fonts.jetbrains-mono
+    (wrapNeovimUnstable neovim-unwrapped {
+      wrapRc = false;
+      wrapperArgs = [
+        "--suffix"
+        "LD_LIBRARY_PATH"
+        ":"
+        "${stdenv.cc.cc.lib}/lib"
+      ];
+    })
     # # It is sometimes useful to fine-tune packages, for example, by applying
     # # overrides. You can do that directly here, just don't forget the
     # # parentheses. Maybe you want to install Nerd Fonts with a limited number of
@@ -90,6 +99,12 @@
   # setting Neovim
   programs.neovim.plugins = [
     pkgs.vimPlugins.nvim-treesitter.withAllGrammars
+  ];
+  programs.neovim.extraWrapperArgs = [
+    "--suffix"
+    "LD_LIBRARY_PATH"
+    ":"
+    "${pkgs.lib.makeLibraryPath [ pkgs.stdenv.cc.cc ]}"
   ];
 
   # Let Home Manager install and manage itself.
