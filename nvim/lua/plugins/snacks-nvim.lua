@@ -30,7 +30,7 @@ return {
             end,
             section = 'terminal',
             cmd =
-            'chafa /home/s-show/.dotfiles/nvim/dashboard_logo_500x500.png --size 48 -c full --symbols vhalf; sleep .1',
+            'chafa /home/s-show/.dotfiles/nvim/snacks_dashboard_logo.PNG --size 44 -c full --symbols vhalf; sleep .1',
             height = 48,
             -- width = 36,
             padding = 1,

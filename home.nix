@@ -12,12 +12,11 @@
   #     inputs.neovim-nightly-overlay.overlays.default
   #   ];
   # };
-  #
+
   home.packages = with pkgs; [
     # # Adds the 'hello' command to your environment. It prints a friendly
     # # "Hello, world!" when run.
     # pkgs.hello
-    # neovim
     wget
     gh
     fd
@@ -41,7 +40,7 @@
     vim-language-server
     vscode-langservers-extracted
     clang-tools
-    nil
+    nixd
     nixfmt-rfc-style
     zsh-abbr
     nb
@@ -51,6 +50,8 @@
     timg
     go
     chafa
+    bun
+    nodejs_22
     nerd-fonts.jetbrains-mono
     # # It is sometimes useful to fine-tune packages, for example, by applying
     # # overrides. You can do that directly here, just don't forget the
@@ -104,8 +105,8 @@
     ".config/nvim".source =
       config.lib.file.mkOutOfStoreSymlink "${builtins.toString config.home.homeDirectory}/.dotfiles/nvim";
   };
-  home.file.".local/bin/home-update.sh" = {
-    source = config.lib.file.mkOutOfStoreSymlink "${builtins.toString config.home.homeDirectory}/.dotfiles/home-update.sh";
+  home.file.".local/bin/home-update" = {
+    source = config.lib.file.mkOutOfStoreSymlink "${builtins.toString config.home.homeDirectory}/.dotfiles/home-update";
     # recursive = true;
   };
 

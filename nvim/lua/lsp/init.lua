@@ -1,7 +1,15 @@
 vim.lsp.config('*', {
-  capabilities = require('ddc_source_lsp').make_client_capabilities(),
-})
-vim.lsp.util.make_position_params(0, 'utf-8')
+  capabilities = vim.tbl_extend(
+    'force',
+    require('ddc_source_lsp').make_client_capabilities(),
+    {
+      general = {
+        positionEncodings = { 'utf-8' }
+      }
+    }
+  )}
+)
+-- vim.lsp.util.make_position_params(0, 'utf-8')
 
 -- You will likely want to reduce updatetime which affects CursorHold
 -- note: this setting is global and should be set only once
