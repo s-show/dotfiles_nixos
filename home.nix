@@ -50,8 +50,6 @@
     timg
     go
     chafa
-    bun
-    nodejs_22
     nerd-fonts.jetbrains-mono
     (wrapNeovimUnstable neovim-unwrapped {
       wrapRc = false;
