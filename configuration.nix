@@ -16,7 +16,7 @@ let
       "generic";
   unstable-tarball = builtins.fetchTarball "https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz";
   unstable = import unstable-tarball {
-   config = config.nixpkgs.config;
+    config = config.nixpkgs.config;
   };
 in
 {
@@ -48,7 +48,7 @@ in
   };
 
   programs = {
-    nix-ld= {
+    nix-ld = {
       enable = true;
     };
     git = {

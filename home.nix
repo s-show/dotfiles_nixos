@@ -50,6 +50,7 @@
     timg
     go
     chafa
+    jq
     nerd-fonts.jetbrains-mono
     (wrapNeovimUnstable neovim-unwrapped {
       wrapRc = false;
@@ -104,7 +105,6 @@
     ":"
     "${pkgs.lib.makeLibraryPath [ pkgs.stdenv.cc.cc ]}"
   ];
-
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
