@@ -97,6 +97,14 @@ vim.api.nvim_create_autocmd({ "DirChanged" }, {
   end,
 })
 
+-- ヤンクした箇所をハイライトする
+vim.api.nvim_create_autocmd("TextYankPost", {
+  pattern = "*",
+  callback = function()
+    vim.highlight.on_yank({ timeout = 300 })
+  end,
+})
+
 -- コマンドラインでディレクトリ名を引数に渡して起動したときに、
 -- そのディレクトリをカレントディレクトリに設定する
 local group_cdpwd = vim.api.nvim_create_augroup("group_cdpwd", { clear = true })

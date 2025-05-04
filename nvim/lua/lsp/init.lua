@@ -4,7 +4,7 @@ vim.lsp.config('*', {
     require('ddc_source_lsp').make_client_capabilities(),
     {
       general = {
-        positionEncodings = { 'utf-8' }
+        positionEncodings = { 'utf-16' }
       }
     }
   )}

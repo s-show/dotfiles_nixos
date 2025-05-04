@@ -78,8 +78,11 @@ return {
     },
     explorer = { enabled = true },
     indent = { enabled = false },
-    input = { enabled = false },
-    picker = { enabled = true },
+    input = { enabled = true },
+    picker = {
+      enabled = true,
+      ui_select = true,
+    },
     notifier = { enabled = false },
     quickfile = { enabled = false },
     scope = { enabled = false },

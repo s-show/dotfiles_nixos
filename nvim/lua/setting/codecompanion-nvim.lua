@@ -1,0 +1,22 @@
+-- local default_model = 'openai/gpt-4.1-mini'
+-- local available_model = {
+--   'google/gemini-2.0-flash-001',
+--   'google/gemini-2.5-pro-previer-03-25',
+--   'anthropic/claude-3.7-sonnet',
+--   'openai/gpt-4.1-mini',
+--   'qwen/qwen3-235b-a22b'
+-- }
+-- local current_model = default_model
+--
+-- local function select_model()
+--   vim.ui.select(available_model, {
+--     prompt = 'select model:',
+--   }, function (choice)
+--     if choice then
+--       current_model = choice
+--       vim.notify('selected model: ' .. current_model)
+--     end
+--   end )
+-- end
+--
+-- vim.keymap.set('n', '<space>cs', select_model, { desc = 'select ai model.' })
