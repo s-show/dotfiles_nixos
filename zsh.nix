@@ -18,12 +18,11 @@
       mkdir = "mkdir -p %";
       apply = "git add . && home-manager switch --flake .";
     };
-    initExtraFirst = ''
+    initContent = ''
       ABBR_DEFAULT_BINDINGS=0
       bindkey ";" abbr-expand-and-insert
       bindkey "Enter" abbr-expand-and-accept
-    '';
-    initExtra = ''
+
       ABBR_SET_EXPANSION_CURSOR=1
       ABBR_SET_LINE_CURSOR=1
       compinit
@@ -31,14 +30,13 @@
       zstyle ':completion:*:default' menu select=1
       eval "$(direnv hook zsh)"
     '';
-
-    # shellAliases = {
-    #   cat = "bat";
-    #   grep = "rg '%' %";
-    #   ls = "eza --icons always --classify always";
-    #   la = "eza --icons always --classify always --all ";
-    #   ll = "eza --icons always --long --all --git ";
-    #   tree = "eza --icons always --classify always --tree";
-    # };
+    # initExtra = ''
+    #   ABBR_SET_EXPANSION_CURSOR=1
+    #   ABBR_SET_LINE_CURSOR=1
+    #   compinit
+    #   bindkey -e
+    #   zstyle ':completion:*:default' menu select=1
+    #   eval "$(direnv hook zsh)"
+    # '';
   };
 }
