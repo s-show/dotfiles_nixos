@@ -6,46 +6,53 @@
     # neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
   };
 
-  outputs = inputs: {
-    nixosConfigurations = {
-      desktop = inputs.nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        modules = [
-          ./configuration.nix
-        ];
+  outputs =
+    inputs:
+    let
+      # 各マシンのシステムタイプを定義する辞書
+      systems = {
+        desktop = "x86_64-linux";
+        zenbook = "aarch64-linux";
       };
-      zenbook = inputs.nixpkgs.lib.nixosSystem {
-        system = "aarch64-linux";
-        modules = [
-          ./configuration.nix
-        ];
-      };
+
+      # NixOS のシステム構成を作成するヘルパー関数
+      mkNixosSystem =
+        machine: system:
+        inputs.nixpkgs.lib.nixosSystem {
+          system = system;
+          modules = [
+            ./configuration.nix
+          ];
+        };
+
+      # Home Manager のホーム構成を作成するヘルパー関数
+      mkHomeManager =
+        machine: system:
+        inputs.home-manager.lib.homeManagerConfiguration {
+          pkgs = import inputs.nixpkgs {
+            system = system;
+            config = {
+              allowUnfree = true;
+            };
+          };
+          extraSpecialArgs = { inherit inputs; };
+          modules = [
+            ./home.nix
+          ];
+        };
+    in
+    {
+      nixosConfigurations = builtins.listToAttrs (
+        map (machine: {
+          name = machine;
+          value = mkNixosSystem machine (systems.${machine});
+        }) (builtins.attrNames systems)
+      );
+      homeConfigurations = builtins.listToAttrs (
+        map (machine: {
+          name = "s-show@" + machine;
+          value = mkHomeManager machine (systems.${machine});
+        }) (builtins.attrNames systems)
+      );
     };
-    homeConfigurations = {
-      "s-show@desktop" = inputs.home-manager.lib.homeManagerConfiguration {
-        pkgs = import inputs.nixpkgs {
-          system = "x86_64-linux";
-          config.allowUnfree = true; # プロプライエタリなパッケージを許可
-        };
-        extraSpecialArgs = {
-          inherit inputs;
-        };
-        modules = [
-          ./home.nix
-        ];
-      };
-      "s-show@zenbook" = inputs.home-manager.lib.homeManagerConfiguration {
-        pkgs = import inputs.nixpkgs {
-          system = "aarch64-linux";
-          config.allowUnfree = true; # プロプライエタリなパッケージを許可
-        };
-        extraSpecialArgs = {
-          inherit inputs;
-        };
-        modules = [
-          ./home.nix
-        ];
-      };
-    };
-  };
 }

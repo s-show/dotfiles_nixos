@@ -99,12 +99,6 @@
   programs.neovim.plugins = [
     pkgs.vimPlugins.nvim-treesitter.withAllGrammars
   ];
-  programs.neovim.extraWrapperArgs = [
-    "--suffix"
-    "LD_LIBRARY_PATH"
-    ":"
-    "${pkgs.lib.makeLibraryPath [ pkgs.stdenv.cc.cc ]}"
-  ];
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
