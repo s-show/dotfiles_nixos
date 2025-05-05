@@ -1,13 +1,7 @@
 vim.lsp.config('*', {
-  capabilities = vim.tbl_extend(
-    'force',
-    require('ddc_source_lsp').make_client_capabilities(),
-    {
-      general = {
-        positionEncodings = { 'utf-16' }
-      }
-    }
-  )}
+    -- capabilities = require('ddc_source_lsp').make_client_capabilities(),
+    capabilities = require('cmp_nvim_lsp').default_capabilities()
+  }
 )
 -- vim.lsp.util.make_position_params(0, 'utf-8')
 
