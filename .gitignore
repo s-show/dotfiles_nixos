@@ -1,4 +1,4 @@
-./nvim/lazy-lock.json
-./flake.lock
-./secrets.yaml
-./sops/age/keys.txt
+nvim/lazy-lock.json
+flake.lock
+secrets.yaml
+sops/age/keys.txt
