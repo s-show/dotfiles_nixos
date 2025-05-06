@@ -5,83 +5,24 @@ vim.api.nvim_set_keymap('c', '<C-j>', [[<Plug>(skkeleton-enable)]], { noremap = 
 vim.api.nvim_set_keymap('c', '<C-l>', [[<Plug>(skkeleton-disable)]], { noremap = true })
 vim.fn['skkeleton#config']({
   globalDictionaries = {
-    -- vim.fn["expand"]('~/AppData/Local/nvim/skk_dict/SKK-JISYO.L')
-    -- ->C:\Users\shouhei shimizu\AppData\Local\nvim\skk_dict\SKK-JISYO.L
     vim.fn["expand"]('~/.config/nvim/skk_dict/SKK-JISYO.L'),
     vim.fn["expand"]('~/.config/nvim/skk_dict/SKK-JISYO.geo'),
     vim.fn["expand"]('~/.config/nvim/skk_dict/SKK-JISYO.jinmei'),
     vim.fn["expand"]('~/.config/nvim/skk_dict/SKK-JISYO.law'),
   },
-  databasePath = vim.fn["expand"]('~/AppData/Local/nvim/skk_dict'),
   eggLikeNewline = true,
   keepState = true,
   showCandidatesCount = 2,
-  registerConvertResult = true
+  registerConvertResult = true,
 })
--- vim.fn['skkeleton#register_keymap']('input', '/', 'abbrev')
+
+vim.g.denops_server_deno_args = { '--unstable-kv' }
+vim.fn['skkeleton#config']({
+  databasePath = vim.fn["expand"]('~/.config/nvim/skk_dict/')
+})
 
 vim.fn['skkeleton#register_kanatable']('rom', {
   ['jj'] = 'escape',
-  -- ['kz'] = { 'かん', '' },
-  -- ['kx'] = { 'きん', '' },
-  -- ['kc'] = { 'くん', '' },
-  -- ['kv'] = { 'けん', '' },
-  -- ['kb'] = { 'こん', '' },
-  -- ['sz'] = { 'さん', '' },
-  -- ['sx'] = { 'しん', '' },
-  -- ['sc'] = { 'すん', '' },
-  -- ['sv'] = { 'せん', '' },
-  -- ['sb'] = { 'そん', '' },
-  -- ['tz'] = { 'たん', '' },
-  -- ['tx'] = { 'ちん', '' },
-  -- ['tc'] = { 'つん', '' },
-  -- ['tv'] = { 'てん', '' },
-  -- ['tb'] = { 'とん', '' },
-  -- ['nz'] = { 'なん', '' },
-  -- ['nx'] = { 'にん', '' },
-  -- ['nc'] = { 'ぬん', '' },
-  -- ['nv'] = { 'ねん', '' },
-  -- ['nb'] = { 'のん', '' },
-  -- ['hz'] = { 'はん', '' },
-  -- ['hx'] = { 'ひん', '' },
-  -- ['hc'] = { 'ふん', '' },
-  -- ['hv'] = { 'へん', '' },
-  -- ['hb'] = { 'ほん', '' },
-  -- ['mz'] = { 'まん', '' },
-  -- ['mx'] = { 'みん', '' },
-  -- ['mc'] = { 'むん', '' },
-  -- ['mv'] = { 'めん', '' },
-  -- ['mb'] = { 'もん', '' },
-  -- ['yz'] = { 'やん', '' },
-  -- ['yc'] = { 'ゆん', '' },
-  -- ['yb'] = { 'よん', '' },
-  -- ['rz'] = { 'らん', '' },
-  -- ['rx'] = { 'りん', '' },
-  -- ['rc'] = { 'るん', '' },
-  -- ['rv'] = { 'れん', '' },
-  -- ['rb'] = { 'ろん', '' },
-  -- ['wz'] = { 'わん', '' },
-  -- ['wb'] = { 'をん', '' },
-  -- ['gz'] = { 'がん', '' },
-  -- ['gx'] = { 'ぎん', '' },
-  -- ['gc'] = { 'ぐん', '' },
-  -- ['gv'] = { 'げん', '' },
-  -- ['gb'] = { 'ごん', '' },
-  -- ['zz'] = { 'ざん', '' },
-  -- ['zx'] = { 'じん', '' },
-  -- ['zc'] = { 'ずん', '' },
-  -- ['zv'] = { 'ぜん', '' },
-  -- ['zb'] = { 'ぞん', '' },
-  -- ['dz'] = { 'だん', '' },
-  -- ['dx'] = { 'ぢん', '' },
-  -- ['dc'] = { 'づん', '' },
-  -- ['dv'] = { 'でん', '' },
-  -- ['db'] = { 'どん', '' },
-  -- ['bz'] = { 'ばん', '' },
-  -- ['bx'] = { 'びん', '' },
-  -- ['bc'] = { 'ぶん', '' },
-  -- ['bv'] = { 'べん', '' },
-  -- ['bb'] = { 'ぼん', '' },
   -- 丸数字
   -- ref: https://ja.wikipedia.org/wiki/丸数字
   ['z0'] = { '⓪', '' },
