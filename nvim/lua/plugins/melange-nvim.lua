@@ -1,3 +1,0 @@
-return {
-  { "savq/melange-nvim" }
-}
