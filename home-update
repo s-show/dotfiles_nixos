@@ -2,5 +2,5 @@
 
 cd ~/.dotfiles
 git add .
-home-manager switch --flake .
+home-manager switch --show-trace --flake .
 cd ~/
