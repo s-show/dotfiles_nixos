@@ -12,8 +12,9 @@
 -- vim.cmd.colorscheme 'slate'
 -- vim.cmd([[colorscheme modus_operandi]]) -- modus_operandi, modus_vivendi
 -- vim.cmd.colorscheme "catppuccin-latte"
-vim.cmd.colorscheme "ashikaga"
+-- vim.cmd.colorscheme "ashikaga"
 -- vim.cmd.colorscheme "evergarden"
+vim.cmd.colorscheme "sonokai"
 
 -- vim.cmd('highlight LineNr guifg=#white')
 -- vim.cmd('highlight CursorLineNr guifg=#ffcc00')

@@ -1,0 +1,5 @@
+return {
+  'sainnhe/sonokai',
+  opts = {
+  }
+}
