@@ -52,6 +52,8 @@
     chafa
     jq
     nerd-fonts.jetbrains-mono
+    age
+    sops
     (wrapNeovimUnstable neovim-unwrapped {
       wrapRc = false;
       wrapperArgs = [
@@ -117,11 +119,29 @@
     # recursive = true;
   };
 
+  sops = {
+    age.keyFile = "/home/s-show/.dotfiles/sops/age/keys.txt"; # must have no password!
+    defaultSopsFile = ./secrets.yaml;
+    defaultSymlinkPath = "/run/user/1001/secrets";
+    defaultSecretsMountPoint = "/run/user/1001/secrets.d";
+    secrets.OPENROUTER_API_KEY = {
+      # sopsFile = ./secrets.yml.enc; # optionally define per-secret files
+      path = "${config.sops.defaultSymlinkPath}/OPENROUTER_API_KEY";
+    };
+  };
+
+  programs.zsh = {
+    initExtra = ''
+      export OPENROUTER_API_KEY=$(cat ${config.sops.secrets.OPENROUTER_API_KEY.path})
+    '';
+  };
+
   imports = [
     ./zsh.nix
     ./fzf.nix
     ./git.nix
     # ./starship.nix
     ./direnv.nix
+    inputs.sops-nix.homeManagerModules.sops
   ];
 }

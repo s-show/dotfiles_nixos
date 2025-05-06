@@ -1,5 +1,5 @@
 keys:
-  - &zenbook age1m8x00p9mwxatherz547ey87n6cx2nm3njts6dcpqtldex7rctersk8rcqv
+  - &zenbook age1jz9nxd7vtaj9vx3a6wa0msd5rr7rqwapkmuacgl564zvalscrd7q57ywda
 creation_rules:
   - path_regex: secrets.yaml$
     key_groups:

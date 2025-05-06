@@ -3,6 +3,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     home-manager.url = "github:nix-community/home-manager/";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    sops-nix.url = "github:Mic92/sops-nix";
     # neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
   };
 
@@ -22,6 +23,7 @@
           system = system;
           modules = [
             ./configuration.nix
+            inputs.sops-nix.nixosModules.sops
           ];
         };
 
@@ -54,5 +56,8 @@
           value = mkHomeManager machine (systems.${machine});
         }) (builtins.attrNames systems)
       );
+      home-manager.sharedModules = [
+        inputs.sops-nix.homeManagerModules.sops
+      ];
     };
 }
