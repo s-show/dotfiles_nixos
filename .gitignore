@@ -1,4 +1,0 @@
-nvim/lazy-lock.json
-flake.lock
-secrets.yaml
-sops/age/keys.txt
