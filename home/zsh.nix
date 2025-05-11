@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ pkgs, lib, config, ... }:
+{
   programs.zsh = {
     enable = true;
     autocd = true; # cdなしでファイルパスだけで移動
@@ -18,18 +19,29 @@
       mkdir = "mkdir -p %";
       apply = "git add . && home-manager switch --flake .";
     };
-    initContent = ''
-      ABBR_DEFAULT_BINDINGS=0
-      bindkey ";" abbr-expand-and-insert
-      bindkey "Enter" abbr-expand-and-accept
+    initContent =
+      let
+        zshConfigEarlyInit = lib.mkOrder 500 ''
+          ABBR_DEFAULT_BINDINGS=0
+          bindkey ";" abbr-expand-and-insert
+          bindkey "Enter" abbr-expand-and-accept
+        '';
+        zshConfigLastInit = lib.mkOrder 1500 ''
+          ABBR_SET_EXPANSION_CURSOR=1
+          ABBR_SET_LINE_CURSOR=1
+          compinit
+          bindkey -e
+          zstyle ':completion:*:default' menu select=1
+          eval "$(direnv hook zsh)"
+          export OPENROUTER_API_KEY=$(cat ${config.sops.secrets.OPENROUTER_API_KEY.path})
+          cp "${builtins.toString config.home.homeDirectory}/.dotfiles/home/git-pre-commit" "${builtins.toString config.home.homeDirectory}/.dotfiles/.git/hooks/pre-commit"
+        '';
+      in
+      lib.mkMerge [
+        zshConfigEarlyInit
+        zshConfigLastInit
+      ];
 
-      ABBR_SET_EXPANSION_CURSOR=1
-      ABBR_SET_LINE_CURSOR=1
-      compinit
-      bindkey -e
-      zstyle ':completion:*:default' menu select=1
-      eval "$(direnv hook zsh)"
-    '';
     # initExtra = ''
     #   ABBR_SET_EXPANSION_CURSOR=1
     #   ABBR_SET_LINE_CURSOR=1

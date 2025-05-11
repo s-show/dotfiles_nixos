@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+# 環境固有の設定ファイル一覧
+blocked_files="secrets.yaml keys.txt"
+
+# コミット対象のファイルを取得
+staged_files=$(git diff --cached --name-only)
+
+for file in $staged_files; do
+  for blocked_file in $blocked_files; do
+    if [ "$(basename $file)" = "$blocked_file" ]; then
+      echo "機密保持のため $blocked_file のコミットは禁止！"
+      exit 1
+    fi
+  done
+done

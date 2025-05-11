@@ -108,16 +108,10 @@
   # plain files is through 'home.file'.
   home.file = {
     ".config/starship.toml".source =
-      config.lib.file.mkOutOfStoreSymlink "${builtins.toString config.home.homeDirectory}/.dotfiles/starship.toml";
+      config.lib.file.mkOutOfStoreSymlink "${builtins.toString config.home.homeDirectory}/.dotfiles/home/starship.toml";
     ".config/superfile".source =
-      config.lib.file.mkOutOfStoreSymlink "${builtins.toString config.home.homeDirectory}/.dotfiles/superfile";
+      config.lib.file.mkOutOfStoreSymlink "${builtins.toString config.home.homeDirectory}/.dotfiles/home/superfile";
     ".config/nvim".source =
-      config.lib.file.mkOutOfStoreSymlink "${builtins.toString config.home.homeDirectory}/.dotfiles/nvim";
-  };
-  home.file.".local/bin/home-update" = {
-    source = config.lib.file.mkOutOfStoreSymlink "${builtins.toString config.home.homeDirectory}/.dotfiles/home-update";
-    # recursive = true;
-  };
 
   sops = {
     age.keyFile = "/home/s-show/.dotfiles/sops/age/keys.txt"; # must have no password!
@@ -134,14 +128,17 @@
     initExtra = ''
       export OPENROUTER_API_KEY=$(cat ${config.sops.secrets.OPENROUTER_API_KEY.path})
     '';
+      config.lib.file.mkOutOfStoreSymlink "${builtins.toString config.home.homeDirectory}/.dotfiles/home/nvim";
+    ".local/bin/home-update".source =
+      config.lib.file.mkOutOfStoreSymlink "${builtins.toString config.home.homeDirectory}/.dotfiles/home/home-update";
   };
 
   imports = [
-    ./zsh.nix
-    ./fzf.nix
-    ./git.nix
+    ./home/zsh.nix
+    ./home/fzf.nix
+    ./home/git.nix
     # ./starship.nix
-    ./direnv.nix
+    ./home/direnv.nix
     inputs.sops-nix.homeManagerModules.sops
   ];
 }

@@ -16,7 +16,7 @@ return {
           },
           scheme = {
             model = {
-              default = 'openai/gpt-4o-mini',
+              default = 'anthropic/claude-3.7-sonnet',
             },
           },
         })

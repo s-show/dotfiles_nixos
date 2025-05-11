@@ -49,7 +49,7 @@ local lsp_names = {
   'html',
   'ts_ls',
   'eslint',
-  'emmet_language_server',
+  'emmet_ls',
   'nixd',
 }
 
