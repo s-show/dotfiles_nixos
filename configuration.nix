@@ -14,10 +14,10 @@ let
       "zenbook"
     else
       "generic";
-  unstable-tarball = builtins.fetchTarball "https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz";
-  unstable = import unstable-tarball {
-    config = config.nixpkgs.config;
-  };
+  # unstable-tarball = builtins.fetchTarball "https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz";
+  # unstable = import unstable-tarball {
+  #   config = config.nixpkgs.config;
+  # };
 in
 {
   networking.hostName = hostname;
