@@ -97,6 +97,16 @@
   #   EDITOR = "nvim";
   # };
 
+  sops = {
+    age.keyFile = "/home/s-show/.dotfiles/sops/age/keys.txt"; # must have no password!
+    defaultSopsFile = ./secrets.yaml;
+    defaultSymlinkPath = "/run/user/1001/secrets";
+    defaultSecretsMountPoint = "/run/user/1001/secrets.d";
+    secrets.OPENROUTER_API_KEY = {
+      path = "${config.sops.defaultSymlinkPath}/OPENROUTER_API_KEY";
+    };
+  };
+
   # setting Neovim
   programs.neovim.plugins = [
     pkgs.vimPlugins.nvim-treesitter.withAllGrammars
@@ -112,22 +122,6 @@
     ".config/superfile".source =
       config.lib.file.mkOutOfStoreSymlink "${builtins.toString config.home.homeDirectory}/.dotfiles/home/superfile";
     ".config/nvim".source =
-
-  sops = {
-    age.keyFile = "/home/s-show/.dotfiles/sops/age/keys.txt"; # must have no password!
-    defaultSopsFile = ./secrets.yaml;
-    defaultSymlinkPath = "/run/user/1001/secrets";
-    defaultSecretsMountPoint = "/run/user/1001/secrets.d";
-    secrets.OPENROUTER_API_KEY = {
-      # sopsFile = ./secrets.yml.enc; # optionally define per-secret files
-      path = "${config.sops.defaultSymlinkPath}/OPENROUTER_API_KEY";
-    };
-  };
-
-  programs.zsh = {
-    initExtra = ''
-      export OPENROUTER_API_KEY=$(cat ${config.sops.secrets.OPENROUTER_API_KEY.path})
-    '';
       config.lib.file.mkOutOfStoreSymlink "${builtins.toString config.home.homeDirectory}/.dotfiles/home/nvim";
     ".local/bin/home-update".source =
       config.lib.file.mkOutOfStoreSymlink "${builtins.toString config.home.homeDirectory}/.dotfiles/home/home-update";
