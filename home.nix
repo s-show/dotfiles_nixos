@@ -35,13 +35,14 @@
     cl
     python313
     lua-language-server
-    emmet-language-server
+    emmet-ls
     typescript-language-server
     vim-language-server
     vscode-langservers-extracted
     clang-tools
     nixd
     nixfmt-rfc-style
+    eslint_d
     zsh-abbr
     nb
     deno
