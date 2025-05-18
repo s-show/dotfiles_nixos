@@ -33,13 +33,17 @@ cmp.setup({
     ["<Down>"] = cmp.mapping.select_next_item(),
     ['<C-y>'] = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
     ['<C-e>'] = cmp.mapping.abort(),
-    ["<CR>"] = function(fallback)
-      if cmp.visible() and cmp.get_active_entry() then
-        cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true })
-      else
-        fallback()
-      end
-    end,
+    ["<CR>"] = cmp.mapping({
+      i = function(fallback)
+        if cmp.visible() and cmp.get_active_entry() then
+          cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true })
+        else
+          fallback()
+        end
+      end,
+      s = cmp.mapping.confirm({ select = true }),
+      c = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false })
+    }),
   },
   completion = {
     completeopt = "menu,menuone,noinsert,noselect",

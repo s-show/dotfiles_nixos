@@ -15,6 +15,7 @@ return {
       vim.keymap.set("i", "<S-tab>", "<cmd>AutolistShiftTab<cr>")
       vim.keymap.set("i", "<C-t>", "<c-t><cmd>AutolistRecalculate<cr>") -- an example of using <c-t> to indent
       vim.keymap.set("i", "<S-CR>", "<CR><cmd>AutolistNewBullet<cr>")
+      vim.keymap.set("i", "<CR>", "<CR><cmd>AutolistNewBullet<cr>")
       vim.keymap.set("n", "o", "o<cmd>AutolistNewBullet<cr>")
       vim.keymap.set("n", "O", "O<cmd>AutolistNewBulletBefore<cr>")
       vim.keymap.set("n", "<CR>", "<cmd>AutolistToggleCheckbox<cr><CR>")

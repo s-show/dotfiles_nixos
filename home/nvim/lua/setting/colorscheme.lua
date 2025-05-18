@@ -14,7 +14,7 @@
 -- vim.cmd.colorscheme "catppuccin-latte"
 -- vim.cmd.colorscheme "ashikaga"
 -- vim.cmd.colorscheme "evergarden"
-vim.cmd.colorscheme "sonokai"
+vim.cmd.colorscheme "cyberdream"
 
 -- vim.cmd('highlight LineNr guifg=#white')
 -- vim.cmd('highlight CursorLineNr guifg=#ffcc00')

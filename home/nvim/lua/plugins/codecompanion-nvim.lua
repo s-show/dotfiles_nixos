@@ -86,7 +86,13 @@ return {
       }
     },
   },
-  cmd = { "CodeCompanion", "CodeCompanionActions", "CodeCompanionChat" },
+  cmd = {
+    "CodeCompanion",
+    "CodeCompanionActions",
+    "CodeCompanionChat",
+    "CodeCompanionCmd",
+    "CodeCompanionLoad",
+  },
   keys = {
     { "<Space>cc", "<Cmd>CodeCompanionChat Toggle<CR>", mode = { "n" } },
     { "<Space>cc", "<Cmd>CodeCompanionChat<CR>",        mode = { "v" } },
