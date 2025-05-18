@@ -1,4 +1,4 @@
-{ config, pkgs, inputs, ... }:
+{ config, pkgs, lib, inputs, ... }:
 {
   # Home Manager needs a bit of information about you and the paths it should manage.
   home = rec {
@@ -7,11 +7,11 @@
     stateVersion = "25.05";
   };
 
-  # nixpkgs = {
-  #   overlays = [
-  #     inputs.neovim-nightly-overlay.overlays.default
-  #   ];
-  # };
+  nixpkgs = {
+    overlays = [
+      inputs.neovim-nightly-overlay.overlays.default
+    ];
+  };
 
   home.packages = with pkgs; [
     # # Adds the 'hello' command to your environment. It prints a friendly
@@ -55,6 +55,7 @@
     nerd-fonts.jetbrains-mono
     age
     sops
+    nkf
     (wrapNeovimUnstable neovim-unwrapped {
       wrapRc = false;
       wrapperArgs = [
@@ -128,11 +129,16 @@
       config.lib.file.mkOutOfStoreSymlink "${builtins.toString config.home.homeDirectory}/.dotfiles/home/home-update";
   };
 
+  home.activation = {
+    prepareGithook = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      cp "${builtins.toString config.home.homeDirectory}/.dotfiles/home/git-pre-commit" "${builtins.toString config.home.homeDirectory}/.dotfiles/.git/hooks/pre-commit"
+    '';
+  };
+
   imports = [
     ./home/zsh.nix
     ./home/fzf.nix
     ./home/git.nix
-    # ./starship.nix
     ./home/direnv.nix
     inputs.sops-nix.homeManagerModules.sops
   ];
