@@ -6,6 +6,12 @@
     enableCompletion = true; # 自動補完
     autosuggestion.enable = true; # 入力サジェスト
     syntaxHighlighting.enable = true; # シンタックスハイライト
+    history.ignorePatterns = [
+      "fg *"
+      "exit *"
+      "export *API*"
+      "history *"
+    ];
     zsh-abbr.enable = true;
     zsh-abbr.abbreviations = {
       cat = "bat %";
@@ -34,7 +40,6 @@
           zstyle ':completion:*:default' menu select=1
           eval "$(direnv hook zsh)"
           export OPENROUTER_API_KEY=$(cat ${config.sops.secrets.OPENROUTER_API_KEY.path})
-          cp "${builtins.toString config.home.homeDirectory}/.dotfiles/home/git-pre-commit" "${builtins.toString config.home.homeDirectory}/.dotfiles/.git/hooks/pre-commit"
         '';
       in
       lib.mkMerge [
