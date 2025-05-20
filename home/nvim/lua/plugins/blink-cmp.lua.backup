@@ -9,7 +9,11 @@ return {
 
     lazy = true,
     -- make sure to set opts so that lazy.nvim calls blink.compat's setup
-    opts = {},
+    opts = {
+      impersonate_nvim_cmp = true,
+      -- print some debug information. Might be useful for troubleshooting
+      debug = true,
+    },
   },
 
   {
@@ -17,8 +21,8 @@ return {
     event = { "InsertEnter", "CmdLineEnter" },
     version = '*',        -- バイナリをダウンロードする場合
     dependencies = {
-      "L3MON4D3/LuaSnip", -- スニペットエンジン
-      "rinx/cmp-skkeleton",
+      { "L3MON4D3/LuaSnip" }, -- スニペットエンジン
+      { "rinx/cmp-skkeleton" },
     },
     opts = {
       keymap = {
@@ -36,7 +40,9 @@ return {
         skkeleton = {
           name = "skkeleton",
           module = 'blink.compat.source',
-          score_offset = -3,
+          opts = {
+            cmp_name = "skkeleton",
+          },
         }
       },
       per_filetype = {

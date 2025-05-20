@@ -45,9 +45,11 @@ cmp.setup({
       c = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false })
     }),
   },
+  -- 補完メニューが表示されたときに最初の項目を事前に選択する
   completion = {
-    completeopt = "menu,menuone,noinsert,noselect",
+    completeopt = "menu,menuone",
   },
+  preselect = cmp.PreselectMode.Item,
   formatting = {
     format = lspkind.cmp_format({
       mode = 'text_symbol',

@@ -8,7 +8,7 @@ vim.opt.helplang = 'ja'
 vim.api.nvim_set_var('loaded_netrwPlugin', 1)
 
 -- skkeleton + ddc.vim で変換候補が出たら一番上を自動的に選択するための設定
-vim.opt.completeopt:append {'noinsert'}
+vim.opt.completeopt = 'menu,menuone'
 
 -- `w`や`q`などのコマンドをコマンド履歴に残さないようにする設定
 vim.api.nvim_create_autocmd("ModeChanged", {

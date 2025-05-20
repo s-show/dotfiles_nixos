@@ -1,6 +1,6 @@
 vim.lsp.config('*', {
     -- capabilities = require('ddc_source_lsp').make_client_capabilities(),
-    capabilities = require('cmp_nvim_lsp').default_capabilities()
+    -- capabilities = require('cmp_nvim_lsp').default_capabilities()
   }
 )
 -- vim.lsp.util.make_position_params(0, 'utf-8')
