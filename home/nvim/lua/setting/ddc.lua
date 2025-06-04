@@ -4,6 +4,7 @@ vim.fn["ddc#custom#patch_global"]({
   -- ui = 'native',
   sources = {
     'lsp',
+    'skkeleton',
     'file',
     'buffer',
     'vsnip',
@@ -46,7 +47,7 @@ vim.fn["ddc#custom#patch_global"]({
       ignoreCase = true,
     },
     skkeleton = {
-      mark = 'skkeleton',
+      mark = 'skk',
       matchers = {},
       sorters = {},
       converters = {},
@@ -161,3 +162,6 @@ vim.api.nvim_create_autocmd(
     end
   }
 )
+
+require('setting.ddc-codecompanion')()
+vim.fn['skkeleton#initialize']()

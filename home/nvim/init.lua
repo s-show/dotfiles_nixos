@@ -34,15 +34,16 @@ require("lazy").setup({
   }
 })
 
--- 分割した設定ファイルを読み込む
+-- 分割した設定ファイルを読み込む 
 require('setting.colorscheme')
 require('setting.lualine')
 require('setting.basic')
 require('lsp.init')
 require('setting.lexima')
--- require('setting.pum')
--- require('setting.ddc')
-require('setting.nvim-cmp')
+require('setting.pum')
+require('setting.ddc')
+-- require('setting.nvim-cmp')
+-- require('setting.blink-cmp')
 require('setting.ddu')
 require('setting.skkeleton')
 require('setting.clipboard')

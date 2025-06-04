@@ -1,0 +1,6 @@
+return {
+  {
+    -- "rinx/cmp-skkeleton",
+    "uga-rosa/cmp-skkeleton",
+  },
+}

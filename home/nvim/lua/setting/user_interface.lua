@@ -39,8 +39,8 @@ vim.opt.tabstop = 2
 -- 行頭でのTab文字の表示幅
 vim.opt.shiftwidth = 2
 
-vim.opt.winblend = 0 -- ウィンドウの不透明度
-vim.opt.pumblend = 0 -- ポップアップメニューの不透明度
+-- vim.opt.winblend = 0 -- ウィンドウの不透明度
+-- vim.opt.pumblend = 0 -- ポップアップメニューの不透明度
 vim.opt.pumheight = 15 -- 補完候補の表示数の上限
 
 --=======================================================================================

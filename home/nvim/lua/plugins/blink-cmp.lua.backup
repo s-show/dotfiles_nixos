@@ -4,79 +4,86 @@ return {
     'saghen/blink.compat',
     -- use the latest release, via version = '*', if you also use the latest release for blink.cmp
 
-    version = '*',
+    version = '2.*',
     -- lazy.nvim will automatically load the plugin when it's required by blink.cmp
 
     lazy = true,
     -- make sure to set opts so that lazy.nvim calls blink.compat's setup
     opts = {
-      impersonate_nvim_cmp = true,
       -- print some debug information. Might be useful for troubleshooting
-      debug = true,
+      -- debug = true,
     },
   },
 
   {
     'saghen/blink.cmp',
     event = { "InsertEnter", "CmdLineEnter" },
-    version = '*',        -- バイナリをダウンロードする場合
+    version = '*',
     dependencies = {
-      { "L3MON4D3/LuaSnip" }, -- スニペットエンジン
-      { "rinx/cmp-skkeleton" },
+      { "L3MON4D3/LuaSnip" },
+      { "uga-rosa/cmp-skkeleton" },
     },
     opts = {
       keymap = {
         preset = "enter",
         ["<C-u>"] = { "scroll_documentation_up", "fallback" },
         ["<C-d>"] = { "scroll_documentation_down", "fallback" },
-        ['<C-y>'] = { 'select_and_accept' },
+        ['<C-y>'] = { "select_and_accept", "fallback" },
+        ["<C-m>"] = { "select_and_accept", "fallback" },
         ["<C-b>"] = {},
         ["<C-f>"] = {},
-      }
-    },
-    sources = {
-      default = { "snippets", "lsp", "path", "buffer", "skkeleton" },
-      providers = {
-        skkeleton = {
-          name = "skkeleton",
-          module = 'blink.compat.source',
-          opts = {
-            cmp_name = "skkeleton",
+      },
+      sources = {
+        default = { "snippets", "lsp", "path", "buffer", "cmdline", "skkeleton" },
+        providers = {
+          skkeleton = {
+            name = "skkeleton",
+            module = 'blink.compat.source',
+          }
+        },
+        min_keyword_length = function(ctx)
+          -- :wq, :qa -> menu doesn't popup
+          -- :Lazy, :wqa -> menu popup
+          if ctx.mode == "cmdline" and ctx.line:find("^%l+$") ~= nil then
+            return 3
+          end
+          return 0
+        end,
+      },
+      snippets = {
+        preset = "luasnip",
+      },
+      completion = {
+        menu = {
+          border = 'rounded',
+        },
+        documentation = {
+          window = {
+            border = 'rounded',
           },
-        }
+          auto_show = true,
+        },
+        -- list = {
+        --   selection = {
+        --     auto_insert = true,
+        --   }
+        -- }
       },
-      per_filetype = {
-        markdown = { "snippets", "lsp", "path", "skkeleton" },
-        mdx = { "snippets", "lsp", "path", "skkeleton" },
-      },
-      min_keyword_length = function(ctx)
-        -- :wq, :qa -> menu doesn't popup
-        -- :Lazy, :wqa -> menu popup
-        if ctx.mode == "cmdline" and ctx.line:find("^%l+$") ~= nil then
-          return 3
-        end
-        return 0
-      end,
-    },
-    snippets = {
-      preset = "luasnip",
-    },
-    completion = {
-      menu = {
-        border = 'single',
-      },
-      documentation = {
+      signature = {
         window = {
           border = 'single',
         },
-        auto_show = true,
-        auto_show_delay_ms = 500,
       },
-    },
-    signature = {
-      window = {
-        border = 'single',
-      },
-    },
+      cmdline = {
+        keymap = {
+          preset = 'inherit',
+        },
+        completion = {
+          menu = {
+            auto_show = true,
+          },
+        },
+      }
+    }
   }
 }

@@ -1,5 +1,0 @@
-return {
-  {
-    "rinx/cmp-skkeleton",
-  },
-}

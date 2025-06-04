@@ -1,7 +1,9 @@
 -- pum の設定は ddc.vim より前に行う必要がある
-vim.fn["pum#set_option"]('border', 'rounded')
+-- vim.fn["pum#set_option"]('border', 'rounded')
 vim.fn["pum#set_option"]({
+  border = 'rounded',
   padding = true,
+  offset_cmdrow = 2,
 })
 
 local pum_au_group = vim.api.nvim_create_augroup('pum_vim', {})

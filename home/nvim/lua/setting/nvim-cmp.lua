@@ -53,15 +53,15 @@ cmp.setup({
   formatting = {
     format = lspkind.cmp_format({
       mode = 'text_symbol',
-      -- maxwidth = {
-      --   menu = 50,
-      --   abbr = 50,
-      -- },
-      -- ellipsis_char = '...',
-      -- show_labelDetails = true,
-      -- before = function(entry, vim_item)
-      --   return vim_item
-      -- end
+      maxwidth = {
+        menu = 50,
+        abbr = 50,
+      },
+      ellipsis_char = '...',
+      show_labelDetails = true,
+      before = function(entry, vim_item)
+        return vim_item
+      end
     })
   },
 })
@@ -149,6 +149,6 @@ cmp.setup.cmdline(":", {
     { name = "cmdline" },
   },
   completion = {
-    completeopt = "menu,menuone,noinsert,noselect",
+    completeopt = "menu,menuone",
   }
 })
