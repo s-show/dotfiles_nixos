@@ -67,8 +67,14 @@ function CommandlinePre()
   vim.keymap.set('c', '<C-p>', [[pum#map#insert_relative(-1, 'loop')]], { expr = true })
   vim.keymap.set('c', '<Down>', [[pum#map#insert_relative(+1, 'loop')]], { expr = true })
   vim.keymap.set('c', '<Up>', [[pum#map#insert_relative(-1, 'loop')]], { expr = true })
-  vim.keymap.set('c', '<C-y>', [[pum#map#confirm()]], { expr = true })
-  vim.keymap.set('c', '<CR>', [[pum#visible() ? pum#map#confirm() : '<CR>']], { expr = true })
+  vim.keymap.set('c', '<C-y>', vim.fn['pum#map#confirm'])
+  vim.keymap.set('c', '<CR>', function()
+    if vim.fn['pum#visible']() then
+      return vim.fn['pum#map#confirm']()
+    else
+      vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<CR>', true, false, true), 'n', false)
+    end
+  end)
   vim.keymap.set('c', '<C-e>', [[pum#map#cancel()]], { expr = true })
   vim.api.nvim_create_autocmd(
     { 'User' },
