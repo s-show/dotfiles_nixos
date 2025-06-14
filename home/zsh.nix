@@ -39,7 +39,7 @@
           bindkey -e
           zstyle ':completion:*:default' menu select=1
           eval "$(direnv hook zsh)"
-          export OPENROUTER_API_KEY=$(cat ${config.sops.secrets.OPENROUTER_API_KEY.path})
+          export OPENROUTER_API_KEY=$(cat "/run/secrets/OPENROUTER_API_KEY")
         '';
       in
       lib.mkMerge [

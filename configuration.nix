@@ -27,6 +27,16 @@ in
     <nixos-wsl/modules>
   ];
 
+  sops.defaultSopsFile = ./secrets/secrets.yaml;
+  sops.defaultSopsFormat = "yaml";
+  sops.age.keyFile = "/home/s-show/.dotfiles/sops/age/keys.txt";
+  sops.secrets.OPENROUTER_API_KEY = {
+    owner = config.users.users.s-show.name;
+  };
+  # sops.secrets.HOGE_KEY = {
+  #   owner = config.users.users.s-show.name;
+  # };
+
   wsl.enable = true;
   wsl.defaultUser = "nixos";
   wsl.interop.includePath = false;

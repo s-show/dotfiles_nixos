@@ -93,16 +93,6 @@
   #   EDITOR = "nvim";
   # };
 
-  sops = {
-    age.keyFile = "/home/s-show/.dotfiles/sops/age/keys.txt"; # must have no password!
-    defaultSopsFile = ./secrets.yaml;
-    defaultSymlinkPath = "/run/user/1001/secrets";
-    defaultSecretsMountPoint = "/run/user/1001/secrets.d";
-    secrets.OPENROUTER_API_KEY = {
-      path = "${config.sops.defaultSymlinkPath}/OPENROUTER_API_KEY";
-    };
-  };
-
   # setting Neovim
   programs.neovim.plugins = [
     pkgs.vimPlugins.nvim-treesitter.withAllGrammars
@@ -134,6 +124,5 @@
     ./home/fzf.nix
     ./home/git.nix
     ./home/direnv.nix
-    inputs.sops-nix.homeManagerModules.sops
   ];
 }
