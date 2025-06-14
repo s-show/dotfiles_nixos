@@ -7,7 +7,7 @@
   "better-escape.nvim": { "branch": "master", "commit": "19a38aab94961016430905ebec30d272a01e9742" },
   "catppuccin": { "branch": "main", "commit": "fa42eb5e26819ef58884257d5ae95dd0552b9a66" },
   "chowcho.nvim": { "branch": "main", "commit": "c87ba3be2059070e16c89bf1710762dd70cb3007" },
-  "codecompanion.nvim": { "branch": "main", "commit": "c2f3f244193c72a29be623c85595fade24f28547" },
+  "codecompanion.nvim": { "branch": "main", "commit": "ac1c3c9d937eb90280eecd00efc12b1b9858b94f" },
   "cyberdream.nvim": { "branch": "main", "commit": "f660ebfd8840e226d2a5368e08108a7aa84fef36" },
   "ddc-filter-matcher_head": { "branch": "main", "commit": "2c46a670191cb883bc07a2286883a7c438f731fb" },
   "ddc-filter-sorter_rank": { "branch": "main", "commit": "b24215966eadcaecbe71185aa0b68f799e658c25" },
