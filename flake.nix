@@ -16,7 +16,7 @@
         zenbook = "aarch64-linux";
       };
 
-      # NixOS のシステム構成を作成するヘルパー関数
+      # NixOS のシステム構成を作成するヘルパー関数（Home Manager統合版）
       mkNixosSystem =
         machine: system:
         inputs.nixpkgs.lib.nixosSystem {
@@ -24,22 +24,22 @@
           modules = [
             ./configuration.nix
             inputs.sops-nix.nixosModules.sops
-          ];
-        };
-
-      # Home Manager のホーム構成を作成するヘルパー関数
-      mkHomeManager =
-        machine: system:
-        inputs.home-manager.lib.homeManagerConfiguration {
-          pkgs = import inputs.nixpkgs {
-            system = system;
-            config = {
-              allowUnfree = true;
-            };
-          };
-          extraSpecialArgs = { inherit inputs; };
-          modules = [
-            ./home.nix
+            # Home ManagerをNixOSモジュールとして統合
+            inputs.home-manager.nixosModules.home-manager
+            {
+              # nixpkgsにoverlayを適用
+              nixpkgs.overlays = [
+                inputs.neovim-nightly-overlay.overlays.default
+              ];
+              # Home Manager設定
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.users.s-show = import ./home.nix;
+              home-manager.extraSpecialArgs = { inherit inputs; };
+              #home-manager.sharedModules = [
+              #  inputs.sops-nix.homeManagerModules.sops
+              #];
+            }
           ];
         };
     in
@@ -50,14 +50,5 @@
           value = mkNixosSystem machine (systems.${machine});
         }) (builtins.attrNames systems)
       );
-      homeConfigurations = builtins.listToAttrs (
-        map (machine: {
-          name = "s-show@" + machine;
-          value = mkHomeManager machine (systems.${machine});
-        }) (builtins.attrNames systems)
-      );
-      home-manager.sharedModules = [
-        inputs.sops-nix.homeManagerModules.sops
-      ];
     };
 }

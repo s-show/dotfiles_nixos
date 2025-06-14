@@ -40,7 +40,7 @@ in
       ];
     };
   };
-
+  nixpkgs.config.allowUnfree = true;
   users.users.s-show = {
     isNormalUser = true;
     extraGroups = [ "wheel" ];

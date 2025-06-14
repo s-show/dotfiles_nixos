@@ -7,12 +7,6 @@
     stateVersion = "25.05";
   };
 
-  nixpkgs = {
-    overlays = [
-      inputs.neovim-nightly-overlay.overlays.default
-    ];
-  };
-
   home.packages = with pkgs; [
     # # Adds the 'hello' command to your environment. It prints a friendly
     # # "Hello, world!" when run.
