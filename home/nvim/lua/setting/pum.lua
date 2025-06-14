@@ -4,6 +4,7 @@ vim.fn["pum#set_option"]({
   border = 'rounded',
   padding = true,
   offset_cmdrow = 2,
+  auto_select = true,
 })
 
 local pum_au_group = vim.api.nvim_create_augroup('pum_vim', {})
