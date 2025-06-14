@@ -8,10 +8,13 @@ return {
     },
     opts = {
       heading = {
-        position = 'inline',
+        position = 'overlay',
       },
       quote = {
         repeat_linebreak = true,
+      },
+      code = {
+        border = 'thick'
       },
       win_options = {
         showbreak = { default = '', rendered = '  ' },
