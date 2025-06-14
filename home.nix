@@ -12,6 +12,8 @@
     # # "Hello, world!" when run.
     # pkgs.hello
     wget
+# `pkgs.` を付けないと `A definition for option `home-manager.users.s-show.home.packages."[definition 13-entry 2]"' is not of type `package'. Definition values:` エラーになる
+    pkgs.file
     gh
     fd
     bat
