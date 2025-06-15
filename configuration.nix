@@ -25,13 +25,16 @@ in
 
   sops.defaultSopsFile = ./secrets/secrets.yaml;
   sops.defaultSopsFormat = "yaml";
-  sops.age.keyFile = "/home/s-show/.dotfiles/sops/age/keys.txt";
+  # SOPS は `$XDG_CONFIG_HOME/sops/age/keys.txt` → `$HOME/.config/sops/age/keys.txt` の順番で
+  # 鍵ペアを探すので、鍵ペアの保存場所を別にしている。
+  # これにより、鍵ペアを GitHub にアップロードする危険性も減少する。
+  sops.age.keyFile = "/home/s-show/.config/sops/age/keys.txt";
   sops.secrets.OPENROUTER_API_KEY = {
     owner = config.users.users.s-show.name;
   };
-  # sops.secrets.HOGE_KEY = {
-  #   owner = config.users.users.s-show.name;
-  # };
+  sops.secrets.HOGE_KEY = {
+    owner = config.users.users.s-show.name;
+  };
 
   wsl.enable = true;
   wsl.defaultUser = "nixos";
@@ -62,7 +65,7 @@ in
     };
     vim = {
       enable = true;
-      # defaultEditor = true;
+      defaultEditor = true;
     };
     zsh = {
       enable = true;

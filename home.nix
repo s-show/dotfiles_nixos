@@ -91,9 +91,9 @@
   #
   #  /etc/profiles/per-user/s-show/etc/profile.d/hm-session-vars.sh
   #
-  home.sessionVariables = {
-    EDITOR = "vim";
-  };
+  # home.sessionVariables = {
+  #   EDITOR = "vim";
+  # };
 
   # setting Neovim
   programs.neovim.plugins = [
