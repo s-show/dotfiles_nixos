@@ -29,14 +29,16 @@
       let
         zshConfigEarlyInit = lib.mkOrder 500 ''
           ABBR_DEFAULT_BINDINGS=0
-          bindkey ";" abbr-expand-and-insert
-          bindkey "Enter" abbr-expand-and-accept
         '';
+        # $EDITOR=vim としているため、`;`や`Enter`にabbrの動作を割り当てるには
+        # `-M emacs` オプションが必要になる。
         zshConfigLastInit = lib.mkOrder 1500 ''
           ABBR_SET_EXPANSION_CURSOR=1
           ABBR_SET_LINE_CURSOR=1
           compinit
           bindkey -e
+          bindkey -M emacs ";" abbr-expand-and-insert
+          bindkey -M emacs "Enter" abbr-expand-and-accept
           zstyle ':completion:*:default' menu select=1
           eval "$(direnv hook zsh)"
           export OPENROUTER_API_KEY=$(cat "/run/secrets/OPENROUTER_API_KEY")
