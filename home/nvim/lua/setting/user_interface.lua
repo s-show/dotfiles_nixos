@@ -49,52 +49,53 @@ vim.opt.pumheight = 15 -- 補完候補の表示数の上限
 local ok, extui = pcall(require, 'vim._extui')
 if ok then
   extui.enable({
-    enable = true, -- extuiを有効化
+    enable = true,      -- extuiを有効化
     msg = {
-      pos = 'cmd', -- 'box'か'cmd'だがcmdheight=0だとどっちでも良い？（記事後述）
+      pos = 'cmd',      -- 'box'か'cmd'だがcmdheight=0だとどっちでも良い？（記事後述）
       box = {
         timeout = 5000, -- boxメッセージの表示時間 ミリ秒
       },
     },
   })
-end
-vim.opt.cmdheight = 0
 
-local extui_colorscheme = "dayfox"
+  vim.opt.cmdheight = 0
 
--- extuiのカラースキームを自動設定
-local augroup = vim.api.nvim_create_augroup("atusy-extui-cmdline", {})
-vim.api.nvim_create_autocmd("CmdlineEnter", {
-  group = augroup,
-  callback = function()
-    if not require("vim._extui.shared").cfg.enable then
-      return
-    end
-    local tabpage = vim.api.nvim_get_current_tabpage()
-    local extuiwins = require("vim._extui.shared").wins[tabpage]
-    for _, w in pairs(extuiwins) do
-      require("styler").set_theme(w, { colorscheme = extui_colorscheme })
-    end
-  end,
-})
+  local extui_colorscheme = "dayfox"
 
-local function hide_msgbox()
-  -- 表示中のウィンドウ一覧を取得
-  local wins = vim.api.nvim_tabpage_list_wins(vim.api.nvim_get_current_tabpage())
+  -- extuiのカラースキームを自動設定
+  local augroup = vim.api.nvim_create_augroup("atusy-extui-cmdline", {})
+  vim.api.nvim_create_autocmd("CmdlineEnter", {
+    group = augroup,
+    callback = function()
+      if not require("vim._extui.shared").cfg.enable then
+        return
+      end
+      local tabpage = vim.api.nvim_get_current_tabpage()
+      local extuiwins = require("vim._extui.shared").wins[tabpage]
+      for _, w in pairs(extuiwins) do
+        require("styler").set_theme(w, { colorscheme = extui_colorscheme })
+      end
+    end,
+  })
 
-  -- ウィンドウごとに表示中のバッファのファイルタイプを確認
-  -- msgboxを見つけたらhideして、関数を終了
-  for _, win in ipairs(wins)  do
-    local buf = vim.api.nvim_win_get_buf(win)
-    local ft = vim.bo[buf].filetype
-    if ft == "msgbox" then
-      vim.api.nvim_win_set_config(win, { hide = true })
-      return
+  local function hide_msgbox()
+    -- 表示中のウィンドウ一覧を取得
+    local wins = vim.api.nvim_tabpage_list_wins(vim.api.nvim_get_current_tabpage())
+
+    -- ウィンドウごとに表示中のバッファのファイルタイプを確認
+    -- msgboxを見つけたらhideして、関数を終了
+    for _, win in ipairs(wins) do
+      local buf = vim.api.nvim_win_get_buf(win)
+      local ft = vim.bo[buf].filetype
+      if ft == "msgbox" then
+        vim.api.nvim_win_set_config(win, { hide = true })
+        return
+      end
     end
   end
-end
 
-vim.keymap.set("n", "<C-L>", function()
-  hide_msgbox()
-  return "<Cmd>nohlsearch<Bar>diffupdate<Bar>normal! <C-L><CR>"
-end, { expr = true })
+  vim.keymap.set("n", "<C-L>", function()
+    hide_msgbox()
+    return "<Cmd>nohlsearch<Bar>diffupdate<Bar>normal! <C-L><CR>"
+  end, { expr = true })
+end
