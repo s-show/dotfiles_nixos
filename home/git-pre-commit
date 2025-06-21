@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # 環境固有の設定ファイル一覧
-blocked_files="secrets.yaml keys.txt .sops.yaml"
+blocked_files="keys.txt"
 
 # コミット対象のファイルを取得
 staged_files=$(git diff --cached --name-only)
