@@ -2,7 +2,7 @@
 
 let
   # Package sets
-  pkgs_2411 = import (builtins.fetchTarball {
+  oldNixpkgs = import (builtins.fetchTarball {
     url = "https://github.com/NixOS/nixpkgs/archive/c5dd43934613ae0f8ff37c59f61c507c2e8f980d.tar.gz";
   }) {};
  
@@ -19,7 +19,7 @@ let
   # Neovim source packages
   neovim-sources = {
     # v0.10.4 from specific nixpkgs commit
-    v0104 = pkgs_2411.neovim-unwrapped;
+    v0104 = oldNixpkgs.neovim-unwrapped;
     # Stable version from inputs
     # flake.nix の overlay 設定により neovim-unwrapped が nightly 版に置き換えられている模様なので、
     # nixpkgsの安定版を明示的に取得
