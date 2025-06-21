@@ -37,9 +37,6 @@
               home-manager.useUserPackages = true;
               home-manager.users.s-show = import ./home.nix;
               home-manager.extraSpecialArgs = { inherit inputs; };
-              #home-manager.sharedModules = [
-              #  inputs.sops-nix.homeManagerModules.sops
-              #];
             }
           ];
         };
