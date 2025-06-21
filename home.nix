@@ -1,126 +1,150 @@
 { config, pkgs, lib, inputs, ... }:
+
+let
+  # Package sets
+  pkgs_2411 = import (builtins.fetchTarball {
+    url = "https://github.com/NixOS/nixpkgs/archive/c5dd43934613ae0f8ff37c59f61c507c2e8f980d.tar.gz";
+  }) {};
+ 
+  # Common Neovim wrapper arguments
+  commonWrapperArgs = {
+    wrapRc = false;
+    wrapperArgs = [
+      "--suffix"
+      "LD_LIBRARY_PATH"
+      ":"
+      "${pkgs.stdenv.cc.cc.lib}/lib"
+    ];
+  };
+  # Neovim source packages
+  neovim-sources = {
+    # v0.10.4 from specific nixpkgs commit
+    v0104 = pkgs_2411.neovim-unwrapped;
+    # Stable version from inputs
+    # flake.nix の overlay 設定により neovim-unwrapped が nightly 版に置き換えられている模様なので、
+    # nixpkgsの安定版を明示的に取得
+    stable = inputs.nixpkgs.legacyPackages.${pkgs.system}.neovim-unwrapped;
+    # Nightly version from overlay
+    nightly = pkgs.neovim;
+  };
+ 
+  # Neovim nightly version from overlay
+  neovim_0104 = pkgs.wrapNeovimUnstable neovim-sources.v0104 commonWrapperArgs;
+
+  # Neovim stable version
+  neovim-stable =pkgs.wrapNeovimUnstable neovim-sources.stable commonWrapperArgs;
+ 
+  # Neovim nightly version from overlay
+  neovim-nightly =pkgs.wrapNeovimUnstable neovim-sources.nightly commonWrapperArgs;
+
+  # Create wrapper script for nvim-stable
+  nvim-stable-wrapper = pkgs.writeShellScriptBin "nvim-stable" ''
+    exec ${neovim-stable}/bin/nvim "$@"
+  '';
+  nvim-0104-wrapper = pkgs.writeShellScriptBin "nvim-0104" ''
+    exec ${neovim_0104}/bin/nvim "$@"
+  '';
+
+  # User configuration constants
+  username = "s-show";
+  homeDirectory = "/home/${username}";
+  stateVersion = "25.05";
+  mkDotfileSymlink = path: config.lib.file.mkOutOfStoreSymlink 
+    "${homeDirectory}/.dotfiles/${path}";
+in
 {
-  # Home Manager needs a bit of information about you and the paths it should manage.
-  home = rec {
-    username = "s-show";
-    homeDirectory = "/home/${username}";
-    stateVersion = "25.05";
+  # Home Manager configuration
+  home = {
+    inherit username homeDirectory stateVersion;
+
+    # Packages organized by category
+    packages = with pkgs; [
+      # Core utilities
+      wget
+      pkgs.file
+      unzip
+      jq
+      nkf
+
+      # Development tools
+      gh
+      fd
+      bat
+      tig
+      eza
+      ripgrep
+      cargo
+      zig
+      go
+      deno
+      nix-direnv
+      age
+      sops
+
+      # Shell and terminal
+      starship
+      zellij
+      zsh-abbr
+      nb
+      superfile
+     
+      # Programming languages and runtimes
+      cl
+      python313
+      lua51Packages.luarocks-nix
+      libgcc
+
+      # Language servers and formatters
+      lua-language-server
+      emmet-ls
+      typescript-language-server
+      vim-language-server
+      vscode-langservers-extracted
+      clang-tools
+      nixd
+      nixfmt-rfc-style
+      eslint_d
+
+      # Media and display
+      libsixel
+      timg
+      chafa
+
+      # Fonts
+      nerd-fonts.jetbrains-mono
+
+      # Neovim packages
+      neovim-nightly # nvim コマンドで nightly 版を起動
+      nvim-stable-wrapper # nvim-stable コマンドで nightly 版を起動
+      nvim-0104-wrapper
+    ];
   };
 
-  home.packages = with pkgs; [
-    # # Adds the 'hello' command to your environment. It prints a friendly
-    # # "Hello, world!" when run.
-    # pkgs.hello
-    wget
-# `pkgs.` を付けないと `A definition for option `home-manager.users.s-show.home.packages."[definition 13-entry 2]"' is not of type `package'. Definition values:` エラーになる
-    pkgs.file
-    gh
-    fd
-    bat
-    tig
-    eza
-    ripgrep
-    superfile
-    starship
-    zellij
-    unzip
-    cargo
-    lua51Packages.luarocks-nix
-    libgcc
-    zig
-    cl
-    python313
-    lua-language-server
-    emmet-ls
-    typescript-language-server
-    vim-language-server
-    vscode-langservers-extracted
-    clang-tools
-    nixd
-    nixfmt-rfc-style
-    eslint_d
-    zsh-abbr
-    nb
-    deno
-    nix-direnv
-    libsixel
-    timg
-    go
-    chafa
-    jq
-    nerd-fonts.jetbrains-mono
-    age
-    sops
-    nkf
-    (wrapNeovimUnstable neovim-unwrapped {
-      wrapRc = false;
-      wrapperArgs = [
-        "--suffix"
-        "LD_LIBRARY_PATH"
-        ":"
-        "${stdenv.cc.cc.lib}/lib"
-      ];
-    })
-    # # It is sometimes useful to fine-tune packages, for example, by applying
-    # # overrides. You can do that directly here, just don't forget the
-    # # parentheses. Maybe you want to install Nerd Fonts with a limited number of
-    # # fonts?
-    # (pkgs.nerdfonts.override { fonts = [ "FantasqueSansMono" ]; })
-
-    # # You can also create simple shell scripts directly inside your
-    # # configuration. For example, this adds a command 'my-hello' to your
-    # # environment:
-    # (pkgs.writeShellScriptBin "my-hello" ''
-    #   echo "Hello, ${config.home.username}!"
-    # '')
-  ];
-
-  # Home Manager can also manage your environment variables through
-  # 'home.sessionVariables'. These will be explicitly sourced when using a
-  # shell provided by Home Manager. If you don't want to manage your shell
-  # through Home Manager then you have to manually source 'hm-session-vars.sh'
-  # located at either
-  #
-  #  ~/.nix-profile/etc/profile.d/hm-session-vars.sh
-  #
-  # or
-  #
-  #  ~/.local/state/nix/profiles/profile/etc/profile.d/hm-session-vars.sh
-  #
-  # or
-  #
-  #  /etc/profiles/per-user/s-show/etc/profile.d/hm-session-vars.sh
-  #
-  # home.sessionVariables = {
-  #   EDITOR = "vim";
-  # };
-
-  # setting Neovim
+  # Neovim plugins
   programs.neovim.plugins = [
     pkgs.vimPlugins.nvim-treesitter.withAllGrammars
   ];
-  # Let Home Manager install and manage itself.
+
+  # Enable Home Manager
   programs.home-manager.enable = true;
 
-  # Home Manager is pretty good at managing dotfiles. The primary way to manage
-  # plain files is through 'home.file'.
+  # Dotfiles management
   home.file = {
-    ".config/starship.toml".source =
-      config.lib.file.mkOutOfStoreSymlink "${builtins.toString config.home.homeDirectory}/.dotfiles/home/starship.toml";
-    ".config/superfile".source =
-      config.lib.file.mkOutOfStoreSymlink "${builtins.toString config.home.homeDirectory}/.dotfiles/home/superfile";
-    ".config/nvim".source =
-      config.lib.file.mkOutOfStoreSymlink "${builtins.toString config.home.homeDirectory}/.dotfiles/home/nvim";
-    ".local/bin/home-update".source =
-      config.lib.file.mkOutOfStoreSymlink "${builtins.toString config.home.homeDirectory}/.dotfiles/home/home-update";
+    ".config/starship.toml".source = mkDotfileSymlink "home/starship.toml";
+    ".config/superfile".source = mkDotfileSymlink "home/superfile";
+    ".config/nvim".source = mkDotfileSymlink "home/nvim";
+    ".local/bin/home-update".source = mkDotfileSymlink "home/home-update";
   };
 
+  # Home activation scripts
   home.activation = {
     prepareGithook = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-      cp "${builtins.toString config.home.homeDirectory}/.dotfiles/home/git-pre-commit" "${builtins.toString config.home.homeDirectory}/.dotfiles/.git/hooks/pre-commit"
+      cp "${homeDirectory}/.dotfiles/home/git-pre-commit" \
+         "${homeDirectory}/.dotfiles/.git/hooks/pre-commit"
     '';
   };
 
+  # Import additional modules
   imports = [
     ./home/zsh.nix
     ./home/fzf.nix
