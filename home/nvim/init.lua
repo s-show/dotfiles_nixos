@@ -34,7 +34,7 @@ require("lazy").setup({
   }
 })
 
--- 分割した設定ファイルを読み込む 
+-- 分割した設定ファイルを読み込む
 require('setting.colorscheme')
 require('setting.lualine')
 require('setting.basic')
