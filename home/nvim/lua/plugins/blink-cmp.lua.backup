@@ -18,7 +18,7 @@ return {
   {
     'saghen/blink.cmp',
     event = { "InsertEnter", "CmdLineEnter" },
-    version = '*',
+    version = '1.*',
     dependencies = {
       { "L3MON4D3/LuaSnip" },
       { "uga-rosa/cmp-skkeleton" },
@@ -26,6 +26,7 @@ return {
     opts = {
       keymap = {
         preset = "enter",
+        ['<C-space>'] = { 'show', 'show_documentation', 'hide_documentation' },
         ["<C-u>"] = { "scroll_documentation_up", "fallback" },
         ["<C-d>"] = { "scroll_documentation_down", "fallback" },
         ['<C-y>'] = { "select_and_accept", "fallback" },
@@ -63,11 +64,11 @@ return {
           },
           auto_show = true,
         },
-        -- list = {
-        --   selection = {
-        --     auto_insert = true,
-        --   }
-        -- }
+        list = {
+          selection = {
+            auto_insert = true,
+          }
+        }
       },
       signature = {
         window = {
