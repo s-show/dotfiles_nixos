@@ -6,12 +6,19 @@
     enableCompletion = true; # 自動補完
     autosuggestion.enable = true; # 入力サジェスト
     syntaxHighlighting.enable = true; # シンタックスハイライト
-    history.ignorePatterns = [
-      "fg *"
-      "exit *"
-      "export *API*"
-      "history *"
-    ];
+    history = {
+      ignorePatterns = [
+        "fg *"
+        "exit *"
+        "export *API*"
+        "history *"
+        "exa"
+        "ls"
+        "cd"
+      ];
+      ignoreAllDups = true;
+      share = true;
+    };
     zsh-abbr.enable = true;
     zsh-abbr.abbreviations = {
       cat = "bat %";
@@ -42,20 +49,12 @@
           zstyle ':completion:*:default' menu select=1
           eval "$(direnv hook zsh)"
           export OPENROUTER_API_KEY=$(cat "/run/secrets/OPENROUTER_API_KEY")
+          autoload -Uz run-help run-help-git run-help-ip run-help-sudo
         '';
       in
       lib.mkMerge [
         zshConfigEarlyInit
         zshConfigLastInit
       ];
-
-    # initExtra = ''
-    #   ABBR_SET_EXPANSION_CURSOR=1
-    #   ABBR_SET_LINE_CURSOR=1
-    #   compinit
-    #   bindkey -e
-    #   zstyle ':completion:*:default' menu select=1
-    #   eval "$(direnv hook zsh)"
-    # '';
   };
 }
