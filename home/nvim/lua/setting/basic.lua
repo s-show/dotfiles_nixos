@@ -99,10 +99,12 @@ vim.api.nvim_create_autocmd({ "DirChanged" }, {
 
 -- ヤンクした箇所をハイライトする
 vim.api.nvim_create_autocmd("TextYankPost", {
-  pattern = "*",
-  callback = function()
-    vim.hl.on_yank({ timeout = 300 })
-  end,
+    pattern = "*",
+    callback = function()
+      if vim.v.event.operator == "y" then
+        vim.hl.on_yank({ timeout = 300 })
+      end
+    end,
 })
 
 -- コマンドラインでディレクトリ名を引数に渡して起動したときに、
