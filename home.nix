@@ -135,6 +135,7 @@ in
     ".config/superfile".source = mkDotfileSymlink "home/superfile";
     ".config/nvim".source = mkDotfileSymlink "home/nvim";
     ".local/bin/home-update".source = mkDotfileSymlink "home/home-update";
+    ".local/bin/flakes-update".source = mkDotfileSymlink "home/flakes-update";
   };
 
   # Home activation scripts
