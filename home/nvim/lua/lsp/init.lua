@@ -1,10 +1,29 @@
-vim.lsp.config('*', {
-  capabilities = require('ddc_source_lsp').make_client_capabilities(),
-  -- capabilities = require('cmp_nvim_lsp').default_capabilities(),
-  -- capabilities = require('blink.cmp').get_lsp_capabilities(),
-}
-)
--- vim.lsp.util.make_position_params(0, 'utf-8')
+-- テストで古いバージョンの Neovim を起動したときのエラー回避
+if vim.fn.has('nvim-0.11') == 1 then
+  vim.lsp.config('*', {
+    capabilities = require('ddc_source_lsp').make_client_capabilities(),
+    -- capabilities = require('cmp_nvim_lsp').default_capabilities(),
+    -- capabilities = require('blink.cmp').get_lsp_capabilities(),
+  })
+
+  local lsp_names = {
+    'clangd',
+    'lua_ls',
+    'html',
+    'css',
+    'ts_ls',
+    'eslint',
+    'emmet_ls',
+    'nixd',
+  }
+
+  vim.lsp.enable(lsp_names)
+else
+  local capabilities = require("ddc_source_lsp").make_client_capabilities()
+  -- local capabilities = require("cmp_nvim_lsp").default_capabilities()
+  -- local capabilities = require("blink.cmp").get_lsp_capabilities()
+  capabilities.textDocument.completion.completionItem.snippetSupport = true
+end
 
 -- You will likely want to reduce updatetime which affects CursorHold
 -- note: this setting is global and should be set only once
@@ -38,24 +57,11 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'ga', '<cmd>lua vim.lsp.buf.code_action()<CR>', bufopt)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', bufopt)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gx', '<cmd>lua vim.diagnostic.open_float()<CR>', bufopt)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'g[', '<cmd>lua vim.diagnostic.goto_prev()<CR>', bufopt)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'g]', '<cmd>lua vim.diagnostic.goto_next()<CR>', bufopt)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'g[', '<cmd>lua vim.diagnostic.jump({ count = -1 })<CR>', bufopt)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'g]', '<cmd>lua vim.diagnostic.jump({ count = 1 })<CR>', bufopt)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gf', '<cmd>lua vim.lsp.buf.format({buffer = true})<CR>', bufopt)
   end
 })
-
-local lsp_names = {
-  'clangd',
-  'lua_ls',
-  'html',
-  'css',
-  'ts_ls',
-  'eslint',
-  'emmet_ls',
-  'nixd',
-}
-
-vim.lsp.enable(lsp_names)
 
 local kind_icons = {
   Text = "",
