@@ -49,12 +49,10 @@ vim.opt.pumheight = 15 -- 補完候補の表示数の上限
 local ok, extui = pcall(require, 'vim._extui')
 if ok then
   extui.enable({
-    enable = true,      -- extuiを有効化
+    enable = true,    -- extuiを有効化
     msg = {
-      pos = 'cmd',      -- 'box'か'cmd'だがcmdheight=0だとどっちでも良い？（記事後述）
-      box = {
-        timeout = 5000, -- boxメッセージの表示時間 ミリ秒
-      },
+      target = 'cmd', -- 'cmd'か'msg'だがcmdheight=0だとどっちでも良い？（記事後述）
+      timeout = 5000, -- boxメッセージの表示時間 ミリ秒
     },
   })
 
@@ -71,7 +69,7 @@ if ok then
         return
       end
       local tabpage = vim.api.nvim_get_current_tabpage()
-      local extuiwins = require("vim._extui.shared").wins[tabpage]
+      local extuiwins = require("vim._extui.shared").wins
       for _, w in pairs(extuiwins) do
         require("styler").set_theme(w, { colorscheme = extui_colorscheme })
       end
