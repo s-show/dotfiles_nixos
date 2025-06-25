@@ -81,6 +81,7 @@ in
       nix-direnv
       age
       sops
+      claude-code
 
       # Shell and terminal
       starship
