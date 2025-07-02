@@ -50,6 +50,11 @@
           eval "$(direnv hook zsh)"
           export OPENROUTER_API_KEY=$(cat "/run/secrets/OPENROUTER_API_KEY")
           autoload -Uz run-help run-help-git run-help-ip run-help-sudo
+          precmd() {
+            # Mark end of previous command (no exit code here, since Zsh lacks easy last status in prompt):
+            print -P "\e]133;D;\a"
+          }
+          PROMPT=$'%{\e]133;A\a%}'$PROMPT$'%{\e]133;B\a%}'
         '';
       in
       lib.mkMerge [
