@@ -74,29 +74,6 @@ vim.api.nvim_create_user_command('Redir', function(ctx)
   vim.opt_local.modified = false
 end, { nargs = '+', complete = 'command' })
 
--- メモ用ディレクトリを開いたら自動保存を有効化する
-local group_autosave = vim.api.nvim_create_augroup("group_autosave", { clear = true })
-vim.api.nvim_create_user_command('Memo', function()
-  vim.api.nvim_create_autocmd({ "InsertLeave", "BufLeave" }, {
-    group = group_autosave,
-    pattern = "*.md",
-    callback = function()
-      vim.cmd("silent! wall")
-    end,
-  })
-end, {})
-vim.api.nvim_create_autocmd({ "DirChanged" }, {
-  group = group_autosave,
-  pattern = "*.md",
-  callback = function()
-    vim.api.nvim_set_current_dir(vim.fn.expand("%:p:h"))
-    local argDirectory = vim.fn.expand("%:p:h")
-    if argDirectory == '/home/s-show/diary' then
-      vim.cmd("Memo")
-    end
-  end,
-})
-
 -- ヤンクした箇所をハイライトする
 vim.api.nvim_create_autocmd("TextYankPost", {
     pattern = "*",
@@ -106,56 +83,3 @@ vim.api.nvim_create_autocmd("TextYankPost", {
       end
     end,
 })
-
--- コマンドラインでディレクトリ名を引数に渡して起動したときに、
--- そのディレクトリをカレントディレクトリに設定する
-local group_cdpwd = vim.api.nvim_create_augroup("group_cdpwd", { clear = true })
-vim.api.nvim_create_autocmd({ "VimEnter" }, {
-  group = group_cdpwd,
-  pattern = "*",
-  callback = function()
-    local argDirectory = vim.fn.expand("%:p:h")
-    local ft = vim.o.filetype
-    if ft ~= 'oil' then
-      vim.api.nvim_set_current_dir(argDirectory)
-    else
-      local sub_str = ''
-      if vim.fn.has('wsl') == 1 then
-        sub_str = string.gsub(argDirectory, "oil://", "")
-      elseif vim.fn.has('win32') == 1 then
-        sub_str = string.gsub(argDirectory, "oil:///", "")
-        sub_str = string.gsub(sub_str, "^([A-Z])", "%1:")
-      end
-      vim.api.nvim_set_current_dir(sub_str)
-    end
-      if vim.fn.has('wsl') then
-        if argDirectory == '/home/s-show/diary' then
-          vim.cmd("Memo")
-        end
-      end
-  end,
-})
-
-function GetCharCursorLine()
-  local _cursor_line_text = vim.fn.getline('.')
-  local _cursor_line_text_length = vim.fn.strcharlen(_cursor_line_text)
-  -- local _search_words = {
-  --   { '\\.', '。', '．' },
-  --   { ',', '、', '，．' },
-  -- }
-  local _search_words = { '\\.', '。', '．' }
-  local _pattern = ''
-  for i, _word in ipairs(_search_words) do
-    if _search_words[i+1] ~= nil then
-      _pattern = _pattern .. _word .. '\\|'
-    else
-      _pattern = _pattern .. _word
-    end
-  end
-  for i = 0, _cursor_line_text_length do
-    local _char = vim.fn.strcharpart(_cursor_line_text, i, 1)
-    if vim.fn.match(_char, _pattern) ~= -1 then
-      vim.notify(_char .. '|' .. tostring(i + 1))
-    end
-  end
-end

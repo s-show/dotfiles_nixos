@@ -1,5 +1,4 @@
 -- pum の設定は ddc.vim より前に行う必要がある
--- vim.fn["pum#set_option"]('border', 'rounded')
 vim.fn["pum#set_option"]({
   border = 'rounded',
   padding = true,
@@ -92,28 +91,15 @@ function CommandlinePre()
 end
 
 function CommandlinePost()
-  vim.api.nvim_del_keymap('c', '<C-n>')
-  vim.api.nvim_del_keymap('c', '<C-p>')
-  vim.api.nvim_del_keymap('c', '<Down>')
-  vim.api.nvim_del_keymap('c', '<Up>')
-  vim.api.nvim_del_keymap('c', '<C-y>')
-  vim.api.nvim_del_keymap('c', '<CR>')
-  vim.api.nvim_del_keymap('c', '<C-e>')
+  if vim.fn.maparg('<C-e>', 'c') ~= '' then
+    vim.keymap.del('c', '<Tab>')
+    vim.keymap.del('c', '<S-Tab>')
+    vim.keymap.del('c', '<C-n>')
+    vim.keymap.del('c', '<C-p>')
+    vim.keymap.del('c', '<Down>')
+    vim.keymap.del('c', '<Up>')
+    vim.keymap.del('c', '<C-y>')
+    vim.keymap.del('c', '<CR>')
+    vim.keymap.del('c', '<C-e>')
+  end
 end
-
--- vim.api.nvim_create_autocmd(
---   { 'User' },
---   {
---     pattern = 'PumCompleteDone',
---     group = pum_au_group,
---     once = true,
---     callback = function()
---       vim.notify('hogehoge')
---       vim.cmd('doautocmd CompleteDone')
---     end
---   }
--- )
---
--- カラースキーマの設定を上書きしている
--- vim.cmd [[highlight PmenuSel ctermbg=green guibg=green]]
--- vim.cmd [[highlight PmenuSel ctermfg=black guifg=black]]
