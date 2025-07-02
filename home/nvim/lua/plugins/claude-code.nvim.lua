@@ -7,6 +7,10 @@ return {
     require("claude-code").setup({
       window = {
         position = 'vertical'
+      },
+      keymaps = {
+        window_navigation = false,
+        scrolling = false,
       }
     })
   end

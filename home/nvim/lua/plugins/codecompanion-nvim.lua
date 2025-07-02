@@ -16,11 +16,21 @@ return {
           },
           scheme = {
             model = {
-              default = 'anthropic/claude-3.7-sonnet',
+              -- default = 'anthropic/claude-sonnet-4',
+              choices = {
+                'google/gemini-2.0-flash-001',
+                'google/gemini-2.5-pro-preview-03-25',
+                'anthropic/claude-opus-4',
+                'anthropic/claude-sonnet-4',
+                'openai/gpt-4o-mini',
+              }
             },
           },
         })
-      end
+      end,
+      opts = {
+        show_model_choices = true,
+      }
     },
     strategies = {
       chat = {

@@ -8,9 +8,7 @@ vim.fn["pum#set_option"]({
 
 local pum_au_group = vim.api.nvim_create_augroup('pum_vim', {})
 
---[[
-インサートモードに入った時に ddc.vim のキーバインドを設定する
---]]
+-- インサートモードに入った時に ddc.vim のキーバインドを設定する
 vim.api.nvim_create_autocmd('InsertEnter', {
   group = pum_au_group,
   callback = function()
@@ -25,11 +23,7 @@ function InsertEnterPre()
     { expr = true })
   vim.keymap.set('i', '<C-e>', [[pum#visible() ? pum#map#cancel() : '<C-e>']], { expr = true })
   vim.keymap.set('i', '<C-y>', [[pum#visible() ? pum#map#confirm() : '<C-y>']], { expr = true })
-  -- vim.keymap.set('i', '<CR>',  [[pum#visible() ? pum#map#confirm() : lexima#expand('<LT>CR>', 'i')]], { expr = true })
-  vim.cmd [[
-    inoremap <silent><expr> <CR> pum#visible() ? "\<Cmd>call pum#map#confirm()\<CR>" :
-    \ "\<C-r>=lexima#expand('<LT>CR>', 'i')\<CR>"
-  ]]
+  vim.keymap.set('i', '<tab>', [[pum#visible() ? pum#map#confirm() : '<tab>']], { expr = true })
   vim.api.nvim_create_autocmd(
     { 'InsertLeave' },
     {
@@ -44,15 +38,16 @@ function InsertEnterPre()
 end
 
 function InsertEnterPost()
-  vim.api.nvim_del_keymap('i', '<C-n>')
-  vim.api.nvim_del_keymap('i', '<C-p>')
-  vim.api.nvim_del_keymap('i', '<C-e>')
-  vim.api.nvim_del_keymap('i', '<C-y>')
+  local pcall_result, _ = pcall(vim.api.nvim_del_keymap, 'i', '<C-n>')
+  if pcall_result ~= false then
+    vim.keymap.del('i', '<C-p>')
+    vim.keymap.del('i', '<C-e>')
+    vim.keymap.del('i', '<C-y>')
+    vim.keymap.del('i', '<tab>')
+  end
 end
 
---[[
-コマンドラインモードに入った時に ddc.vim のキーバインドを設定する
---]]
+-- コマンドラインモードに入った時に ddc.vim のキーバインドを設定する
 vim.keymap.set('n', ':', function() CommandlinePre() return ':' end, { expr = true })
 vim.keymap.set('n', '/', function() CommandlinePre() return '/' end, { expr = true })
 vim.keymap.set('n', '?', function() CommandlinePre() return '?' end, { expr = true })
