@@ -15,6 +15,7 @@ vim.fn["ddc#custom#patch_global"]({
     'InsertEnter',
     'TextChangedI',
     'TextChangedP',
+    'TextChangedT',
     'CmdlineChanged',
   },
   cmdlineSources = {
