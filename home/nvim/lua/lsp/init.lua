@@ -15,6 +15,7 @@ if vim.fn.has('nvim-0.11') == 1 then
     'eslint',
     'emmet_ls',
     'nixd',
+    'ruby_lsp',
   }
 
   vim.lsp.enable(lsp_names)
