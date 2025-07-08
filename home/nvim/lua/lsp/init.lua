@@ -43,23 +43,23 @@ vim.api.nvim_create_autocmd(
 vim.api.nvim_create_autocmd('LspAttach', {
   callback = function(args)
     local bufnr = args.buf
-    local bufopt = { noremap = true, silent = true }
+    local bufopt = { buffer = bufnr, noremap = true, silent = true }
     -- LSP によって `K` が自動的にマッピングされたりされなかったりするので、
     -- やむを得ず `vim.fn.maparg()` を使ってマッピングの有無を確認している。
     if vim.fn.maparg('K', 'n') ~= '' then
       vim.api.nvim_buf_del_keymap(bufnr, 'n', 'K')
     end
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', bufopt)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gh', '<cmd>lua vim.lsp.buf.hover()<CR>', bufopt)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', bufopt)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<CR>', bufopt)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gn', '<cmd>lua vim.lsp.buf.rename()<CR>', bufopt)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'ga', '<cmd>lua vim.lsp.buf.code_action()<CR>', bufopt)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', bufopt)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gx', '<cmd>lua vim.diagnostic.open_float()<CR>', bufopt)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'g[', '<cmd>lua vim.diagnostic.jump({ count = -1 })<CR>', bufopt)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'g]', '<cmd>lua vim.diagnostic.jump({ count = 1 })<CR>', bufopt)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gf', '<cmd>lua vim.lsp.buf.format({buffer = true})<CR>', bufopt)
+    vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', bufopt)
+    vim.keymap.set('n', 'gh', '<cmd>lua vim.lsp.buf.hover()<CR>', bufopt)
+    vim.keymap.set('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', bufopt)
+    vim.keymap.set('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<CR>', bufopt)
+    vim.keymap.set('n', 'gn', '<cmd>lua vim.lsp.buf.rename()<CR>', bufopt)
+    vim.keymap.set('n', 'ga', '<cmd>lua vim.lsp.buf.code_action()<CR>', bufopt)
+    vim.keymap.set('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', bufopt)
+    vim.keymap.set('n', 'gx', '<cmd>lua vim.diagnostic.open_float()<CR>', bufopt)
+    vim.keymap.set('n', 'g[', '<cmd>lua vim.diagnostic.jump({ count = -1 })<CR>', bufopt)
+    vim.keymap.set('n', 'g]', '<cmd>lua vim.diagnostic.jump({ count = 1 })<CR>', bufopt)
+    vim.keymap.set('n', 'gf', '<cmd>lua vim.lsp.buf.format({buffer = true})<CR>', bufopt)
   end
 })
 

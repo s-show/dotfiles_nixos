@@ -1,5 +1,5 @@
 -- 検索設定
-vim.api.nvim_set_keymap('n', '<ESC><ESC>', '<Cmd>nohlsearch<CR>', {silent=true})
+vim.keymap.set('n', '<ESC><ESC>', '<Cmd>nohlsearch<CR>', {silent=true})
 
 -- set help file language
 vim.opt.helplang = 'ja'

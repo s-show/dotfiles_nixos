@@ -1,6 +1,6 @@
 --skkeleton
-vim.keymap.set( { 'i', 'c' } , '<C-j>', '<plug>(skkeleton-enable)', {})
-vim.keymap.set( { 'i', 'c' } , '<C-l>', '<plug>(skkeleton-disable)', {})
+vim.keymap.set( { 'i', 'c', 't' } , '<C-j>', '<plug>(skkeleton-enable)', {})
+vim.keymap.set( { 'i', 'c', 't' } , '<C-l>', '<plug>(skkeleton-disable)', {})
 vim.fn['skkeleton#config']({
   globalDictionaries = {
     vim.fn["expand"]('~/.config/nvim/skk_dict/SKK-JISYO.L'),

@@ -17,13 +17,13 @@ vim.api.nvim_create_autocmd('InsertEnter', {
 })
 
 function InsertEnterPre()
-  vim.keymap.set('i', '<C-n>', [[pum#visible() ? pum#map#select_relative(+1, 'loop') : ddc#map#manual_complete()]],
+  vim.keymap.set({'i', 't'}, '<C-n>', [[pum#visible() ? pum#map#select_relative(+1, 'loop') : ddc#map#manual_complete()]],
     { expr = true })
-  vim.keymap.set('i', '<C-p>', [[pum#visible() ? pum#map#select_relative(-1, 'loop') : ddc#map#manual_complete()]],
+  vim.keymap.set({'i', 't'}, '<C-p>', [[pum#visible() ? pum#map#select_relative(-1, 'loop') : ddc#map#manual_complete()]],
     { expr = true })
-  vim.keymap.set('i', '<C-e>', [[pum#visible() ? pum#map#cancel() : '<C-e>']], { expr = true })
-  vim.keymap.set('i', '<C-y>', [[pum#visible() ? pum#map#confirm() : '<C-y>']], { expr = true })
-  vim.keymap.set('i', '<tab>', [[pum#visible() ? pum#map#confirm() : '<tab>']], { expr = true })
+  vim.keymap.set({'i', 't'}, '<C-e>', [[pum#visible() ? pum#map#cancel() : '<C-e>']], { expr = true })
+  vim.keymap.set({'i', 't'}, '<C-y>', [[pum#visible() ? pum#map#confirm() : '<C-y>']], { expr = true })
+  vim.keymap.set({'i', 't'}, '<tab>', [[pum#visible() ? pum#map#confirm() : '<tab>']], { expr = true })
   vim.api.nvim_create_autocmd(
     { 'InsertLeave' },
     {
@@ -38,12 +38,12 @@ function InsertEnterPre()
 end
 
 function InsertEnterPost()
-  local pcall_result, _ = pcall(vim.api.nvim_del_keymap, 'i', '<C-n>')
+  local pcall_result, _ = pcall(vim.api.nvim_del_keymap, {'i', 't'}, '<C-n>')
   if pcall_result ~= false then
-    vim.keymap.del('i', '<C-p>')
-    vim.keymap.del('i', '<C-e>')
-    vim.keymap.del('i', '<C-y>')
-    vim.keymap.del('i', '<tab>')
+    vim.keymap.del({'i', 't'}, '<C-p>')
+    vim.keymap.del({'i', 't'}, '<C-e>')
+    vim.keymap.del({'i', 't'}, '<C-y>')
+    vim.keymap.del({'i', 't'}, '<tab>')
   end
 end
 
