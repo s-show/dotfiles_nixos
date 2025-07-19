@@ -49,6 +49,9 @@ let
   # wsl-notify-send パッケージをインポート
   wsl-notify-send = import ./home/packages/wsl-notify-send.nix { inherit pkgs lib; };
 
+  # node2nix を組み込む
+  nodePkgs = pkgs.callPackage ./home/node2nix { inherit pkgs; };
+
   # User configuration constants
   username = "s-show";
   homeDirectory = "/home/${username}";
@@ -84,7 +87,10 @@ in
       nix-direnv
       age
       sops
-      claude-code
+      nodejs_24
+      node2nix
+      nodePkgs."@anthropic-ai/claude-code"
+      nodePkgs."editprompt"
 
       # Shell and terminal
       starship
