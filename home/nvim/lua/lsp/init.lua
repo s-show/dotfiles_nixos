@@ -16,6 +16,7 @@ if vim.fn.has('nvim-0.11') == 1 then
     'emmet_ls',
     'nixd',
     'ruby_lsp',
+    'bash-language-server',
   }
 
   vim.lsp.enable(lsp_names)
