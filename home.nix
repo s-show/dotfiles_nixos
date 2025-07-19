@@ -135,8 +135,10 @@ in
     ".config/starship.toml".source = mkDotfileSymlink "home/starship.toml";
     ".config/superfile".source = mkDotfileSymlink "home/superfile";
     ".config/nvim".source = mkDotfileSymlink "home/nvim";
+    ".config/nvim_ime".source = mkDotfileSymlink "home/nvim_ime";
     ".local/bin/home-update".source = mkDotfileSymlink "home/home-update";
     ".local/bin/flakes-update".source = mkDotfileSymlink "home/flakes-update";
+    ".local/bin/nvim_ime".source = mkDotfileSymlink "home/nvim_ime.sh";
   };
 
   # Home activation scripts
