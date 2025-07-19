@@ -65,7 +65,6 @@ in
     };
     vim = {
       enable = true;
-      defaultEditor = true;
     };
     zsh = {
       enable = true;
@@ -76,9 +75,6 @@ in
     ssh = {
       startAgent = true;
     };
-    # neovim = {
-    #  enable = true;
-    # };
   };
 
   security.sudo = {
@@ -88,8 +84,6 @@ in
   environment.systemPackages = with pkgs; [
     vim
     git
-    #neovim
-    # unstable.neovim
   ];
   environment.localBinInPath = true;
 

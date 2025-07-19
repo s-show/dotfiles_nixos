@@ -1,4 +1,8 @@
 { pkgs, lib, config, ... }:
+let
+  # wsl-notify-send パッケージをインポート
+  wsl-notify-send = import ./packages/wsl-notify-send.nix { inherit pkgs lib; };
+in
 {
   programs.zsh = {
     enable = true;
@@ -46,15 +50,20 @@
           bindkey -e
           bindkey -M emacs ";" abbr-expand-and-insert
           bindkey -M emacs "Enter" abbr-expand-and-accept
+          bindkey -s '^X^I' 'editprompt -e nvim_ime\n'
           zstyle ':completion:*:default' menu select=1
           eval "$(direnv hook zsh)"
           export OPENROUTER_API_KEY=$(cat "/run/secrets/OPENROUTER_API_KEY")
+          export EDITOR=nvim
           autoload -Uz run-help run-help-git run-help-ip run-help-sudo
           precmd() {
             # Mark end of previous command (no exit code here, since Zsh lacks easy last status in prompt):
             print -P "\e]133;D;\a"
           }
           PROMPT=$'%{\e]133;A\a%}'$PROMPT$'%{\e]133;B\a%}'
+          notify-send() {
+            ${wsl-notify-send}/bin/wsl-notify-send.exe --category "$WSL_DISTRO_NAME" "$@"
+          }
         '';
       in
       lib.mkMerge [
