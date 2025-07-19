@@ -46,6 +46,9 @@ let
     exec ${neovim_0104}/bin/nvim "$@"
   '';
 
+  # wsl-notify-send パッケージをインポート
+  wsl-notify-send = import ./home/packages/wsl-notify-send.nix { inherit pkgs lib; };
+
   # User configuration constants
   username = "s-show";
   homeDirectory = "/home/${username}";
@@ -138,6 +141,9 @@ in
     ".config/nvim_ime".source = mkDotfileSymlink "home/nvim_ime";
     ".local/bin/home-update".source = mkDotfileSymlink "home/home-update";
     ".local/bin/flakes-update".source = mkDotfileSymlink "home/flakes-update";
+    ".local/bin/notify".source = mkDotfileSymlink "home/notify.sh";
+    ".local/bin/notify-debug".source = mkDotfileSymlink "home/notify-debug.sh";
+    ".local/bin/notify-init".source = mkDotfileSymlink "home/notify-init.sh";
     ".local/bin/nvim_ime".source = mkDotfileSymlink "home/nvim_ime.sh";
   };
 
@@ -156,4 +162,11 @@ in
     ./home/git.nix
     ./home/direnv.nix
   ];
+
+  # 環境変数の設定
+  home.sessionVariables = {
+    # wsl-notify-send.exe の完全パスを環境変数に保存
+    WSL_NOTIFY_SEND_EXE = "${wsl-notify-send}/bin/wsl-notify-send.exe";
+  };
+
 }
