@@ -1,0 +1,18 @@
+-- /plugins/lexima.lsp の `config = function()` の中で設定しないと
+-- 上手く動かないので、それまでの設定をコメントアウトした。(2024/12/06)
+-- vim.g.lexima_no_default_rules = 1
+-- vim.fn['lexima#set_default_rules']()
+-- vim.fn["lexima#add_rule"]({
+--   char = '<',
+--   input_after = '>',
+-- })
+-- vim.fn['lexima#add_rule']({
+--   char = '>',
+--   at = [[\%#>]],
+--   leave =  1,
+-- })
+-- vim.fn['lexima#add_rule']({
+--   char = '<BS>',
+--   at = [[<\%#>]],
+--   delete =  1,
+-- })
