@@ -1,14 +1,13 @@
--- リーダーキー設定
+--=======================================================================================
+--リーダーキー設定
+--=======================================================================================
 vim.g.mapleader = ","
 
+--=======================================================================================
 -- カーソル操作系
--- vim.keymap.set('n', 'j', 'gj', { noremap = true })
--- vim.keymap.set('n', 'k', 'gk', { noremap = true })
+--=======================================================================================
 vim.keymap.set('n', '<Up>', 'gk')
 vim.keymap.set('n', '<Down>', 'gj')
--- nvim-cmp が上下キーを使うので「Ctrl + 上下」で移動する
-vim.keymap.set('i', '<C-Up>', '<C-G>k', { noremap = true })
-vim.keymap.set('i', '<C-Down>', '<C-G>j', { noremap = true })
 vim.opt.whichwrap:append {
   ['<'] = true,
   ['>'] = true,
@@ -18,12 +17,20 @@ vim.opt.whichwrap:append {
   l = true,
 }
 vim.cmd('source ~/.config/nvim/lua/setting/keymapping.vim')
+-- インサートモードで←・→移動した際に Undo block を中断させないための設定
+-- [Insertモードでも気軽に←・→したい | Atusy's blog](https://blog.atusy.net/2023/03/03/horizontal-arrows-on-insert/)
+vim.keymap.set('i', '<Left>', '<C-G>U<Left>')
+vim.keymap.set('i', '<Right>', '<C-G>U<Right>')
 
+--=======================================================================================
 -- ファイル操作系
+--=======================================================================================
 -- ,ww で保存
 vim.keymap.set('n', '<leader>ww', "<Cmd>update<CR>", { noremap = true })
 
+--=======================================================================================
 -- ウィンドウ操作系
+--=======================================================================================
 -- space-w-[vsjkhlc=]でウィンドウの分割・移動・リサイズ・クローズを実行
 vim.keymap.set('n', '<leader>wv', '<Cmd>wincmd v<CR>', { silent = true })
 vim.keymap.set('n', '<leader>ws', '<Cmd>wincmd s<CR>', { silent = true })
@@ -71,7 +78,9 @@ vim.keymap.set('i', '/',
   { expr = true, noremap = false }
 )
 
+--=======================================================================================
 -- ターミナル操作系
+--=======================================================================================
 vim.keymap.set('t', '<Esc>', '<C-\\><C-n><Plug>(Esc)', { noremap = true })
 vim.keymap.set('n', '<Plug>(Esc)<Esc>', 'i', { noremap = true })
 
