@@ -133,7 +133,8 @@ vim.fn["ddc#custom#patch_global"]({
         Interface = "Structure"
       }
     }
-  }
+  },
+  specialBufferCompletion = true
 })
 
 -- https://github.com/Shougo/ddc.vim/blob/abd90cb2f3acf557d6ea6b98dbe74bbc58c0c479/doc/ddc.txt#L1424-L1438 のコードを元に実装
