@@ -45,7 +45,27 @@ vim.keymap.set('n', '<leader>tt', '',
   }
 )
 
-
+-- H/LとPageUp/PageDownを共存させる設定
+-- https://blog.atusy.net/2024/05/29/vim-hl-enhanced/ を改変
+-- Hのマッピング（条件分岐あり）
+vim.keymap.set('n', 'H', function()
+  if vim.fn.winline() == 1 then
+    return '<PageUp>H<Plug>(H)'
+  else
+    return 'H<Plug>(H)'
+  end
+end, { expr = true })
+-- Lのマッピング（条件分岐あり）
+vim.keymap.set('n', 'L', function()
+  if vim.fn.winline() == vim.fn.winheight(0) then
+    return '<PageDown>Lzb<Plug>(L)'
+  else
+    return 'L<Plug>(L)'
+  end
+end, { expr = true })
+-- <Plug>マッピング
+vim.keymap.set('n', '<Plug>(H)H', '<PageUp>H<Plug>(H)')
+vim.keymap.set('n', '<Plug>(L)L', '<PageDown>Lzb<Plug>(L)')
 vim.keymap.set('i', '/',
   [[complete_info(['mode']).mode == 'files' && complete_info(['selected']).selected >= 0 ? '<c-x><c-f>' : '/']],
   { expr = true, noremap = false }
