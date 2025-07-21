@@ -44,7 +44,11 @@ vim.lsp.config('lua_ls', {
     })
   end,
   settings = {
-    Lua = {}
+    Lua = {
+      semantic = {
+        enable = false
+      },
+    }
   }
 })
 
