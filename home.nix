@@ -6,7 +6,7 @@ let
   oldNixpkgs = import (builtins.fetchTarball {
     url = "https://github.com/NixOS/nixpkgs/archive/c5dd43934613ae0f8ff37c59f61c507c2e8f980d.tar.gz";
   }) {};
- 
+
   # Common Neovim wrapper arguments
   commonWrapperArgs = {
     wrapRc = false;
@@ -28,7 +28,7 @@ let
     # Nightly version from overlay
     nightly = pkgs.neovim-unwrapped;
   };
- 
+
   # Neovim nightly version from overlay
   neovim_0104 = oldNixpkgs.wrapNeovimUnstable neovim-sources.v0104 commonWrapperArgs;
 
@@ -56,7 +56,7 @@ let
   username = "s-show";
   homeDirectory = "/home/${username}";
   stateVersion = "25.05";
-  mkDotfileSymlink = path: config.lib.file.mkOutOfStoreSymlink 
+  mkDotfileSymlink = path: config.lib.file.mkOutOfStoreSymlink
     "${homeDirectory}/.dotfiles/${path}";
 in
 {
@@ -98,12 +98,14 @@ in
       zsh-abbr
       nb
       superfile
-     
+
       # Programming languages and runtimes
       cl
       python313
       lua51Packages.luarocks-nix
       libgcc
+      gnumake
+      gcc
 
       # Language servers and formatters
       lua-language-server
@@ -131,11 +133,6 @@ in
       nvim-0104-wrapper # nvim-0104 コマンドで v0.10.4 を起動
     ];
   };
-
-  # Neovim plugins
-  programs.neovim.plugins = [
-    pkgs.vimPlugins.nvim-treesitter.withAllGrammars
-  ];
 
   # Enable Home Manager
   programs.home-manager.enable = true;
