@@ -131,6 +131,9 @@ in
       neovim-nightly # nvim コマンドで nightly 版を起動
       nvim-stable-wrapper # nvim-stable コマンドで安定版を起動
       nvim-0104-wrapper # nvim-0104 コマンドで v0.10.4 を起動
+
+      # misc tools
+      wsl-notify-send
     ];
   };
 
@@ -146,8 +149,6 @@ in
     ".local/bin/home-update".source = mkDotfileSymlink "home/home-update";
     ".local/bin/flakes-update".source = mkDotfileSymlink "home/flakes-update";
     ".local/bin/notify".source = mkDotfileSymlink "home/notify.sh";
-    ".local/bin/notify-debug".source = mkDotfileSymlink "home/notify-debug.sh";
-    ".local/bin/notify-init".source = mkDotfileSymlink "home/notify-init.sh";
     ".local/bin/nvim_ime".source = mkDotfileSymlink "home/nvim_ime.sh";
   };
 
@@ -166,11 +167,4 @@ in
     ./home/git.nix
     ./home/direnv.nix
   ];
-
-  # 環境変数の設定
-  home.sessionVariables = {
-    # wsl-notify-send.exe の完全パスを環境変数に保存
-    WSL_NOTIFY_SEND_EXE = "${wsl-notify-send}/bin/wsl-notify-send.exe";
-  };
-
 }
