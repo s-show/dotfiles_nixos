@@ -43,13 +43,7 @@ chowcho.setup({
   },
 })
 
---[[ vim.keymap.set('n', '<C-w>w',
-  function ()
-    chowcho.run()
-  end,
-  { noremap = true }
-)
-]]
+-- [Neovimの<C-w><C-w>をchowcho.nvimで拡張する](https://zenn.dev/kawarimidoll/articles/daa39da5838567)
 local win_keymap_set = function(key, callback)
   vim.keymap.set({ 'n', 't' }, '<C-w>' .. key, callback)
   vim.keymap.set({ 'n', 't' }, '<C-w><C-' .. key .. '>', callback)
