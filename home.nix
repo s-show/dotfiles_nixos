@@ -100,7 +100,7 @@ in
       superfile
 
       # Programming languages and runtimes
-      cl
+      # cl
       python313
       lua51Packages.luarocks-nix
       libgcc
