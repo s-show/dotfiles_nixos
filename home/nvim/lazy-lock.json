@@ -73,6 +73,7 @@
   "tinysegmenter.nvim": { "branch": "main", "commit": "64ac8a1b4c074fd032cdc7f1f9167c50447fd8cd" },
   "treesj": { "branch": "main", "commit": "3b4a2bc42738a63de17e7485d4cc5e49970ddbcc" },
   "vague.nvim": { "branch": "main", "commit": "d1f131a1eb9a23e3bc6a11072abcad6455c8ba2b" },
+  "vim-gin": { "branch": "main", "commit": "7c4b98011a2d5bdf7342031f9c8ae7a1c11b584b" },
   "vim-vsnip": { "branch": "master", "commit": "0a4b8419e44f47c57eec4c90df17567ad4b1b36e" },
   "vimdoc-ja": { "branch": "master", "commit": "8b3da61b167a15a55330527c9096c40c3dd34781" }
 }
