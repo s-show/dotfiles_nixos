@@ -4,139 +4,139 @@
 
 let
   sources = {
-    "@inquirer/checkbox-4.1.9" = {
+    "@inquirer/checkbox-4.2.0" = {
       name = "_at_inquirer_slash_checkbox";
       packageName = "@inquirer/checkbox";
-      version = "4.1.9";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/@inquirer/checkbox/-/checkbox-4.1.9.tgz";
-        sha512 = "DBJBkzI5Wx4jFaYm221LHvAhpKYkhVS0k9plqHwaHhofGNxvYB7J3Bz8w+bFJ05zaMb0sZNHo4KdmENQFlNTuQ==";
-      };
-    };
-    "@inquirer/confirm-5.1.13" = {
-      name = "_at_inquirer_slash_confirm";
-      packageName = "@inquirer/confirm";
-      version = "5.1.13";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/@inquirer/confirm/-/confirm-5.1.13.tgz";
-        sha512 = "EkCtvp67ICIVVzjsquUiVSd+V5HRGOGQfsqA4E4vMWhYnB7InUL0pa0TIWt1i+OfP16Gkds8CdIu6yGZwOM1Yw==";
-      };
-    };
-    "@inquirer/core-10.1.14" = {
-      name = "_at_inquirer_slash_core";
-      packageName = "@inquirer/core";
-      version = "10.1.14";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/@inquirer/core/-/core-10.1.14.tgz";
-        sha512 = "Ma+ZpOJPewtIYl6HZHZckeX1STvDnHTCB2GVINNUlSEn2Am6LddWwfPkIGY0IUFVjUUrr/93XlBwTK6mfLjf0A==";
-      };
-    };
-    "@inquirer/editor-4.2.14" = {
-      name = "_at_inquirer_slash_editor";
-      packageName = "@inquirer/editor";
-      version = "4.2.14";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/@inquirer/editor/-/editor-4.2.14.tgz";
-        sha512 = "yd2qtLl4QIIax9DTMZ1ZN2pFrrj+yL3kgIWxm34SS6uwCr0sIhsNyudUjAo5q3TqI03xx4SEBkUJqZuAInp9uA==";
-      };
-    };
-    "@inquirer/expand-4.0.16" = {
-      name = "_at_inquirer_slash_expand";
-      packageName = "@inquirer/expand";
-      version = "4.0.16";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/@inquirer/expand/-/expand-4.0.16.tgz";
-        sha512 = "oiDqafWzMtofeJyyGkb1CTPaxUkjIcSxePHHQCfif8t3HV9pHcw1Kgdw3/uGpDvaFfeTluwQtWiqzPVjAqS3zA==";
-      };
-    };
-    "@inquirer/figures-1.0.12" = {
-      name = "_at_inquirer_slash_figures";
-      packageName = "@inquirer/figures";
-      version = "1.0.12";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/@inquirer/figures/-/figures-1.0.12.tgz";
-        sha512 = "MJttijd8rMFcKJC8NYmprWr6hD3r9Gd9qUC0XwPNwoEPWSMVJwA2MlXxF+nhZZNMY+HXsWa+o7KY2emWYIn0jQ==";
-      };
-    };
-    "@inquirer/input-4.2.0" = {
-      name = "_at_inquirer_slash_input";
-      packageName = "@inquirer/input";
       version = "4.2.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/@inquirer/input/-/input-4.2.0.tgz";
-        sha512 = "opqpHPB1NjAmDISi3uvZOTrjEEU5CWVu/HBkDby8t93+6UxYX0Z7Ps0Ltjm5sZiEbWenjubwUkivAEYQmy9xHw==";
+        url = "https://registry.npmjs.org/@inquirer/checkbox/-/checkbox-4.2.0.tgz";
+        sha512 = "fdSw07FLJEU5vbpOPzXo5c6xmMGDzbZE2+niuDHX5N6mc6V0Ebso/q3xiHra4D73+PMsC8MJmcaZKuAAoaQsSA==";
       };
     };
-    "@inquirer/number-3.0.16" = {
+    "@inquirer/confirm-5.1.14" = {
+      name = "_at_inquirer_slash_confirm";
+      packageName = "@inquirer/confirm";
+      version = "5.1.14";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/@inquirer/confirm/-/confirm-5.1.14.tgz";
+        sha512 = "5yR4IBfe0kXe59r1YCTG8WXkUbl7Z35HK87Sw+WUyGD8wNUx7JvY7laahzeytyE1oLn74bQnL7hstctQxisQ8Q==";
+      };
+    };
+    "@inquirer/core-10.1.15" = {
+      name = "_at_inquirer_slash_core";
+      packageName = "@inquirer/core";
+      version = "10.1.15";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/@inquirer/core/-/core-10.1.15.tgz";
+        sha512 = "8xrp836RZvKkpNbVvgWUlxjT4CraKk2q+I3Ksy+seI2zkcE+y6wNs1BVhgcv8VyImFecUhdQrYLdW32pAjwBdA==";
+      };
+    };
+    "@inquirer/editor-4.2.15" = {
+      name = "_at_inquirer_slash_editor";
+      packageName = "@inquirer/editor";
+      version = "4.2.15";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/@inquirer/editor/-/editor-4.2.15.tgz";
+        sha512 = "wst31XT8DnGOSS4nNJDIklGKnf+8shuauVrWzgKegWUe28zfCftcWZ2vktGdzJgcylWSS2SrDnYUb6alZcwnCQ==";
+      };
+    };
+    "@inquirer/expand-4.0.17" = {
+      name = "_at_inquirer_slash_expand";
+      packageName = "@inquirer/expand";
+      version = "4.0.17";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/@inquirer/expand/-/expand-4.0.17.tgz";
+        sha512 = "PSqy9VmJx/VbE3CT453yOfNa+PykpKg/0SYP7odez1/NWBGuDXgPhp4AeGYYKjhLn5lUUavVS/JbeYMPdH50Mw==";
+      };
+    };
+    "@inquirer/figures-1.0.13" = {
+      name = "_at_inquirer_slash_figures";
+      packageName = "@inquirer/figures";
+      version = "1.0.13";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/@inquirer/figures/-/figures-1.0.13.tgz";
+        sha512 = "lGPVU3yO9ZNqA7vTYz26jny41lE7yoQansmqdMLBEfqaGsmdg7V3W9mK9Pvb5IL4EVZ9GnSDGMO/cJXud5dMaw==";
+      };
+    };
+    "@inquirer/input-4.2.1" = {
+      name = "_at_inquirer_slash_input";
+      packageName = "@inquirer/input";
+      version = "4.2.1";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/@inquirer/input/-/input-4.2.1.tgz";
+        sha512 = "tVC+O1rBl0lJpoUZv4xY+WGWY8V5b0zxU1XDsMsIHYregdh7bN5X5QnIONNBAl0K765FYlAfNHS2Bhn7SSOVow==";
+      };
+    };
+    "@inquirer/number-3.0.17" = {
       name = "_at_inquirer_slash_number";
       packageName = "@inquirer/number";
-      version = "3.0.16";
+      version = "3.0.17";
       src = fetchurl {
-        url = "https://registry.npmjs.org/@inquirer/number/-/number-3.0.16.tgz";
-        sha512 = "kMrXAaKGavBEoBYUCgualbwA9jWUx2TjMA46ek+pEKy38+LFpL9QHlTd8PO2kWPUgI/KB+qi02o4y2rwXbzr3Q==";
+        url = "https://registry.npmjs.org/@inquirer/number/-/number-3.0.17.tgz";
+        sha512 = "GcvGHkyIgfZgVnnimURdOueMk0CztycfC8NZTiIY9arIAkeOgt6zG57G+7vC59Jns3UX27LMkPKnKWAOF5xEYg==";
       };
     };
-    "@inquirer/password-4.0.16" = {
+    "@inquirer/password-4.0.17" = {
       name = "_at_inquirer_slash_password";
       packageName = "@inquirer/password";
-      version = "4.0.16";
+      version = "4.0.17";
       src = fetchurl {
-        url = "https://registry.npmjs.org/@inquirer/password/-/password-4.0.16.tgz";
-        sha512 = "g8BVNBj5Zeb5/Y3cSN+hDUL7CsIFDIuVxb9EPty3lkxBaYpjL5BNRKSYOF9yOLe+JOcKFd+TSVeADQ4iSY7rbg==";
+        url = "https://registry.npmjs.org/@inquirer/password/-/password-4.0.17.tgz";
+        sha512 = "DJolTnNeZ00E1+1TW+8614F7rOJJCM4y4BAGQ3Gq6kQIG+OJ4zr3GLjIjVVJCbKsk2jmkmv6v2kQuN/vriHdZA==";
       };
     };
-    "@inquirer/prompts-7.6.0" = {
+    "@inquirer/prompts-7.7.1" = {
       name = "_at_inquirer_slash_prompts";
       packageName = "@inquirer/prompts";
-      version = "7.6.0";
+      version = "7.7.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/@inquirer/prompts/-/prompts-7.6.0.tgz";
-        sha512 = "jAhL7tyMxB3Gfwn4HIJ0yuJ5pvcB5maYUcouGcgd/ub79f9MqZ+aVnBtuFf+VC2GTkCBF+R+eo7Vi63w5VZlzw==";
+        url = "https://registry.npmjs.org/@inquirer/prompts/-/prompts-7.7.1.tgz";
+        sha512 = "XDxPrEWeWUBy8scAXzXuFY45r/q49R0g72bUzgQXZ1DY/xEFX+ESDMkTQolcb5jRBzaNJX2W8XQl6krMNDTjaA==";
       };
     };
-    "@inquirer/rawlist-4.1.4" = {
+    "@inquirer/rawlist-4.1.5" = {
       name = "_at_inquirer_slash_rawlist";
       packageName = "@inquirer/rawlist";
-      version = "4.1.4";
+      version = "4.1.5";
       src = fetchurl {
-        url = "https://registry.npmjs.org/@inquirer/rawlist/-/rawlist-4.1.4.tgz";
-        sha512 = "5GGvxVpXXMmfZNtvWw4IsHpR7RzqAR624xtkPd1NxxlV5M+pShMqzL4oRddRkg8rVEOK9fKdJp1jjVML2Lr7TQ==";
+        url = "https://registry.npmjs.org/@inquirer/rawlist/-/rawlist-4.1.5.tgz";
+        sha512 = "R5qMyGJqtDdi4Ht521iAkNqyB6p2UPuZUbMifakg1sWtu24gc2Z8CJuw8rP081OckNDMgtDCuLe42Q2Kr3BolA==";
       };
     };
-    "@inquirer/search-3.0.16" = {
+    "@inquirer/search-3.0.17" = {
       name = "_at_inquirer_slash_search";
       packageName = "@inquirer/search";
-      version = "3.0.16";
+      version = "3.0.17";
       src = fetchurl {
-        url = "https://registry.npmjs.org/@inquirer/search/-/search-3.0.16.tgz";
-        sha512 = "POCmXo+j97kTGU6aeRjsPyuCpQQfKcMXdeTMw708ZMtWrj5aykZvlUxH4Qgz3+Y1L/cAVZsSpA+UgZCu2GMOMg==";
+        url = "https://registry.npmjs.org/@inquirer/search/-/search-3.0.17.tgz";
+        sha512 = "CuBU4BAGFqRYors4TNCYzy9X3DpKtgIW4Boi0WNkm4Ei1hvY9acxKdBdyqzqBCEe4YxSdaQQsasJlFlUJNgojw==";
       };
     };
-    "@inquirer/select-4.2.4" = {
+    "@inquirer/select-4.3.1" = {
       name = "_at_inquirer_slash_select";
       packageName = "@inquirer/select";
-      version = "4.2.4";
+      version = "4.3.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/@inquirer/select/-/select-4.2.4.tgz";
-        sha512 = "unTppUcTjmnbl/q+h8XeQDhAqIOmwWYWNyiiP2e3orXrg6tOaa5DHXja9PChCSbChOsktyKgOieRZFnajzxoBg==";
+        url = "https://registry.npmjs.org/@inquirer/select/-/select-4.3.1.tgz";
+        sha512 = "Gfl/5sqOF5vS/LIrSndFgOh7jgoe0UXEizDqahFRkq5aJBLegZ6WjuMh/hVEJwlFQjyLq1z9fRtvUMkb7jM1LA==";
       };
     };
-    "@inquirer/type-3.0.7" = {
+    "@inquirer/type-3.0.8" = {
       name = "_at_inquirer_slash_type";
       packageName = "@inquirer/type";
-      version = "3.0.7";
+      version = "3.0.8";
       src = fetchurl {
-        url = "https://registry.npmjs.org/@inquirer/type/-/type-3.0.7.tgz";
-        sha512 = "PfunHQcjwnju84L+ycmcMKB/pTPIngjUJvfnRhKY6FKPuYXlM4aQCb/nIdTFR6BEhMjFvngzvng/vBAJMZpLSA==";
+        url = "https://registry.npmjs.org/@inquirer/type/-/type-3.0.8.tgz";
+        sha512 = "lg9Whz8onIHRthWaN1Q9EGLa/0LFJjyM8mEUbL1eTi6yMGvBf8gvyDLtxSXztQsxMvhxxNpJYrwa1YHdq+w4Jw==";
       };
     };
-    "@types/node-24.0.15" = {
+    "@types/node-24.1.0" = {
       name = "_at_types_slash_node";
       packageName = "@types/node";
-      version = "24.0.15";
+      version = "24.1.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/@types/node/-/node-24.0.15.tgz";
-        sha512 = "oaeTSbCef7U/z7rDeJA138xpG3NuKc64/rZ2qmUFkFJmnMsAPaluIifqyWd8hSSMxyP9oie3dLAqYPblag9KgA==";
+        url = "https://registry.npmjs.org/@types/node/-/node-24.1.0.tgz";
+        sha512 = "ut5FthK5moxFKH2T1CUOC6ctR67rQRvvHdFLCD2Ql6KXmMuCrjsSsRI9UsLCm9M18BMwClv4pn327UvB7eeO1w==";
       };
     };
     "ansi-escapes-4.3.2" = {
@@ -328,13 +328,13 @@ let
         sha512 = "v3MXnZAcvnywkTUEZomIActle7RXXeedOR31wwl7VlyoXO4Qi9arvSenNQWne1TcRwhCL1HwLI21bEqdpj8/rA==";
       };
     };
-    "inquirer-12.7.0" = {
+    "inquirer-12.8.2" = {
       name = "inquirer";
       packageName = "inquirer";
-      version = "12.7.0";
+      version = "12.8.2";
       src = fetchurl {
-        url = "https://registry.npmjs.org/inquirer/-/inquirer-12.7.0.tgz";
-        sha512 = "KKFRc++IONSyE2UYw9CJ1V0IWx5yQKomwB+pp3cWomWs+v2+ZsG11G2OVfAjFS6WWCppKw+RfKmpqGfSzD5QBQ==";
+        url = "https://registry.npmjs.org/inquirer/-/inquirer-12.8.2.tgz";
+        sha512 = "oBDL9f4+cDambZVJdfJu2M5JQfvaug9lbo6fKDlFV40i8t3FGA1Db67ov5Hp5DInG4zmXhHWTSnlXBntnJ7GMA==";
       };
     };
     "is-docker-3.0.0" = {
@@ -463,15 +463,6 @@ let
         sha512 = "D2FR03Vir7FIu45XBY20mTb+/ZSWB00sjU9jdQXt83gDrI4Ztz5Fs7/yy74g2N5SVQY4xY1qDr4rNddwYRVX0g==";
       };
     };
-    "oxlint-1.7.0" = {
-      name = "oxlint";
-      packageName = "oxlint";
-      version = "1.7.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/oxlint/-/oxlint-1.7.0.tgz";
-        sha512 = "krJN1fIRhs3xK1FyVyPtYIV9tkT4WDoIwI7eiMEKBuCjxqjQt5ZemQm1htPvHqNDOaWFRFt4btcwFdU8bbwgvA==";
-      };
-    };
     "path-key-3.1.1" = {
       name = "path-key";
       packageName = "path-key";
@@ -490,22 +481,13 @@ let
         sha512 = "haREypq7xkM7ErfgIyA0z+Bj4AGKlMSdlQE2jvJo6huWD1EdkKYV+G/T4nq0YEF2vgTT8kqMFKo1uHn950r4SQ==";
       };
     };
-    "prettier-3.6.2" = {
-      name = "prettier";
-      packageName = "prettier";
-      version = "3.6.2";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/prettier/-/prettier-3.6.2.tgz";
-        sha512 = "I7AIg5boAr5R0FFtJ6rCfD+LFsWHp81dolrFD8S79U9tb8Az2nGrJncnMSnys+bpQJfRUzqs9hnA81OAA3hCuQ==";
-      };
-    };
-    "run-async-4.0.4" = {
+    "run-async-4.0.5" = {
       name = "run-async";
       packageName = "run-async";
-      version = "4.0.4";
+      version = "4.0.5";
       src = fetchurl {
-        url = "https://registry.npmjs.org/run-async/-/run-async-4.0.4.tgz";
-        sha512 = "2cgeRHnV11lSXBEhq7sN7a5UVjTKm9JTb9x8ApIT//16D7QL96AgnNeWSGoB4gIHc0iYw/Ha0Z+waBaCYZVNhg==";
+        url = "https://registry.npmjs.org/run-async/-/run-async-4.0.5.tgz";
+        sha512 = "oN9GTgxUNDBumHTTDmQ8dep6VIJbgj9S3dPP+9XylVLIK4xB9XTXtKWROd5pnhdXR9k0EgO1JRcNh0T+Ny2FsA==";
       };
     };
     "rxjs-7.8.2" = {
@@ -676,27 +658,27 @@ in
   editprompt = nodeEnv.buildNodePackage {
     name = "editprompt";
     packageName = "editprompt";
-    version = "0.1.0";
+    version = "0.2.1";
     src = fetchurl {
-      url = "https://registry.npmjs.org/editprompt/-/editprompt-0.1.0.tgz";
-      sha512 = "W7+c8UjXIvNN8Dw/zrnfBfkcvBr2sbW23nYBqHHvAnoSscQP0Way0GEukbnOnY+K6RI0pAHN3EIp760HWDW7Qw==";
+      url = "https://registry.npmjs.org/editprompt/-/editprompt-0.2.1.tgz";
+      sha512 = "z3YKR19RMDTPr/Dw1qpkyLHnLx1mJNO8ffX9yqRVHipc2gkVjOYMA2IQ4IoO9YZ9VvxweY7hf1K85ZhqKOPtvA==";
     };
     dependencies = [
-      sources."@inquirer/checkbox-4.1.9"
-      sources."@inquirer/confirm-5.1.13"
-      sources."@inquirer/core-10.1.14"
-      sources."@inquirer/editor-4.2.14"
-      sources."@inquirer/expand-4.0.16"
-      sources."@inquirer/figures-1.0.12"
-      sources."@inquirer/input-4.2.0"
-      sources."@inquirer/number-3.0.16"
-      sources."@inquirer/password-4.0.16"
-      sources."@inquirer/prompts-7.6.0"
-      sources."@inquirer/rawlist-4.1.4"
-      sources."@inquirer/search-3.0.16"
-      sources."@inquirer/select-4.2.4"
-      sources."@inquirer/type-3.0.7"
-      sources."@types/node-24.0.15"
+      sources."@inquirer/checkbox-4.2.0"
+      sources."@inquirer/confirm-5.1.14"
+      sources."@inquirer/core-10.1.15"
+      sources."@inquirer/editor-4.2.15"
+      sources."@inquirer/expand-4.0.17"
+      sources."@inquirer/figures-1.0.13"
+      sources."@inquirer/input-4.2.1"
+      sources."@inquirer/number-3.0.17"
+      sources."@inquirer/password-4.0.17"
+      sources."@inquirer/prompts-7.7.1"
+      sources."@inquirer/rawlist-4.1.5"
+      sources."@inquirer/search-3.0.17"
+      sources."@inquirer/select-4.3.1"
+      sources."@inquirer/type-3.0.8"
+      sources."@types/node-24.1.0"
       sources."ansi-escapes-4.3.2"
       sources."ansi-regex-5.0.1"
       sources."ansi-styles-4.3.0"
@@ -718,7 +700,7 @@ in
       sources."has-flag-4.0.0"
       sources."human-signals-5.0.0"
       sources."iconv-lite-0.4.24"
-      sources."inquirer-12.7.0"
+      sources."inquirer-12.8.2"
       sources."is-docker-3.0.0"
       sources."is-fullwidth-code-point-3.0.0"
       sources."is-inside-container-1.0.0"
@@ -737,10 +719,8 @@ in
       })
       sources."onetime-6.0.0"
       sources."os-tmpdir-1.0.2"
-      sources."oxlint-1.7.0"
       sources."path-key-3.1.1"
-      sources."prettier-3.6.2"
-      sources."run-async-4.0.4"
+      sources."run-async-4.0.5"
       sources."rxjs-7.8.2"
       sources."safer-buffer-2.1.2"
       sources."shebang-command-2.0.0"
@@ -773,10 +753,10 @@ in
   "@anthropic-ai/claude-code" = nodeEnv.buildNodePackage {
     name = "_at_anthropic-ai_slash_claude-code";
     packageName = "@anthropic-ai/claude-code";
-    version = "1.0.56";
+    version = "1.0.61";
     src = fetchurl {
-      url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-1.0.56.tgz";
-      sha512 = "LYOlv9uXtLrJcJqSLvQlhy7shhC6MHEXuSGZ/+BazM4LY36ng3cmKjTCDny0kZQxa+u/+MYOXUrkmkJm2qR75Q==";
+      url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-1.0.61.tgz";
+      sha512 = "+gjKzY1hsWfHoH52SgKR6E0ujCDPyyRsjyRShtZfS0urKd8VQq3D/DF3hvT3P4JJeW0YuWp5Dep0aSRON+/FFA==";
     };
     buildInputs = globalBuildInputs;
     meta = {
