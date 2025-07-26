@@ -10,6 +10,11 @@ local function is_claude_code_buffer()
   local bufname = vim.api.nvim_buf_get_name(0)
   return string.find(bufname, "claude%-code%-") ~= nil
 end
+-- バッファ名に cc-input-spaceが含まれるかチェック
+local function is_ccInputSpace_buffer()
+  local bufname = vim.api.nvim_buf_get_name(0)
+  return string.find(bufname, "cc-input-space") ~= nil
+end
 
 -- 新しいウィンドウを作成する関数
 local function create_bottom_window()
@@ -33,6 +38,7 @@ local function create_bottom_window()
   vim.bo.buftype = 'nofile'
   vim.bo.bufhidden = 'wipe'
   vim.bo.swapfile = false
+  vim.api.nvim_buf_set_name(0, 'cc-input-space')
 
   -- 200ms 待機してからインサートモードに入る
   vim.defer_fn(function()
@@ -85,28 +91,44 @@ function M.setup()
     callback = function()
       if is_claude_code_buffer() then
         -- <leader>gi で新しいウィンドウを作成
-        vim.api.nvim_buf_set_keymap(0, 'n', '<leader>gi', '', {
-          noremap = true,
-          silent = true,
-          callback = create_bottom_window
-        })
-        vim.api.nvim_buf_set_keymap(0, 't', '<C-g>i', '', {
-          noremap = true,
-          silent = true,
-          callback = create_bottom_window
-        })
+        vim.keymap.set(
+          'n',
+          '<leader>gi',
+          create_bottom_window,
+          {
+            buffer = true,
+            desc = '<leader>gi で入力用バッファを開く'
+          }
+        )
+        vim.keymap.set(
+          't',
+          '<C-g>i',
+          create_bottom_window,
+          {
+            buffer = true,
+            desc = 'Ctrl-g + i で入力用バッファを開く'
+          }
+        )
       end
+      -- インサートモードでの <C-g>x キーマッピング
+      vim.keymap.set('i', '<C-g>x', function()
+        -- 元のバッファが設定されている場合のみ実行
+        if original_buf_id then
+          yank_and_close()
+        end
+      end, {
+        desc = 'ノーマルモードで `q` で入力用バッファを閉じる'
+      })
+      -- ノーマルモードでの q キーマッピング
+      vim.keymap.set('n', 'q', function()
+        -- 元のバッファが設定されている場合のみ実行
+        if original_buf_id then
+          yank_and_close()
+        end
+      end, {
+        desc = 'ノーマルモードで `q` で入力用バッファを閉じる'
+      })
     end
-  })
-
-  -- インサートモードでの <C-g>x キーマッピング（グローバル）
-  vim.keymap.set('i', '<C-g>x', function()
-    -- 元のバッファが設定されている場合のみ実行
-    if original_buf_id then
-      yank_and_close()
-    end
-  end, {
-    silent = true
   })
 end
 
