@@ -70,9 +70,6 @@ vim.keymap.set('n', 'L', function()
     return 'L<Plug>(L)'
   end
 end, { expr = true })
--- <Plug>マッピング
-vim.keymap.set('n', '<Plug>(H)H', '<PageUp>H<Plug>(H)')
-vim.keymap.set('n', '<Plug>(L)L', '<PageDown>Lzb<Plug>(L)')
 vim.keymap.set('i', '/',
   [[complete_info(['mode']).mode == 'files' && complete_info(['selected']).selected >= 0 ? '<c-x><c-f>' : '/']],
   { expr = true, noremap = false }
@@ -84,11 +81,12 @@ vim.keymap.set('i', '/',
 vim.keymap.set('t', '<Esc>', '<C-\\><C-n><Plug>(Esc)', { noremap = true })
 vim.keymap.set('n', '<Plug>(Esc)<Esc>', 'i', { noremap = true })
 
--- ノーマルモードの操作カスタマイズ
--- ;2連打でコマンドラインに移動
--- f motion とバッティングするので取り止め
--- vim.keymap.set('n', ';;', ':', { noremap = true })
-
+--=======================================================================================
+-- 編集系
+--=======================================================================================
+-- 挿入モードでEmacsライクの左右移動
+vim.keymap.set("i", "<C-b>", "<C-g>U<Left>")
+vim.keymap.set("i", "<C-f>", "<C-g>U<Right>")
 -- 大文字の Y で行末までヤンク
 vim.keymap.set('n', 'Y', 'y$', { silent = true, noremap = true })
 
@@ -108,3 +106,19 @@ vim.keymap.set('n', 'X', '"_D$', { silent = true, noremap = true })
 -- Visual <, >で連続してインデントを操作
 vim.keymap.set('x', '<', '<gv', { silent = true, noremap = true })
 vim.keymap.set('x', '>', '>gv', { silent = true, noremap = true })
+-- 行選択でも複数行への挿入を可能にする
+vim.keymap.set(
+    "i",
+    "A",
+    function()
+        if vim.fn.mode(0) == "V" then
+            return "<C-v>0o$A"
+        else
+            return "A"
+        end
+    end,
+    {
+        expr = true,
+        desc = [[行選択モードでも複数行に挿入できる A]],
+    }
+)
