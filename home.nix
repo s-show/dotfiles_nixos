@@ -84,6 +84,7 @@ in
       zig
       go
       deno
+      lazysql
       nix-direnv
       age
       sops
