@@ -85,13 +85,13 @@ let
         sha512 = "DJolTnNeZ00E1+1TW+8614F7rOJJCM4y4BAGQ3Gq6kQIG+OJ4zr3GLjIjVVJCbKsk2jmkmv6v2kQuN/vriHdZA==";
       };
     };
-    "@inquirer/prompts-7.7.1" = {
+    "@inquirer/prompts-7.8.0" = {
       name = "_at_inquirer_slash_prompts";
       packageName = "@inquirer/prompts";
-      version = "7.7.1";
+      version = "7.8.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/@inquirer/prompts/-/prompts-7.7.1.tgz";
-        sha512 = "XDxPrEWeWUBy8scAXzXuFY45r/q49R0g72bUzgQXZ1DY/xEFX+ESDMkTQolcb5jRBzaNJX2W8XQl6krMNDTjaA==";
+        url = "https://registry.npmjs.org/@inquirer/prompts/-/prompts-7.8.0.tgz";
+        sha512 = "JHwGbQ6wjf1dxxnalDYpZwZxUEosT+6CPGD9Zh4sm9WXdtUp9XODCQD3NjSTmu+0OAyxWXNOqf0spjIymJa2Tw==";
       };
     };
     "@inquirer/rawlist-4.1.5" = {
@@ -103,13 +103,13 @@ let
         sha512 = "R5qMyGJqtDdi4Ht521iAkNqyB6p2UPuZUbMifakg1sWtu24gc2Z8CJuw8rP081OckNDMgtDCuLe42Q2Kr3BolA==";
       };
     };
-    "@inquirer/search-3.0.17" = {
+    "@inquirer/search-3.1.0" = {
       name = "_at_inquirer_slash_search";
       packageName = "@inquirer/search";
-      version = "3.0.17";
+      version = "3.1.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/@inquirer/search/-/search-3.0.17.tgz";
-        sha512 = "CuBU4BAGFqRYors4TNCYzy9X3DpKtgIW4Boi0WNkm4Ei1hvY9acxKdBdyqzqBCEe4YxSdaQQsasJlFlUJNgojw==";
+        url = "https://registry.npmjs.org/@inquirer/search/-/search-3.1.0.tgz";
+        sha512 = "PMk1+O/WBcYJDq2H7foV0aAZSmDdkzZB9Mw2v/DmONRJopwA/128cS9M/TXWLKKdEQKZnKwBzqu2G4x/2Nqx8Q==";
       };
     };
     "@inquirer/select-4.3.1" = {
@@ -328,13 +328,13 @@ let
         sha512 = "v3MXnZAcvnywkTUEZomIActle7RXXeedOR31wwl7VlyoXO4Qi9arvSenNQWne1TcRwhCL1HwLI21bEqdpj8/rA==";
       };
     };
-    "inquirer-12.8.2" = {
+    "inquirer-12.9.0" = {
       name = "inquirer";
       packageName = "inquirer";
-      version = "12.8.2";
+      version = "12.9.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/inquirer/-/inquirer-12.8.2.tgz";
-        sha512 = "oBDL9f4+cDambZVJdfJu2M5JQfvaug9lbo6fKDlFV40i8t3FGA1Db67ov5Hp5DInG4zmXhHWTSnlXBntnJ7GMA==";
+        url = "https://registry.npmjs.org/inquirer/-/inquirer-12.9.0.tgz";
+        sha512 = "LlFVmvWVCun7uEgPB3vups9NzBrjJn48kRNtFGw3xU1H5UXExTEz/oF1JGLaB0fvlkUB+W6JfgLcSEaSdH7RPA==";
       };
     };
     "is-docker-3.0.0" = {
@@ -673,9 +673,9 @@ in
       sources."@inquirer/input-4.2.1"
       sources."@inquirer/number-3.0.17"
       sources."@inquirer/password-4.0.17"
-      sources."@inquirer/prompts-7.7.1"
+      sources."@inquirer/prompts-7.8.0"
       sources."@inquirer/rawlist-4.1.5"
-      sources."@inquirer/search-3.0.17"
+      sources."@inquirer/search-3.1.0"
       sources."@inquirer/select-4.3.1"
       sources."@inquirer/type-3.0.8"
       sources."@types/node-24.1.0"
@@ -700,7 +700,7 @@ in
       sources."has-flag-4.0.0"
       sources."human-signals-5.0.0"
       sources."iconv-lite-0.4.24"
-      sources."inquirer-12.8.2"
+      sources."inquirer-12.9.0"
       sources."is-docker-3.0.0"
       sources."is-fullwidth-code-point-3.0.0"
       sources."is-inside-container-1.0.0"
@@ -753,10 +753,10 @@ in
   "@anthropic-ai/claude-code" = nodeEnv.buildNodePackage {
     name = "_at_anthropic-ai_slash_claude-code";
     packageName = "@anthropic-ai/claude-code";
-    version = "1.0.61";
+    version = "1.0.63";
     src = fetchurl {
-      url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-1.0.61.tgz";
-      sha512 = "+gjKzY1hsWfHoH52SgKR6E0ujCDPyyRsjyRShtZfS0urKd8VQq3D/DF3hvT3P4JJeW0YuWp5Dep0aSRON+/FFA==";
+      url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-1.0.63.tgz";
+      sha512 = "4aprhrYgBZJ47ADg9mIY+HX/ncqapxW97R4m5CZAE12Rv+lm427sgKyOcdxC/KlSZuwHKiL+nHbI+inos7fqSA==";
     };
     buildInputs = globalBuildInputs;
     meta = {
