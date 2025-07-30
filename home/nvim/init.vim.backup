@@ -1,1 +1,124 @@
-set runtimepath+=~/.local/share/nvim/lazy/pum.vim/
+set runtimepath+=~/.local/share/nvim/lazy/blink.cmp/
+set runtimepath+=~/.local/share/nvim/lazy/blink.compat/
+set runtimepath+=~/.local/share/nvim/lazy/denops.vim/
+set runtimepath+=~/.local/share/nvim/lazy/skkeleton/
+set runtimepath+=~/.local/share/nvim/lazy/skkeleton_indicator.nvim/
+
+lua << EOF
+require('blink.cmp').setup({
+  'saghen/blink.cmp',
+  event = { "InsertEnter", "CmdLineEnter" },
+  version = '1.*',
+  dependencies = {
+    { "L3MON4D3/LuaSnip" },
+    { "uga-rosa/cmp-skkeleton" },
+    { "saghen/blink.compat" }
+  },
+  ---@module 'blink.cmp'
+  ---@type blink.cmp.Config
+  opts = {
+    keymap = {
+      preset = "enter",
+      ['<C-space>'] = { 'show', 'show_documentation', 'hide_documentation' },
+      ["<C-u>"] = { "scroll_documentation_up", "fallback" },
+      ["<C-d>"] = { "scroll_documentation_down", "fallback" },
+      ['<C-y>'] = { "select_and_accept", "fallback" },
+      ["<C-m>"] = { "select_and_accept", "fallback" },
+      ["<C-b>"] = {},
+      ["<C-f>"] = {},
+    },
+    sources = {
+      default = { "skkeleton", "snippets", "lsp", "path", "buffer", "cmdline" },
+      providers = {
+        skkeleton = {
+          name = "skkeleton",
+          module = 'blink.compat.source',
+        }
+      },
+      min_keyword_length = function(ctx)
+        -- :wq, :qa -> menu doesn't popup
+        -- :Lazy, :wqa -> menu popup
+        if ctx.mode == "cmdline" and ctx.line:find("^%l+$") ~= nil then
+          return 3
+        end
+        return 0
+      end,
+    },
+    snippets = {
+      preset = "luasnip",
+    },
+    completion = {
+      menu = {
+        border = 'rounded',
+      },
+      documentation = {
+        window = {
+          border = 'rounded',
+        },
+        auto_show = true,
+      },
+      list = {
+        selection = {
+          auto_insert = true,
+        }
+      }
+    },
+    signature = {
+      window = {
+        border = 'single',
+      },
+    },
+    cmdline = {
+      keymap = {
+        preset = 'inherit',
+      },
+      completion = {
+        menu = {
+          auto_show = true,
+        },
+      },
+    }
+  }
+})
+EOF
+
+lua require('blink.compat').setup()
+
+lua << EOF
+--skkeleton
+vim.keymap.set( { 'i', 'c', 't' } , '<C-j>', '<plug>(skkeleton-enable)', {})
+vim.keymap.set( { 'i', 'c', 't' } , '<C-l>', '<plug>(skkeleton-disable)', {})
+vim.fn['skkeleton#config']({
+  globalDictionaries = {
+    vim.fn["expand"]('~/.config/nvim/skk_dict/SKK-JISYO.L'),
+    vim.fn["expand"]('~/.config/nvim/skk_dict/SKK-JISYO.geo'),
+    vim.fn["expand"]('~/.config/nvim/skk_dict/SKK-JISYO.jinmei'),
+    vim.fn["expand"]('~/.config/nvim/skk_dict/SKK-JISYO.law'),
+  },
+  eggLikeNewline = true,
+  keepState = true,
+  showCandidatesCount = 2,
+  registerConvertResult = true,
+})
+
+vim.g.denops_server_deno_args = { '--unstable-kv' }
+vim.fn['skkeleton#config']({
+  databasePath = vim.fn["expand"]('~/.config/nvim/skk_dict/')
+})
+
+vim.fn['skkeleton#register_kanatable']('rom', {
+  ['jj'] = 'escape',
+  -- 丸数字
+  -- ref: https://ja.wikipedia.org/wiki/丸数字
+  ['z0'] = { '⓪', '' },
+  ['z1'] = { '①', '' },
+  ['z2'] = { '②', '' },
+  ['z3'] = { '③', '' },
+  ['z4'] = { '④', '' },
+  ['z5'] = { '⑤', '' },
+  ['z6'] = { '⑥', '' },
+  ['z7'] = { '⑦', '' },
+  ['z8'] = { '⑧', '' },
+  ['z9'] = { '⑨', '' },
+  ['z10'] = { '⑩', '' },
+})

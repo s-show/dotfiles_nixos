@@ -22,7 +22,10 @@ return {
     dependencies = {
       { "L3MON4D3/LuaSnip" },
       { "uga-rosa/cmp-skkeleton" },
+      { "saghen/blink.compat" }
     },
+    ---@module 'blink.cmp'
+    ---@type blink.cmp.Config
     opts = {
       keymap = {
         preset = "enter",
@@ -35,7 +38,7 @@ return {
         ["<C-f>"] = {},
       },
       sources = {
-        default = { "snippets", "lsp", "path", "buffer", "cmdline", "skkeleton" },
+        default = { "skkeleton", "snippets", "lsp", "path", "buffer", "cmdline" },
         providers = {
           skkeleton = {
             name = "skkeleton",
