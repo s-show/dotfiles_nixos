@@ -23,11 +23,10 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
--- require("lazy").setup("plugins")
 require("lazy").setup({
   dev = {
     path = "~/my_neovim_plugins",
-    patterns = { 'extend_word_motion.nvim' },
+    patterns = { 'extend_word_motion.nvim', 'ft_mapper.nvim' },
   },
   spec = {
     import = 'plugins',
