@@ -31,7 +31,7 @@ return {
             section = 'terminal',
             cmd =
             'chafa /home/s-show/.config/nvim/snacks_dashboard_logo.PNG --size 44 -c full --symbols vhalf; sleep .1',
-            height = 48,
+            height = 36,
             -- width = 36,
             padding = 1,
           },
