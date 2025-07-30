@@ -2,7 +2,6 @@
 -- プラグインと設定ファイルの読み込み順を間違えるとエラーになるので、
 -- 読み込み順は適宜調整している。
 require('setting/keymapping')
-require('setting.ftjpn')
 require('setting.user_interface')
 
 -- Bootstrap lazy.nvim
