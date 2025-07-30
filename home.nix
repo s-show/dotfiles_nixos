@@ -124,9 +124,11 @@ in
       libsixel
       timg
       chafa
+      vhs
 
       # Fonts
       nerd-fonts.jetbrains-mono
+      notonoto
 
       # Neovim packages
       neovim-nightly # nvim コマンドで nightly 版を起動
@@ -147,10 +149,12 @@ in
     ".config/superfile".source = mkDotfileSymlink "home/superfile";
     ".config/nvim".source = mkDotfileSymlink "home/nvim";
     ".config/nvim_ime".source = mkDotfileSymlink "home/nvim_ime";
+    ".config/nvim_demo".source = mkDotfileSymlink "home/nvim_demo";
     ".local/bin/home-update".source = mkDotfileSymlink "home/home-update";
     ".local/bin/flakes-update".source = mkDotfileSymlink "home/flakes-update";
     ".local/bin/notify".source = mkDotfileSymlink "home/notify.sh";
     ".local/bin/nvim_ime".source = mkDotfileSymlink "home/nvim_ime.sh";
+    ".local/bin/nvim_demo".source = mkDotfileSymlink "home/nvim_demo.sh";
   };
 
   # Home activation scripts

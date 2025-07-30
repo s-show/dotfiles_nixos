@@ -1,0 +1,16 @@
+{
+  "cyberdream.nvim": { "branch": "main", "commit": "f660ebfd8840e226d2a5368e08108a7aa84fef36" },
+  "ddc-filter-matcher_head": { "branch": "main", "commit": "2c46a670191cb883bc07a2286883a7c438f731fb" },
+  "ddc-filter-sorter_rank": { "branch": "main", "commit": "b24215966eadcaecbe71185aa0b68f799e658c25" },
+  "ddc-ui-pum": { "branch": "main", "commit": "79df4ac4bf16cb69b358b5b2eedfeab2b69d0eb0" },
+  "ddc.vim": { "branch": "main", "commit": "653546fc1b85c5a7d1674f930d096b4467ebdb95" },
+  "denops.vim": { "branch": "main", "commit": "8ee1fccd95f95675b8256538375cb515e8e49679" },
+  "extend_word_motion.nvim": { "branch": "main", "commit": "16e55673301035b5fe17dd848aaf3423ff6c9a41" },
+  "lazy.nvim": { "branch": "main", "commit": "6c3bda4aca61a13a9c63f1c1d1b16b9d3be90d7a" },
+  "lexima.vim": { "branch": "master", "commit": "ab621e4756465c9d354fce88cff2bd1aa7887065" },
+  "nvim-keycastr": { "branch": "main", "commit": "d494e6ef5b551ffabe8f47d80f233353cd0d8034" },
+  "pum.vim": { "branch": "main", "commit": "39da7aacfea57ee16f8ac38d39796d3a72610db0" },
+  "skkeleton": { "branch": "main", "commit": "3e7c78c8575745f0c642cd82b11032e3dd0eb5a2" },
+  "skkeleton_indicator.nvim": { "branch": "main", "commit": "6d567debfedaad79e72f9088a2711351ec8770ec" },
+  "tinysegmenter.nvim": { "branch": "main", "commit": "64ac8a1b4c074fd032cdc7f1f9167c50447fd8cd" }
+}
