@@ -16,36 +16,6 @@ local function is_ccInputSpace_buffer()
   return string.find(bufname, "cc-input-space") ~= nil
 end
 
--- 新しいウィンドウを作成する関数
-local function create_bottom_window()
-  -- 現在のバッファとウィンドウIDを保存
-  original_buf_id = vim.api.nvim_get_current_buf()
-  original_win_id = vim.api.nvim_get_current_win()
-
-  -- 現在のウィンドウの高さを取得
-  local win_height = vim.api.nvim_win_get_height(0)
-
-  -- 下側3分の1の高さを計算
-  local new_height = math.floor(win_height / 3)
-
-  -- 新しいウィンドウを下に作成
-  vim.cmd('belowright ' .. new_height .. 'split')
-
-  -- 新しいバッファを作成
-  vim.cmd('enew')
-
-  -- バッファの設定
-  vim.bo.buftype = 'nofile'
-  vim.bo.bufhidden = 'wipe'
-  vim.bo.swapfile = false
-  vim.api.nvim_buf_set_name(0, 'cc-input-space')
-
-  -- 200ms 待機してからインサートモードに入る
-  vim.defer_fn(function()
-    vim.cmd('startinsert')
-  end, 200)
-end
-
 -- ウィンドウの内容をヤンクして閉じる関数
 local function yank_and_close()
   -- 現在のバッファの全内容を取得
@@ -56,7 +26,7 @@ local function yank_and_close()
   vim.fn.setreg('"', content)
 
   -- 現在のウィンドウを閉じる
-  vim.cmd('close')
+  vim.cmd('close!')
 
   -- 元のclaude-codeバッファにフォーカスを戻す
   if original_win_id and vim.api.nvim_win_is_valid(original_win_id) then
@@ -81,6 +51,54 @@ local function yank_and_close()
   -- 変数をリセット
   original_buf_id = nil
   original_win_id = nil
+end
+
+-- 新しいウィンドウを作成する関数
+local function create_bottom_window()
+  -- 現在のバッファとウィンドウIDを保存
+  original_buf_id = vim.api.nvim_get_current_buf()
+  original_win_id = vim.api.nvim_get_current_win()
+
+  -- 現在のウィンドウの高さを取得
+  local win_height = vim.api.nvim_win_get_height(0)
+
+  -- 下側3分の1の高さを計算
+  local new_height = math.floor(win_height / 3)
+
+  -- 新しいウィンドウを下に作成
+  vim.cmd('belowright ' .. new_height .. 'split')
+
+  -- 新しいバッファを作成
+  vim.cmd('enew')
+
+  -- バッファの設定
+  vim.bo.bufhidden = 'wipe'
+  vim.bo.swapfile = false
+  vim.api.nvim_buf_set_name(0, 'cc-input-space')
+  vim.keymap.set('i', '<C-g>x', function()
+    -- 元のバッファが設定されている場合のみ実行
+    if original_buf_id then
+      yank_and_close()
+    end
+  end, {
+    buffer = true,
+    desc = 'ノーマルモードで `q` で入力用バッファを閉じる'
+  })
+  -- ノーマルモードでの q キーマッピング
+  vim.keymap.set('n', 'q', function()
+    -- 元のバッファが設定されている場合のみ実行
+    if original_buf_id then
+      yank_and_close()
+    end
+  end, {
+    buffer = true,
+    desc = 'ノーマルモードで `q` で入力用バッファを閉じる'
+  })
+
+  -- 200ms 待機してからインサートモードに入る
+  vim.defer_fn(function()
+    vim.cmd('startinsert')
+  end, 200)
 end
 
 -- キーマッピングの設定
@@ -110,24 +128,6 @@ function M.setup()
           }
         )
       end
-      -- インサートモードでの <C-g>x キーマッピング
-      vim.keymap.set('i', '<C-g>x', function()
-        -- 元のバッファが設定されている場合のみ実行
-        if original_buf_id then
-          yank_and_close()
-        end
-      end, {
-        desc = 'ノーマルモードで `q` で入力用バッファを閉じる'
-      })
-      -- ノーマルモードでの q キーマッピング
-      vim.keymap.set('n', 'q', function()
-        -- 元のバッファが設定されている場合のみ実行
-        if original_buf_id then
-          yank_and_close()
-        end
-      end, {
-        desc = 'ノーマルモードで `q` で入力用バッファを閉じる'
-      })
     end
   })
 end
