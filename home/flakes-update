@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-
-pushd ~/.dotfiles
-git add .
-sudo nixos-rebuild switch --flake . --impure --show-trace
-popd +0

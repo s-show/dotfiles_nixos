@@ -151,7 +151,8 @@ in
     ".config/nvim_ime".source = mkDotfileSymlink "home/nvim_ime";
     ".config/nvim_demo".source = mkDotfileSymlink "home/nvim_demo";
     ".local/bin/home-update".source = mkDotfileSymlink "home/home-update";
-    ".local/bin/flakes-update".source = mkDotfileSymlink "home/flakes-update";
+    ".local/bin/flakes-update".source = mkDotfileSymlink "home/flakes-update.sh";
+    ".local/bin/flakes-and-node2nix-update".source = mkDotfileSymlink "home/flakes-and-node2nix-update.sh";
     ".local/bin/notify".source = mkDotfileSymlink "home/notify.sh";
     ".local/bin/nvim_ime".source = mkDotfileSymlink "home/nvim_ime.sh";
     ".local/bin/nvim_demo".source = mkDotfileSymlink "home/nvim_demo.sh";
