@@ -607,13 +607,13 @@ let
         sha512 = "t0rzBq87m3fVcduHDUFhKmyyX+9eo6WQjZvf51Ea/M0Q7+T374Jp1aUiyUl0GKxp8M/OETVHSDvmkyPgvX+X2w==";
       };
     };
-    "typescript-5.8.3" = {
+    "typescript-5.9.2" = {
       name = "typescript";
       packageName = "typescript";
-      version = "5.8.3";
+      version = "5.9.2";
       src = fetchurl {
-        url = "https://registry.npmjs.org/typescript/-/typescript-5.8.3.tgz";
-        sha512 = "p1diW6TqL9L07nNxvRMM7hMMw4c5XOo/1ibL4aAIGmSAt9slTE1Xgw5KWuof2uTOvCg9BY7ZRi+GaF+7sfgPeQ==";
+        url = "https://registry.npmjs.org/typescript/-/typescript-5.9.2.tgz";
+        sha512 = "CWBzXQrc/qOkhidw1OzBTQuYRbfyxDXJMVJ1XNwUHGROVmuaeiEm3OslpZ1RV96d7SKKjZKrSJu3+t/xlw3R9A==";
       };
     };
     "undici-types-7.8.0" = {
@@ -734,7 +734,7 @@ in
       sources."tmp-0.0.33"
       sources."tslib-2.8.1"
       sources."type-fest-0.21.3"
-      sources."typescript-5.8.3"
+      sources."typescript-5.9.2"
       sources."undici-types-7.8.0"
       sources."which-2.0.2"
       sources."wrap-ansi-6.2.0"
@@ -753,10 +753,10 @@ in
   "@anthropic-ai/claude-code" = nodeEnv.buildNodePackage {
     name = "_at_anthropic-ai_slash_claude-code";
     packageName = "@anthropic-ai/claude-code";
-    version = "1.0.63";
+    version = "1.0.67";
     src = fetchurl {
-      url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-1.0.63.tgz";
-      sha512 = "4aprhrYgBZJ47ADg9mIY+HX/ncqapxW97R4m5CZAE12Rv+lm427sgKyOcdxC/KlSZuwHKiL+nHbI+inos7fqSA==";
+      url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-1.0.67.tgz";
+      sha512 = "r7CfhbKBXgaL5Wo0BIh08SOahFYQPcbHCNnMLtse7iDd2IVBWeOxqoiqQvzRQ0wTCiqLTshRbnmLWHyP4AbuyQ==";
     };
     buildInputs = globalBuildInputs;
     meta = {
