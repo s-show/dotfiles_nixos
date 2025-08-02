@@ -52,6 +52,7 @@ in
           bindkey -M emacs "Enter" abbr-expand-and-accept
           bindkey -s '^X^I' 'editprompt -e nvim_ime\n'
           zstyle ':completion:*:default' menu select=1
+          zstyle ':completion:*:default' ignore-parents parent pwd ..
           eval "$(direnv hook zsh)"
           export OPENROUTER_API_KEY=$(cat "/run/secrets/OPENROUTER_API_KEY")
           export EDITOR=nvim
@@ -64,6 +65,7 @@ in
           notify-send() {
             ${wsl-notify-send}/bin/wsl-notify-send.exe --category "$WSL_DISTRO_NAME" "$@"
           }
+          fpath+="$HOME/.local/bin/"
         '';
       in
       lib.mkMerge [
