@@ -32,24 +32,46 @@ vim.keymap.set('n', '<leader>ww', "<Cmd>update<CR>", { noremap = true })
 -- ウィンドウ操作系
 --=======================================================================================
 -- space-w-[vsjkhlc=]でウィンドウの分割・移動・リサイズ・クローズを実行
-vim.keymap.set('n', '<leader>wv', '<Cmd>wincmd v<CR>', { silent = true })
-vim.keymap.set('n', '<leader>ws', '<Cmd>wincmd s<CR>', { silent = true })
-vim.keymap.set('n', '<leader>wj', '<Cmd>wincmd j<CR>', { silent = true })
-vim.keymap.set('n', '<leader>wk', '<Cmd>wincmd k<CR>', { silent = true })
-vim.keymap.set('n', '<leader>wh', '<Cmd>wincmd h<CR>', { silent = true })
-vim.keymap.set('n', '<leader>wl', '<Cmd>wincmd l<CR>', { silent = true })
-vim.keymap.set('n', '<leader>wc', '<Cmd>wincmd c<CR>', { silent = true })
-vim.keymap.set('n', '<leader>tl', '<Cmd>tabnext<CR>', { silent = true })
-vim.keymap.set('n', '<leader>th', '<Cmd>tabprevious<CR>', { silent = true })
-vim.keymap.set('n', '<leader>tn', '<Cmd>tabnew<CR>', { silent = true })
-vim.keymap.set('n', '<leader>tt', '',
-  {
-    callback = function()
+-- モード、キー、コマンドをまとめて管理
+local keymaps = {
+  -- ノーマルモードのウィンドウ操作
+  { mode = 'n', key = '<leader>wv', cmd = '<Cmd>wincmd v<CR>' },
+  { mode = 'n', key = '<leader>ws', cmd = '<Cmd>wincmd s<CR>' },
+  { mode = 'n', key = '<leader>wj', cmd = '<Cmd>wincmd j<CR>' },
+  { mode = 'n', key = '<leader>wk', cmd = '<Cmd>wincmd k<CR>' },
+  { mode = 'n', key = '<leader>wh', cmd = '<Cmd>wincmd h<CR>' },
+  { mode = 'n', key = '<leader>wl', cmd = '<Cmd>wincmd l<CR>' },
+  { mode = 'n', key = '<leader>wc', cmd = '<Cmd>wincmd c<CR>' },
+
+  -- ノーマルモードのタブ操作
+  { mode = 'n', key = '<leader>tl', cmd = '<Cmd>tabnext<CR>' },
+  { mode = 'n', key = '<leader>th', cmd = '<Cmd>tabprevious<CR>' },
+  { mode = 'n', key = '<leader>tn', cmd = '<Cmd>tabnew<CR>' },
+
+  -- ターミナルモードのキーマップ
+  { mode = 't', key = '<C-g>h',     cmd = '<C-\\><C-n><C-w>h' },
+  { mode = 't', key = '<C-g>j',     cmd = '<C-\\><C-n><C-w>j' },
+  { mode = 't', key = '<C-g>k',     cmd = '<C-\\><C-n><C-w>k' },
+  { mode = 't', key = '<C-g>l',     cmd = '<C-\\><C-n><C-w>l' },
+  { mode = 't', key = '<C-g>tl',    cmd = '<Cmd>tabnext<CR>' },
+  { mode = 't', key = '<C-g>th',    cmd = '<Cmd>tabprevious<CR>' },
+  { mode = 't', key = '<C-g>tn',    cmd = '<Cmd>tabnew<CR>' },
+}
+-- まとめて設定
+for _, mapping in ipairs(keymaps) do
+  vim.keymap.set(mapping.mode, mapping.key, mapping.cmd, { silent = true })
+end
+
+-- タブが2つ以上あればタブを順番に選択し、タブが1つならターミナルタブを開く
+vim.keymap.set('n', '<leader>tt', function()
+    if #vim.api.nvim_list_tabpages() >= 2 then
+      vim.cmd('tabnext')
+    else
       vim.api.nvim_exec2('tabnew', { output = true })
-      vim.api.nvim_exec2('terminal pwsh.exe', { output = true })
-    end,
-    silent = true
-  }
+      vim.api.nvim_exec2('terminal', { output = true })
+    end
+  end,
+  { silent = true }
 )
 
 -- H/LとPageUp/PageDownを共存させる設定
@@ -78,8 +100,9 @@ vim.keymap.set('i', '/',
 --=======================================================================================
 -- ターミナル操作系
 --=======================================================================================
-vim.keymap.set('t', '<Esc>', '<C-\\><C-n><Plug>(Esc)', { noremap = true })
-vim.keymap.set('n', '<Plug>(Esc)<Esc>', 'i', { noremap = true })
+-- vim.keymap.set('t', '<Esc>', '<C-\\><C-n><Plug>(Esc)', { noremap = false })
+-- vim.keymap.set('n', '<Plug>(Esc)<Esc>', 'i')
+vim.keymap.set('t', '<C-]>', '<C-\\><C-n>')
 
 --=======================================================================================
 -- 編集系
@@ -88,37 +111,37 @@ vim.keymap.set('n', '<Plug>(Esc)<Esc>', 'i', { noremap = true })
 vim.keymap.set("i", "<C-b>", "<C-g>U<Left>")
 vim.keymap.set("i", "<C-f>", "<C-g>U<Right>")
 -- 大文字の Y で行末までヤンク
-vim.keymap.set('n', 'Y', 'y$', { silent = true, noremap = true })
+vim.keymap.set('n', 'Y', 'y$', { silent = true })
 
 -- i<space>でWORD選択
-vim.keymap.set('x', 'i<leader>', 'iW', { silent = true, noremap = true })
-vim.keymap.set('o', 'i<leader>', 'iW', { silent = true, noremap = true })
+vim.keymap.set('x', 'i<leader>', 'iW', { silent = true })
+vim.keymap.set('o', 'i<leader>', 'iW', { silent = true })
 
 -- 大文字の U でリドゥ
-vim.keymap.set('n', 'U', '<c-r>', { silent = true, noremap = true })
+vim.keymap.set('n', 'U', '<c-r>', { silent = true })
 
 -- Visual コピー時にカーソル位置を保存
-vim.keymap.set('x', 'y', 'mzy`z', { silent = true, noremap = true })
+vim.keymap.set('x', 'y', 'mzy`z', { silent = true })
 
 -- 大文字の X で行末まで削除
-vim.keymap.set('n', 'X', '"_D$', { silent = true, noremap = true })
+vim.keymap.set('n', 'X', '"_D$', { silent = true })
 
 -- Visual <, >で連続してインデントを操作
-vim.keymap.set('x', '<', '<gv', { silent = true, noremap = true })
-vim.keymap.set('x', '>', '>gv', { silent = true, noremap = true })
+vim.keymap.set('x', '<', '<gv', { silent = true })
+vim.keymap.set('x', '>', '>gv', { silent = true })
 -- 行選択でも複数行への挿入を可能にする
 vim.keymap.set(
-    "i",
-    "A",
-    function()
-        if vim.fn.mode(0) == "V" then
-            return "<C-v>0o$A"
-        else
-            return "A"
-        end
-    end,
-    {
-        expr = true,
-        desc = [[行選択モードでも複数行に挿入できる A]],
-    }
+  "i",
+  "A",
+  function()
+    if vim.fn.mode(0) == "V" then
+      return "<C-v>0o$A"
+    else
+      return "A"
+    end
+  end,
+  {
+    expr = true,
+    desc = [[行選択モードでも複数行に挿入できる A]],
+  }
 )

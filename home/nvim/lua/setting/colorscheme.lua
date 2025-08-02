@@ -1,23 +1,2 @@
--- vim.cmd([[colorscheme everforest]])
--- vim.cmd([[colorscheme carbonfox]])
--- vim.cmd([[colorscheme dawnfox]])
--- vim.cmd([[colorscheme material]])
--- vim.cmd([[colorscheme vague]])
--- vim.g.material_style = "deep ocean"
--- vim.opt.background = 'light'
--- vim.cmd.colorscheme 'melange'
--- vim.cmd.colorscheme 'nordfox'
--- vim.cmd.colorscheme = 'everforest'
--- vim.cmd([[colorscheme melange]])
--- vim.cmd.colorscheme 'slate'
--- vim.cmd([[colorscheme modus_operandi]]) -- modus_operandi, modus_vivendi
--- vim.cmd.colorscheme "catppuccin-latte"
--- vim.cmd.colorscheme "ashikaga"
--- vim.cmd.colorscheme "evergarden"
-vim.cmd.colorscheme "cyberdream"
-
--- vim.cmd('highlight LineNr guifg=#white')
--- vim.cmd('highlight CursorLineNr guifg=#ffcc00')
--- vim.cmd('highlight CursorLine guibg=#000066')
--- vim.cmd('highlight LineNrAbove guifg=#white')
--- vim.cmd('highlight LineNrBelow guifg=#white')
+vim.cmd.colorscheme "material"
+vim.g.material_style = "palenight"

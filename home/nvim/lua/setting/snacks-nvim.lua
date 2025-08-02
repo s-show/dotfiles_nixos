@@ -9,3 +9,4 @@ vim.keymap.set('n', '<leader>sh', "<cmd>lua Snacks.picker.help()<CR>", { silent 
 vim.keymap.set('n', '<leader>sf', "<cmd>lua Snacks.picker.files()<CR>", { silent = true })
 vim.keymap.set('n', '<leader>sb', "<cmd>lua Snacks.picker.buffers()<CR>", { silent = true })
 vim.keymap.set('n', '<leader>sg', "<cmd>lua Snacks.picker.grep({ hidden = true, })<CR>", { silent = true })
+vim.keymap.set('n', '<leader>sc', "<cmd>lua Snacks.picker.command_history()<CR>", { silent = true })

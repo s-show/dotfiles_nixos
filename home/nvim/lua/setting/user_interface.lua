@@ -100,14 +100,15 @@ end
 
 function Win_list()
   -- 表示中のウィンドウ一覧を取得
-  local wins = vim.api.nvim_tabpage_list_wins(vim.api.nvim_get_current_tabpage())
-
-  -- ウィンドウごとに表示中のバッファのファイルタイプを確認
-  -- msgboxを見つけたらhideして、関数を終了
-  for _, win in ipairs(wins) do
-    local buf = vim.api.nvim_win_get_buf(win)
-    local ft = vim.bo[buf].filetype
-    local name = vim.api.nvim_buf_get_name(vim.api.nvim_win_get_buf(win))
-    vim.notify('bufnum: ' .. buf .. ', filetype: ' .. ft .. ', name: ' .. name)
+  local tabs = vim.api.nvim_list_tabpages()
+  for _, tab in ipairs(tabs) do
+    local wins = vim.api.nvim_tabpage_list_wins(tab)
+    for _, win in ipairs(wins) do
+      local buf = vim.api.nvim_win_get_buf(win)
+      local buftype = vim.api.nvim_get_option_value('buftype', { buf = buf })
+      local ft = vim.bo[buf].filetype
+      local name = vim.api.nvim_buf_get_name(vim.api.nvim_win_get_buf(win))
+      vim.notify('bufnum: ' .. buf .. ', buftype: ' .. buftype .. ', filetype: ' .. ft .. ', name: ' .. name)
+    end
   end
 end
