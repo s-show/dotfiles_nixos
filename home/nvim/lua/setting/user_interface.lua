@@ -23,7 +23,7 @@ vim.opt.showbreak = '↪'
 -- TUI で24ビットカラーを使えるようにする
 -- この設定を忘れると各種テーマの色が正確に再現されない
 vim.opt.termguicolors = true
-vim.opt.laststatus = 1
+vim.opt.laststatus = 3
 -- 折り返しの調整
 vim.opt.breakindent = true
 vim.opt.formatoptions = 'l'
