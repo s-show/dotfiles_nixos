@@ -34,7 +34,6 @@ in
       gitm = "git commit -m '%'";
       gitc = "git clone '%'";
       mkdir = "mkdir -p %";
-      apply = "git add . && home-manager switch --flake .";
     };
     initContent =
       let
