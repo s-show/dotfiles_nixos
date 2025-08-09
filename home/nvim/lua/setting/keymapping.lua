@@ -92,10 +92,12 @@ vim.keymap.set('n', 'L', function()
     return 'L<Plug>(L)'
   end
 end, { expr = true })
-vim.keymap.set('i', '/',
-  [[complete_info(['mode']).mode == 'files' && complete_info(['selected']).selected >= 0 ? '<c-x><c-f>' : '/']],
-  { expr = true, noremap = false }
-)
+
+-- [Vimでz連打でカーソル行を画面中央・上・下に移動させる](https://zenn.dev/vim_jp/articles/67ec77641af3f2) を Lua に書き直し
+vim.keymap.set('n', 'zz', 'zz<Plug>(z1)', { desc = "multiple z type 'recenter-top-bottom'" })
+vim.keymap.set('n', '<Plug>(z1)z', 'zt<plug>(z2)')
+vim.keymap.set('n', '<Plug>(z2)z', 'zb<Plug>(z3)')
+vim.keymap.set('n', '<Plug>(z3)z', 'zz<Plug>(z1)')
 
 --=======================================================================================
 -- ターミナル操作系
@@ -107,9 +109,16 @@ vim.keymap.set('t', '<C-]>', '<C-\\><C-n>')
 --=======================================================================================
 -- 編集系
 --=======================================================================================
+-- jj -> Escape
+-- j を押したら直ちに j を入力し、もう一回 j を押せば Escape を発行する
+vim.keymap.set({ 'i', 't' }, 'j', 'j<Plug>(g)', { desc = "jj -> Escape"})
+vim.keymap.set({ 'i', 't' }, '<Plug>(g)j', '<Esc>u')
+vim.keymap.set({ 'i', 't' }, '<Plug>(g)', '<Nop>')
+
 -- 挿入モードでEmacsライクの左右移動
 vim.keymap.set("i", "<C-b>", "<C-g>U<Left>")
 vim.keymap.set("i", "<C-f>", "<C-g>U<Right>")
+
 -- 大文字の Y で行末までヤンク
 vim.keymap.set('n', 'Y', 'y$', { silent = true })
 

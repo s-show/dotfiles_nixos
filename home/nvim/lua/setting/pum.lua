@@ -48,9 +48,12 @@ function InsertEnterPost()
 end
 
 -- コマンドラインモードに入った時に ddc.vim のキーバインドを設定する
-vim.keymap.set('n', ':', function() CommandlinePre() return ':' end, { expr = true })
-vim.keymap.set('n', '/', function() CommandlinePre() return '/' end, { expr = true })
-vim.keymap.set('n', '?', function() CommandlinePre() return '?' end, { expr = true })
+vim.api.nvim_create_autocmd('CmdlineEnter', {
+  group = pum_au_group,
+  callback = function()
+    CommandlinePre()
+  end
+})
 
 function CommandlinePre()
   vim.keymap.set('c', '<Tab>', [[pum#visible() ? pum#map#insert_relative(+1, 'loop') : ddc#map#manual_complete()]],

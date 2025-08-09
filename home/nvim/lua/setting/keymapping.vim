@@ -17,7 +17,6 @@ augroup MarkdownScrollFix
   autocmd FileType markdown nnoremap <buffer> gk k
 augroup END
 
-
 " サブモードを利用して <CTRL-w>++++... でウィンドウをリサイズするキーマッピング
 " [Vim で折り返し行を簡単に移動できるサブモード・テクニック](https://zenn.dev/mattn/articles/83c2d4c7645faa)
 nmap <C-w>+ <C-w>+<SID>ws
@@ -30,10 +29,12 @@ nnoremap <script> <SID>ws> <C-w>><SID>ws
 nnoremap <script> <SID>ws< <C-w><<SID>ws
 nmap <SID>ws <Nop>
 
-
 " [Vimでz連打でカーソル行を画面中央・上・下に移動させる](https://zenn.dev/vim_jp/articles/67ec77641af3f2)
-nmap zz zz<sid>(z1)
-nnoremap <script> <sid>(z1)z zt<sid>(z2)
-nnoremap <script> <sid>(z2)z zb<sid>(z3)
-nnoremap <script> <sid>(z3)z zz<sid>(z1)
+" nmap zz zz<sid>(z1)
+" nnoremap <script> <sid>(z1)z zt<sid>(z2)
+" nnoremap <script> <sid>(z2)z zb<sid>(z3)
+" nnoremap <script> <sid>(z3)z zz<sid>(z1)
 
+" imap j j<SID>g
+" inoremap <script> <SID>gj <Esc>u
+" imap <SID>g <Nop>
