@@ -25,8 +25,8 @@ vim.keymap.set('i', '<Right>', '<C-G>U<Right>')
 --=======================================================================================
 -- ファイル操作系
 --=======================================================================================
--- ,ww で保存
-vim.keymap.set('n', '<leader>ww', "<Cmd>update<CR>", { noremap = true })
+-- <leader>ww で保存
+vim.keymap.set('n', '<leader>ww', "<Cmd>update<CR>")
 
 --=======================================================================================
 -- ウィンドウ操作系
@@ -71,27 +71,41 @@ vim.keymap.set('n', '<leader>tt', function()
       vim.api.nvim_exec2('terminal', { output = true })
     end
   end,
-  { silent = true }
+  {
+    silent = true,
+    desc = 'create terminal tab || tab cycle.'
+  }
 )
 
 -- H/LとPageUp/PageDownを共存させる設定
 -- https://blog.atusy.net/2024/05/29/vim-hl-enhanced/ を改変
 -- Hのマッピング（条件分岐あり）
-vim.keymap.set('n', 'H', function()
-  if vim.fn.winline() == 1 then
-    return '<PageUp>H<Plug>(H)'
-  else
-    return 'H<Plug>(H)'
-  end
-end, { expr = true })
+vim.keymap.set('n', 'H',
+  function()
+    if vim.fn.winline() == 1 then
+      return '<PageUp>H<Plug>(H)'
+    else
+      return 'H<Plug>(H)'
+    end
+  end,
+  {
+    expr = true,
+    desc = 'H to H and PageUp'
+  }
+)
 -- Lのマッピング（条件分岐あり）
-vim.keymap.set('n', 'L', function()
-  if vim.fn.winline() == vim.fn.winheight(0) then
-    return '<PageDown>Lzb<Plug>(L)'
-  else
-    return 'L<Plug>(L)'
-  end
-end, { expr = true })
+vim.keymap.set('n', 'L',
+  function()
+    if vim.fn.winline() == vim.fn.winheight(0) then
+      return '<PageDown>Lzb<Plug>(L)'
+    else
+      return 'L<Plug>(L)'
+    end
+  end,
+  {
+    expr = true,
+    desc = 'L to L and PageDown'
+  })
 
 -- [Vimでz連打でカーソル行を画面中央・上・下に移動させる](https://zenn.dev/vim_jp/articles/67ec77641af3f2) を Lua に書き直し
 vim.keymap.set('n', 'zz', 'zz<Plug>(z1)', { desc = "multiple z type 'recenter-top-bottom'" })
@@ -102,18 +116,17 @@ vim.keymap.set('n', '<Plug>(z3)z', 'zz<Plug>(z1)')
 --=======================================================================================
 -- ターミナル操作系
 --=======================================================================================
--- vim.keymap.set('t', '<Esc>', '<C-\\><C-n><Plug>(Esc)', { noremap = false })
--- vim.keymap.set('n', '<Plug>(Esc)<Esc>', 'i')
 vim.keymap.set('t', '<C-]>', '<C-\\><C-n>')
 
 --=======================================================================================
 -- 編集系
 --=======================================================================================
 -- jj -> Escape
--- j を押したら直ちに j を入力し、もう一回 j を押せば Escape を発行する
-vim.keymap.set({ 'i', 't' }, 'j', 'j<Plug>(g)', { desc = "jj -> Escape"})
-vim.keymap.set({ 'i', 't' }, '<Plug>(g)j', '<Esc>u')
-vim.keymap.set({ 'i', 't' }, '<Plug>(g)', '<Nop>')
+-- j を押したら直ちに j を入力し、続けて j を押せば Escape を発行する
+-- jj の手前で undo ブロックを区切る
+vim.keymap.set('i', 'j', 'j<Plug>(g)', { desc = "jj -> Escape" })
+vim.keymap.set('i', '<Plug>(g)j', '<BS><Esc>')
+vim.keymap.set('i', '<Plug>(g)', '<Nop>')
 
 -- 挿入モードでEmacsライクの左右移動
 vim.keymap.set("i", "<C-b>", "<C-g>U<Left>")
@@ -139,9 +152,7 @@ vim.keymap.set('n', 'X', '"_D$', { silent = true })
 vim.keymap.set('x', '<', '<gv', { silent = true })
 vim.keymap.set('x', '>', '>gv', { silent = true })
 -- 行選択でも複数行への挿入を可能にする
-vim.keymap.set(
-  "i",
-  "A",
+vim.keymap.set( "i", "A",
   function()
     if vim.fn.mode(0) == "V" then
       return "<C-v>0o$A"

@@ -20,7 +20,7 @@ vim.fn['skkeleton#config']({
 })
 
 vim.fn['skkeleton#register_kanatable']('rom', {
-  -- ['jj'] = 'escape',
+  ['jk'] = 'escape',
   -- 丸数字
   -- ref: https://ja.wikipedia.org/wiki/丸数字
   ['z0'] = { '⓪', '' },
