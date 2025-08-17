@@ -1,0 +1,1 @@
+/home/s-show/.dotfiles/home/nvim/lua/plugins/color-scheme_moonfly.lua

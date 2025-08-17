@@ -1,0 +1,1 @@
+/home/s-show/.dotfiles/home/nvim/lua/setting/keymapping.vim
