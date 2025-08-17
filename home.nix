@@ -157,6 +157,7 @@ in
     ".local/bin/notify".source = mkDotfileSymlink "home/notify.sh";
     ".local/bin/nvim_ime".source = mkDotfileSymlink "home/nvim_ime.sh";
     ".local/bin/nvim_demo".source = mkDotfileSymlink "home/nvim_demo.sh";
+    ".local/bin/nbw".source = mkDotfileSymlink "home/wrap_nb.sh";
   };
 
   # Home activation scripts
