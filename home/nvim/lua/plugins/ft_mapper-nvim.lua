@@ -1,7 +1,7 @@
 return {
-  dir = '~/my_neovim_plugins/ft_mapper.nvim',
-  -- 's-show/ft-mapper.nvim',
-  dev = true,
+  -- dir = '~/my_neovim_plugins/ft_mapper.nvim',
+  's-show/ft-mapper.nvim',
+  dev = false,
   opts = {
     debug = false,
     mappings = {
@@ -21,7 +21,9 @@ return {
       { '>', "＞", "»" },
       { "-", "ー", "―", "—", "–" },
       { " ", "　" }, -- 半角・全角スペース
-    }
+    },
+    -- replace_semicolon = '>',
+    -- replace_comma = '<'
   },
   dependencies = {},
 }

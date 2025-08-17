@@ -10,11 +10,6 @@ local function is_claude_code_buffer()
   local bufname = vim.api.nvim_buf_get_name(0)
   return string.find(bufname, "claude%-code%-") ~= nil
 end
--- バッファ名に cc-input-spaceが含まれるかチェック
-local function is_ccInputSpace_buffer()
-  local bufname = vim.api.nvim_buf_get_name(0)
-  return string.find(bufname, "cc-input-space") ~= nil
-end
 
 -- ウィンドウの内容をヤンクして閉じる関数
 local function yank_and_close()
@@ -74,6 +69,7 @@ local function create_bottom_window()
   -- バッファの設定
   vim.bo.bufhidden = 'wipe'
   vim.bo.swapfile = false
+  vim.bo.ft = 'markdown'
   vim.api.nvim_buf_set_name(0, 'cc-input-space')
   vim.keymap.set('i', '<C-g>x', function()
     -- 元のバッファが設定されている場合のみ実行

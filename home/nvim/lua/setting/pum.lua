@@ -17,13 +17,43 @@ vim.api.nvim_create_autocmd('InsertEnter', {
 })
 
 function InsertEnterPre()
-  vim.keymap.set({'i', 't'}, '<C-n>', [[pum#visible() ? pum#map#select_relative(+1, 'loop') : ddc#map#manual_complete()]],
+  vim.keymap.set({ 'i', 't' }, '<C-n>',
+    [[pum#visible() ? pum#map#select_relative(+1, 'loop') : ddc#map#manual_complete()]],
     { expr = true })
-  vim.keymap.set({'i', 't'}, '<C-p>', [[pum#visible() ? pum#map#select_relative(-1, 'loop') : ddc#map#manual_complete()]],
+  vim.keymap.set({ 'i', 't' }, '<C-p>',
+    [[pum#visible() ? pum#map#select_relative(-1, 'loop') : ddc#map#manual_complete()]],
     { expr = true })
-  vim.keymap.set({'i', 't'}, '<C-e>', [[pum#visible() ? pum#map#cancel() : '<C-e>']], { expr = true })
-  vim.keymap.set({'i', 't'}, '<C-y>', [[pum#visible() ? pum#map#confirm() : '<C-y>']], { expr = true })
-  vim.keymap.set({'i', 't'}, '<tab>', [[pum#visible() ? pum#map#confirm() : '<tab>']], { expr = true })
+  vim.keymap.set({ 'i', 't' }, '<C-e>', [[pum#visible() ? pum#map#cancel() : '<C-e>']], { expr = true })
+  vim.keymap.set({ 'i', 't' }, '<C-y>', [[pum#visible() ? pum#map#confirm() : '<C-y>']], { expr = true })
+  vim.keymap.set({ 'i', 't' }, '<tab>', [[pum#visible() ? pum#map#confirm() : '<tab>']], { expr = true })
+  vim.keymap.set({ 'i', 't' }, '<Down>', function()
+    if vim.fn['pum#visible']() then
+      return vim.fn['pum#map#select_relative']('1', 'loop')
+    else
+      vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Down>', true, false, true), 'n', false)
+    end
+  end)
+  vim.keymap.set({ 'i', 't' }, '<Up>', function()
+    if vim.fn['pum#visible']() then
+      return vim.fn['pum#map#select_relative']('-1', 'loop')
+    else
+      vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Up>', true, false, true), 'n', false)
+    end
+  end)
+  vim.keymap.set({ 'i', 't' }, '<Right>', function()
+    if vim.fn['pum#visible']() then
+      return vim.fn['pum#map#confirm']()
+    else
+      vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Right>', true, false, true), 'n', false)
+    end
+  end)
+  vim.keymap.set({ 'i', 't' }, '<Left>', function()
+    if vim.fn['pum#visible']() then
+      return vim.fn['pum#map#cancel']()
+    else
+      vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Left>', true, false, true), 'n', false)
+    end
+  end)
   vim.api.nvim_create_autocmd(
     { 'InsertLeave' },
     {
@@ -38,12 +68,14 @@ function InsertEnterPre()
 end
 
 function InsertEnterPost()
-  local pcall_result, _ = pcall(vim.api.nvim_del_keymap, {'i', 't'}, '<C-n>')
+  local pcall_result, _ = pcall(vim.api.nvim_del_keymap, { 'i', 't' }, '<C-n>')
   if pcall_result ~= false then
-    vim.keymap.del({'i', 't'}, '<C-p>')
-    vim.keymap.del({'i', 't'}, '<C-e>')
-    vim.keymap.del({'i', 't'}, '<C-y>')
-    vim.keymap.del({'i', 't'}, '<tab>')
+    vim.keymap.del({ 'i', 't' }, '<C-p>')
+    vim.keymap.del({ 'i', 't' }, '<C-e>')
+    vim.keymap.del({ 'i', 't' }, '<Left>')
+    vim.keymap.del({ 'i', 't' }, '<C-y>')
+    vim.keymap.del({ 'i', 't' }, '<Right>')
+    vim.keymap.del({ 'i', 't' }, '<tab>')
   end
 end
 
@@ -56,20 +88,37 @@ vim.api.nvim_create_autocmd('CmdlineEnter', {
 })
 
 function CommandlinePre()
-  vim.keymap.set('c', '<Tab>', [[pum#visible() ? pum#map#insert_relative(+1, 'loop') : ddc#map#manual_complete()]],
-    { expr = true })
-  vim.keymap.set('c', '<S-Tab>', [[pum#map#insert_relative(-1, 'loop')]], { expr = true })
+  vim.keymap.set('c', '<Tab>', vim.fn['pum#map#confirm'])
   vim.keymap.set('c', '<C-n>', [[pum#visible() ? pum#map#insert_relative(+1, 'loop') : ddc#map#manual_complete()]],
     { expr = true })
   vim.keymap.set('c', '<C-p>', [[pum#map#insert_relative(-1, 'loop')]], { expr = true })
-  vim.keymap.set('c', '<Down>', [[pum#map#insert_relative(+1, 'loop')]], { expr = true })
-  vim.keymap.set('c', '<Up>', [[pum#map#insert_relative(-1, 'loop')]], { expr = true })
   vim.keymap.set('c', '<C-y>', vim.fn['pum#map#confirm'])
-  vim.keymap.set('c', '<CR>', function()
+  vim.keymap.set('c', '<Down>', function()
+    if vim.fn['pum#visible']() then
+      return vim.fn['pum#map#insert_relative']('1', 'loop')
+    else
+      vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-n>', true, false, true), 'n', false)
+    end
+  end)
+  vim.keymap.set('c', '<Up>', function()
+    if vim.fn['pum#visible']() then
+      return vim.fn['pum#map#insert_relative']('-1', 'loop')
+    else
+      vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-p>', true, false, true), 'n', false)
+    end
+  end)
+  vim.keymap.set('c', '<Right>', function()
     if vim.fn['pum#visible']() then
       return vim.fn['pum#map#confirm']()
     else
-      vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<CR>', true, false, true), 'n', false)
+      vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Right>', true, false, true), 'n', false)
+    end
+  end)
+  vim.keymap.set('c', '<Left>', function()
+    if vim.fn['pum#visible']() then
+      return vim.fn['pum#map#cancel']()
+    else
+      vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Left>', true, false, true), 'n', false)
     end
   end)
   vim.keymap.set('c', '<C-e>', [[pum#map#cancel()]], { expr = true })
@@ -91,13 +140,13 @@ end
 function CommandlinePost()
   if vim.fn.maparg('<C-e>', 'c') ~= '' then
     vim.keymap.del('c', '<Tab>')
-    vim.keymap.del('c', '<S-Tab>')
     vim.keymap.del('c', '<C-n>')
     vim.keymap.del('c', '<C-p>')
     vim.keymap.del('c', '<Down>')
     vim.keymap.del('c', '<Up>')
+    vim.keymap.del('c', '<Left>')
+    vim.keymap.del('c', '<Right>')
     vim.keymap.del('c', '<C-y>')
-    vim.keymap.del('c', '<CR>')
     vim.keymap.del('c', '<C-e>')
   end
 end

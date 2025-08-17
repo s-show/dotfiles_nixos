@@ -11,7 +11,11 @@ return {
       keymaps = {
         window_navigation = false,
         scrolling = false,
-      }
+      },
+      command_variants = {
+        -- custom debug variant
+        debug = "--debug --verbose",
+      },
     })
   end
 }

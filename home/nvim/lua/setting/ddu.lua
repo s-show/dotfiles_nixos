@@ -213,13 +213,6 @@ vim.api.nvim_create_autocmd("User",
   {
     pattern = 'Ddu:ui:ff:openFilterWindow',
     callback = function()
-      vim.keymap.set('c', '<C-n>', [[pum#visible() ? pum#map#insert_relative(+1, 'loop') : ddc#map#manual_complete()]],
-        { expr = true, buffer = true })
-      vim.keymap.set('c', '<C-p>', [[pum#map#insert_relative(-1, 'loop')]], { expr = true, buffer = true })
-      vim.keymap.set('c', '<Down>', [[pum#map#insert_relative(+1, 'loop')]], { expr = true, buffer = true })
-      vim.keymap.set('c', '<Up>', [[pum#map#insert_relative(-1, 'loop')]], { expr = true, buffer = true })
-      vim.keymap.set('c', '<C-y>', [[pum#map#confirm()]], { expr = true, buffer = true })
-      vim.keymap.set('c', '<C-e>', [[pum#map#cancel()]], { expr = true, buffer = true })
       vim.keymap.set({ 'n', 'i' }, '<CR>', [[<Esc><Cmd>close<CR>]], { expr = true, buffer = true })
       vim.fn['ddc#enable_cmdline_completion']()
     end,
@@ -230,12 +223,6 @@ vim.api.nvim_create_autocmd({ 'User' },
   {
     pattern = 'Ddu:ui:ff:closeFilterWindow',
     callback = function()
-      vim.keymap.del('c', '<C-n>', { buffer = true })
-      vim.keymap.del('c', '<C-p>', { buffer = true })
-      vim.keymap.del('c', '<Down>', { buffer = true })
-      vim.keymap.del('c', '<Up>', { buffer = true })
-      vim.keymap.del('c', '<C-y>', { buffer = true })
-      vim.keymap.del('c', '<C-e>', { buffer = true })
       vim.keymap.del('n', '<CR>', { buffer = true })
       vim.keymap.del('i', '<CR>', { buffer = true })
       -- vim.keymap.del('c', '<CR>', { buffer = true })

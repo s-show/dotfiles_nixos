@@ -3,15 +3,15 @@
 --   - fg, bg, style, sp, link,
 --
 -- Just like `spec` groups support templates. This time the template is based on a spec object.
-local groups = {
+-- local groups = {
   -- As with specs and palettes, the values defined under `all` will be applied to every style.
-  nightfox = {
+  -- nightfox = {
     -- As with specs and palettes, a specific style's value will be used over the `all`'s value.
-    WinSeparator = { fg = "#81b29a"},
-  },
-}
-require("nightfox").setup({
-  groups = groups
-})
+    -- WinSeparator = { fg = "#81b29a"},
+--   },
+-- }
+-- require("nightfox").setup({
+--   groups = groups
+-- })
 
-vim.cmd.colorscheme "nightfox"
+vim.cmd.colorscheme "moonfly"
