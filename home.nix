@@ -138,6 +138,8 @@ in
 
       # misc tools
       wsl-notify-send
+      browsh
+      firefox
     ];
   };
 
