@@ -2,7 +2,7 @@
 
 {pkgs ? import <nixpkgs> {
     inherit system;
-  }, system ? builtins.currentSystem, nodejs ? pkgs."nodejs_14"}:
+  }, system ? builtins.currentSystem, nodejs ? pkgs."nodejs_24"}:
 
 let
   nodeEnv = import ./node-env.nix {
@@ -10,8 +10,36 @@ let
     inherit pkgs nodejs;
     libtool = if pkgs.stdenv.isDarwin then pkgs.cctools or pkgs.darwin.cctools else null;
   };
+  
+  # Import generated packages
+  generatedPackages = import ./node-packages.nix {
+    inherit (pkgs) fetchurl nix-gitignore stdenv lib fetchgit;
+    inherit nodeEnv;
+  };
 in
-import ./node-packages.nix {
-  inherit (pkgs) fetchurl nix-gitignore stdenv lib fetchgit;
-  inherit nodeEnv;
+# Override packages to fix @vscode/ripgrep postinstall issue
+generatedPackages // {
+  "@openai/codex" = generatedPackages."@openai/codex".override {
+    # Prevent @vscode/ripgrep from downloading ripgrep binary
+    # Instead, use the system ripgrep from nixpkgs
+    preRebuild = ''
+      # Check if @vscode/ripgrep is in dependencies
+      if [ -d "node_modules/@vscode/ripgrep" ]; then
+        echo "Setting up @vscode/ripgrep to use system ripgrep..."
+        
+        # Create bin directory
+        mkdir -p node_modules/@vscode/ripgrep/bin
+        
+        # Create symlink to system ripgrep
+        ln -sf ${pkgs.ripgrep}/bin/rg node_modules/@vscode/ripgrep/bin/rg
+        
+        # Create a marker file to skip postinstall
+        cat > node_modules/@vscode/ripgrep/lib/postinstall.js << 'POSTINSTALL_EOF'
+        // Postinstall skipped - using system ripgrep from Nix
+        console.log('Using system ripgrep from Nix store: ${pkgs.ripgrep}/bin/rg');
+        process.exit(0);
+      POSTINSTALL_EOF
+      fi
+    '';
+  };
 }

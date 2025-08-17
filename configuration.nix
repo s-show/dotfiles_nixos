@@ -32,6 +32,9 @@ in
   sops.secrets.OPENROUTER_API_KEY = {
     owner = config.users.users.s-show.name;
   };
+  sops.secrets.OPENAI_API_KEY = {
+    owner = config.users.users.s-show.name;
+  };
   sops.secrets.HOGE_KEY = {
     owner = config.users.users.s-show.name;
   };
