@@ -91,7 +91,6 @@ in
       nodejs_24
       node2nix
       nodePkgs."@anthropic-ai/claude-code"
-      nodePkgs."editprompt"
       nodePkgs."@openai/codex"
 
       # Shell and terminal
