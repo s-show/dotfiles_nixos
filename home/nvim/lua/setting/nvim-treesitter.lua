@@ -16,29 +16,22 @@ require('nvim-treesitter.configs').setup {
 -- パーサーディレクトリを追加
 vim.opt.runtimepath:append(vim.fn.stdpath("data") .. "/treesitter")
 
---- Markdown ファイルの現在のカーソル位置にあるTree-sitterノードを取得する
---- @param bufnr number|nil バッファ番号（省略時は現在のバッファ）
---- @return TSNode|nil カーソル位置のノード、パーサーが取得できない場合はnil
+-------------------------------------
+-- Markdownパーサを強制使用して取得
+-------------------------------------
 local function get_md_node_at_cursor(bufnr)
   bufnr = bufnr or vim.api.nvim_get_current_buf()
   local ok, parser = pcall(vim.treesitter.get_parser, bufnr, "markdown", {})
   if not ok or not parser then return nil end
-
-  -- カーソル位置
   local pos = vim.api.nvim_win_get_cursor(0)
   local row, col = pos[1] - 1, pos[2]
-
-  -- markdown のルートからカーソル位置の最小ノードを取得
   local tree = parser:parse()[1]
   if not tree then return nil end
   local root = tree:root()
   return root and root:named_descendant_for_range(row, col, row, col) or nil
 end
 
---- 指定したタイプの子ノードを検索する
---- @param node TSNode|nil 検索対象のノード
---- @param wanted_types table<string, boolean> 検索するノードタイプのテーブル
---- @return TSNode|nil 見つかった子ノード、見つからない場合はnil
+
 local function find_child(node, wanted_types)
   if not node then return nil end
   for child in node:iter_children() do
@@ -49,88 +42,144 @@ local function find_child(node, wanted_types)
   return nil
 end
 
---- Markdownパーサーを使用してフェンス内コンテンツのノードを検索する
---- @param bufnr number|nil バッファ番号（省略時は現在のバッファ）
---- @return TSNode|nil フェンス内コンテンツのノード、見つからない場合はnil
 local function find_fence_content_via_markdown(bufnr)
   local n = get_md_node_at_cursor(bufnr)
   while n do
     if n:type() == "fenced_code_block" then
-      -- 中身を表すノードを取得（通常は code_fence_content）
       local content = find_child(n, { code_fence_content = true })
-      return content or n
+      -- info_string も返す
+      local info_node = find_child(n, { info_string = true })
+      local info = nil
+      if info_node then
+        info = vim.treesitter.get_node_text(info_node, bufnr)
+      end
+      return content or n, info
     end
     n = n:parent()
   end
-  return nil
+  return nil, nil
 end
 
---- 指定されたノードの範囲をビジュアル選択する
---- @param node TSNode 選択対象のノード
-local function select_range_of_node(node)
-  local bufnr = vim.api.nvim_get_current_buf()
-  local sr, sc, er, ec = node:range() -- Tree-sitter: end は排他的
+-------------------------------------
+-- 言語名の抽出と判定
+-------------------------------------
+local function parse_lang_from_info(info)
+  if not info or info == "" then return nil end
+  local lang = info:match("^%s*([%w_+%.%-]+)")
+  if not lang or lang == "" then return nil end
+  -- よくある表記ゆれを吸収
+  local map = {
+    viml = "vim",
+    vimscript = "vim",
+    vim = "vim",
+    lua = "lua",
+    luau = "lua",
+    sh = "sh",
+    shell = "sh",
+    posix = "sh",
+    bash = "bash",
+    zsh = "zsh",
+  }
+  return (map[lang] or lang):lower()
+end
 
-  -- 空範囲は何もしない
-  if sr == er and sc == ec then return end
+-------------------------------------
+-- フェンス中身を文字列として取得（```除外）
+-------------------------------------
+local function get_fence_text(bufnr, node)
+  local sr, sc, er, ec = node:range() -- endはexclusive
 
-  -- 終端を 1 文字手前に詰める（exclusive -> inclusive）
+  -- exclusive→inclusive調整
   if ec == 0 then
-    -- 終端が次行の先頭だった場合は、前の行の末尾に移す
     er = er - 1
-    if er < sr then return end
+    if er < sr then return {} end
     local last = vim.api.nvim_buf_get_lines(bufnr, er, er + 1, true)[1] or ""
     ec = #last
   else
     ec = ec - 1
   end
-
-  -- 念のため: 終端行がフェンス（```...）なら 1 行手前の末尾に寄せる
+  -- 「終端行が閉じフェンス」なら1行手前に寄せる
   local last_line = vim.api.nvim_buf_get_lines(bufnr, er, er + 1, true)[1] or ""
   if last_line:match("^%s*`%s*`%s*`") then
     er = er - 1
-    if er < sr then return end
+    if er < sr then return {} end
     local prev = vim.api.nvim_buf_get_lines(bufnr, er, er + 1, true)[1] or ""
     ec = #prev
   end
-
-  -- 選択実行
-  vim.api.nvim_win_set_cursor(0, { sr + 1, sc })
-  vim.cmd.normal({ args = { "v" }, bang = true })
-  vim.api.nvim_win_set_cursor(0, { er + 1, ec })
+  return vim.api.nvim_buf_get_text(bufnr, sr, sc, er, ec, {})
 end
 
---- Markdownファイル内のコードフェンスの内容を選択する
---- カーソル位置がコードフェンス内にある場合、その内容をビジュアル選択する
-local function SelectFenceContentMarkdown()
-  local bufnr = vim.api.nvim_get_current_buf()
-  local node = find_fence_content_via_markdown(bufnr)
-  if not node then
-    print("Not inside a fenced code block (checked via markdown parser)")
-    return
-  end
-  select_range_of_node(node)
+-------------------------------------
+-- 実行器: Vim / Lua / Sh
+-------------------------------------
+local function exec_vim(lines)
+  local tmp = vim.fn.tempname() .. ".vim"
+  vim.fn.writefile(lines, tmp)
+  vim.cmd.source(tmp)
+  vim.notify("Sourced (Vim): " .. tmp, vim.log.levels.INFO)
 end
 
---- Markdownファイル内のコードフェンスの内容を実行する
---- カーソル位置がコードフェンス内にある場合、その内容を選択して:sourceコマンドで実行する
-local function SourceFenceContentMarkdown()
+
+local function exec_lua(lines)
+  local tmp = vim.fn.tempname() .. ".lua"
+  vim.fn.writefile(lines, tmp)
+  vim.cmd.luafile(tmp)
+  vim.notify("Sourced (Lua): " .. tmp, vim.log.levels.INFO)
+end
+
+local function exec_shell(lines, shell_name) -- shell_name: "sh"|"bash"|"zsh"
+  local ext = (shell_name == "zsh" and ".zsh") or (shell_name == "bash" and ".bash") or ".sh"
+  local tmp = vim.fn.tempname() .. ext
+  vim.fn.writefile(lines, tmp)
+  local out = vim.fn.system({ shell_name, tmp })
+  local code = vim.v.shell_error
+  if code == 0 then
+    vim.notify("Shell OK (" .. shell_name .. "):\n" .. out, vim.log.levels.INFO, { title = "Fence Exec" })
+  else
+    vim.notify("Shell NG (" .. shell_name .. ") exit=" .. code .. ":\n" .. out, vim.log.levels.ERROR,
+      { title = "Fence Exec" })
+  end
+end
+
+-------------------------------------
+-- メイン: 言語自動判定で実行
+-------------------------------------
+local function exec_fence_auto()
   local bufnr = vim.api.nvim_get_current_buf()
-  local node = find_fence_content_via_markdown(bufnr)
-  if not node then
-    print("Not inside a fenced code block (checked via markdown parser)")
+
+  local content_node, info = find_fence_content_via_markdown(bufnr)
+  if not content_node then
+    vim.notify("Not inside a fenced code block", vim.log.levels.WARN)
     return
   end
-  select_range_of_node(node)
-  vim.fn.feedkeys(":source\r", 'm')
+  local lines = get_fence_text(bufnr, content_node)
+  if #lines == 0 then
+    vim.notify("Empty fence content", vim.log.levels.WARN)
+    return
+  end
+
+
+  local lang = parse_lang_from_info(info)
+  -- 既定: info_string が無い/不明 → Vim とみなす（必要なら "markdown" にも対応可）
+  if not lang then lang = "vim" end
+
+  if lang == "vim" then
+    exec_vim(lines)
+  elseif lang == "lua" then
+    exec_lua(lines)
+  elseif lang == "bash" or lang == "zsh" or lang == "sh" then
+    exec_shell(lines, lang)
+  else
+    -- 未対応言語: とりあえず Vim として実行するか、エラーにする
+    vim.notify(("Unsupported fence language: %s"):format(lang), vim.log.levels.ERROR)
+  end
 end
 
 vim.api.nvim_create_autocmd("FileType", {
   pattern = "markdown",
   callback = function(args)
-    vim.keymap.set("n", "<leader>vc", SelectFenceContentMarkdown,
-      { buffer = args.buf, desc = "Select fenced code content (force markdown parser)" })
-    vim.keymap.set("n", "<leader>qr", SourceFenceContentMarkdown,
+    vim.api.nvim_buf_create_user_command(args.buf, "FenceExec", exec_fence_auto, {})
+    vim.keymap.set("n", "<leader>qr", exec_fence_auto,
       { buffer = args.buf, desc = "Run fenced code content (force markdown parser)" })
   end,
 })
