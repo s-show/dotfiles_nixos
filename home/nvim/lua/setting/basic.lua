@@ -68,8 +68,3 @@ vim.api.nvim_create_autocmd("TextYankPost", {
     end
   end,
 })
-
-vim.api.nvim_create_user_command('Restart', function ()
-  vim.cmd('wall')
-  vim.cmd('restart')
-end, { desc = 'save and restart.' })
