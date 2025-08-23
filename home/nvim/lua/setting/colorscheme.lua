@@ -14,4 +14,4 @@
 --   groups = groups
 -- })
 
-vim.cmd.colorscheme "moonfly"
+vim.cmd.colorscheme "backpack"
