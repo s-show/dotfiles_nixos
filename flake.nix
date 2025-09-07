@@ -6,6 +6,8 @@
     sops-nix.url = "github:Mic92/sops-nix";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
+    serena.url = "github:oraios/serena";
+    serena.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =

@@ -55,6 +55,7 @@ in
           eval "$(direnv hook zsh)"
           export OPENROUTER_API_KEY=$(cat "/run/secrets/OPENROUTER_API_KEY")
           export OPENAI_API_KEY=$(cat "/run/secrets/OPENAI_API_KEY")
+          export CEREBRAS_API_KEY=$(cat "/run/secrets/CEREBRAS_API_KEY")
           export EDITOR=nvim
           autoload -Uz run-help run-help-git run-help-ip run-help-sudo
           precmd() {

@@ -85,6 +85,24 @@ let
         sha512 = "D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg==";
       };
     };
+    "vscode-jsonrpc-8.2.0" = {
+      name = "vscode-jsonrpc";
+      packageName = "vscode-jsonrpc";
+      version = "8.2.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/vscode-jsonrpc/-/vscode-jsonrpc-8.2.0.tgz";
+        sha512 = "C+r0eKJUIfiDIfwJhria30+TYWPtuHJXHtI7J0YlOmKAo7ogxP20T0zxB7HZQIFhIyvoBPwWskjxrvAtfjyZfA==";
+      };
+    };
+    "vscode-languageserver-types-3.17.5" = {
+      name = "vscode-languageserver-types";
+      packageName = "vscode-languageserver-types";
+      version = "3.17.5";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/vscode-languageserver-types/-/vscode-languageserver-types-3.17.5.tgz";
+        sha512 = "Ld1VelNuX9pdF39h2Hgaeb5hEZM2Z3jUrrMgWQAu82jMtZp7p3vJT3BzToKtZI7NgQssZje5o0zryOrhQvzQAg==";
+      };
+    };
     "yauzl-2.10.0" = {
       name = "yauzl";
       packageName = "yauzl";
@@ -97,13 +115,13 @@ let
   };
 in
 {
-  "@anthropic-ai/claude-code" = nodeEnv.buildNodePackage {
+  "@anthropic-ai/claude-code-1.0.24" = nodeEnv.buildNodePackage {
     name = "_at_anthropic-ai_slash_claude-code";
     packageName = "@anthropic-ai/claude-code";
-    version = "1.0.83";
+    version = "1.0.24";
     src = fetchurl {
-      url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-1.0.83.tgz";
-      sha512 = "Mm+88khPbg9eAUbrWGirigWeC4xu2hH0ns3+lnfKWX3e8RJDOV9vnCHjzbEIVXvvvw1YmeIO7TxsFk5/MVuhGA==";
+      url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-1.0.24.tgz";
+      sha512 = "4S6ly2297ngNlto7IFZeEicS9u0yRDhocOzndWFovGBb+iUoEPKdZa/rhVk/tcyCADL6S+mMkiGQOlqFDrN3JQ==";
     };
     buildInputs = globalBuildInputs;
     meta = {
@@ -118,10 +136,10 @@ in
   "@openai/codex" = nodeEnv.buildNodePackage {
     name = "_at_openai_slash_codex";
     packageName = "@openai/codex";
-    version = "0.22.0";
+    version = "0.30.0";
     src = fetchurl {
-      url = "https://registry.npmjs.org/@openai/codex/-/codex-0.22.0.tgz";
-      sha512 = "08Uy9SBRfZoaTVMWd/FBrr94lfbFDZKXws7iCL+QVi9yxwYOMP2UiFKdjmeBhGioBaa9PeVckFtXWfaotbF2YQ==";
+      url = "https://registry.npmjs.org/@openai/codex/-/codex-0.30.0.tgz";
+      sha512 = "mlGjiePjbJm52coSQsGxLuoVOjvvo86Rbw7kdFh1ZxCtMZHfcyK8jFJLBrc4O2HkOs/uWjP46PJLm/iRAvrxEA==";
     };
     dependencies = [
       sources."@vscode/ripgrep-1.15.14"
@@ -140,6 +158,28 @@ in
       description = "<h1 align=\"center\">OpenAI Codex CLI</h1>";
       homepage = "https://github.com/openai/codex#readme";
       license = "Apache-2.0";
+    };
+    production = true;
+    bypassCache = true;
+    reconstructLock = true;
+  };
+  "vscode-languageserver-protocol-3.17.5" = nodeEnv.buildNodePackage {
+    name = "vscode-languageserver-protocol";
+    packageName = "vscode-languageserver-protocol";
+    version = "3.17.5";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/vscode-languageserver-protocol/-/vscode-languageserver-protocol-3.17.5.tgz";
+      sha512 = "mb1bvRJN8SVznADSGWM9u/b07H7Ecg0I3OgXDuLdn307rl/J3A9YD6/eYOssqhecL27hK1IPZAsaqh00i/Jljg==";
+    };
+    dependencies = [
+      sources."vscode-jsonrpc-8.2.0"
+      sources."vscode-languageserver-types-3.17.5"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "VSCode Language Server Protocol implementation";
+      homepage = "https://github.com/Microsoft/vscode-languageserver-node#readme";
+      license = "MIT";
     };
     production = true;
     bypassCache = true;

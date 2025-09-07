@@ -5,7 +5,7 @@ let
   nixpkgs-stable = inputs.nixpkgs.legacyPackages.${pkgs.system};
   oldNixpkgs = import (builtins.fetchTarball {
     url = "https://github.com/NixOS/nixpkgs/archive/c5dd43934613ae0f8ff37c59f61c507c2e8f980d.tar.gz";
-  }) {};
+  }) { };
 
   # Common Neovim wrapper arguments
   commonWrapperArgs = {
@@ -56,8 +56,7 @@ let
   username = "s-show";
   homeDirectory = "/home/${username}";
   stateVersion = "25.05";
-  mkDotfileSymlink = path: config.lib.file.mkOutOfStoreSymlink
-    "${homeDirectory}/.dotfiles/${path}";
+  mkDotfileSymlink = path: config.lib.file.mkOutOfStoreSymlink "${homeDirectory}/.dotfiles/${path}";
 in
 {
   # Home Manager configuration
@@ -90,8 +89,9 @@ in
       sops
       nodejs_24
       node2nix
-      nodePkgs."@anthropic-ai/claude-code"
+      nodePkgs."@anthropic-ai/claude-code-1.0.24"
       nodePkgs."@openai/codex"
+      nodePkgs."vscode-languageserver-protocol-3.17.5"
 
       # Shell and terminal
       starship
@@ -102,7 +102,7 @@ in
 
       # Programming languages and runtimes
       # cl
-      python313
+      # python313  # Serenaと競合するため削除。プロジェクトごとにnix-shellで管理
       lua51Packages.luarocks-nix
       libgcc
       gnumake
@@ -139,6 +139,9 @@ in
       wsl-notify-send
       browsh
       firefox
+      
+      # AI coding tools
+      inputs.serena.packages.${pkgs.system}.default
     ];
   };
 
@@ -154,7 +157,8 @@ in
     ".config/nvim_demo".source = mkDotfileSymlink "home/nvim_demo";
     ".local/bin/home-update".source = mkDotfileSymlink "home/home-update";
     ".local/bin/flakes-update".source = mkDotfileSymlink "home/flakes-update.sh";
-    ".local/bin/flakes-and-node2nix-update".source = mkDotfileSymlink "home/flakes-and-node2nix-update.sh";
+    ".local/bin/flakes-and-node2nix-update".source =
+      mkDotfileSymlink "home/flakes-and-node2nix-update.sh";
     ".local/bin/notify".source = mkDotfileSymlink "home/notify.sh";
     ".local/bin/nvim_ime".source = mkDotfileSymlink "home/nvim_ime.sh";
     ".local/bin/nvim_demo".source = mkDotfileSymlink "home/nvim_demo.sh";

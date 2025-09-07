@@ -35,7 +35,7 @@ in
   sops.secrets.OPENAI_API_KEY = {
     owner = config.users.users.s-show.name;
   };
-  sops.secrets.HOGE_KEY = {
+  sops.secrets.CEREBRAS_API_KEY = {
     owner = config.users.users.s-show.name;
   };
 

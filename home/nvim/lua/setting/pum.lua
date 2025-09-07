@@ -40,18 +40,13 @@ function InsertEnterPre()
       vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Up>', true, false, true), 'n', false)
     end
   end)
-  vim.keymap.set({ 'i', 't' }, '<Right>', function()
+  vim.keymap.set({ 'i', 't' }, '<tab>', function()
     if vim.fn['pum#visible']() then
       return vim.fn['pum#map#confirm']()
+    elseif vim.g['skkeleton#state'].phase == 'henkan' then
+      return vim.fn['skkeleton#handle']('handleKey', { key = '', ['function'] = 'kakutei' })
     else
-      vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Right>', true, false, true), 'n', false)
-    end
-  end)
-  vim.keymap.set({ 'i', 't' }, '<Left>', function()
-    if vim.fn['pum#visible']() then
-      return vim.fn['pum#map#cancel']()
-    else
-      vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Left>', true, false, true), 'n', false)
+      vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<tab>', true, false, true), 'n', false)
     end
   end)
   vim.api.nvim_create_autocmd(

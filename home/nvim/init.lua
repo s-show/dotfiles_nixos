@@ -2,8 +2,8 @@
 -- プラグインと設定ファイルの読み込み順を間違えるとエラーになるので、
 -- 読み込み順は適宜調整している。
 require('setting/keymapping')
-require('setting.ftjpn')
 require('setting.user_interface')
+require('setting.basic')
 
 -- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -36,7 +36,6 @@ require("lazy").setup({
 -- 分割した設定ファイルを読み込む
 require('setting.colorscheme')
 require('setting.lualine')
-require('setting.basic')
 require('lsp.init')
 require('setting.lexima')
 require('setting.pum')
@@ -53,9 +52,11 @@ require('setting.nvim-treesitter')
 require('setting.oil-nvim')
 require('setting.denops-popup-preview-vim')
 require('setting.aerial-nvim')
-require('setting.nvim-colorizer')
+-- require('setting.nvim-colorizer')
 -- require('setting.codecompanion-nvim')
 require('setting.snacks-nvim')
 require('setting.claudecode_editwindow').setup()
 require('setting.mini-ai')
 require('setting.restart_wrapper')
+require('setting.quickrun_codeblock')
+vim.cmd('source ~/.config/nvim/lua/setting/helpfile_formatter.vim')

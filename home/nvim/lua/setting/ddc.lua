@@ -56,11 +56,13 @@ vim.fn["ddc#custom#patch_global"]({
       minAutoCompleteLength = 1,
     },
     lsp = {
+      isVolatile = true,
       dup = 'keep',
       mark = 'lsp',
       forceCompletionPattern = { [['\.\w*|:\w*|->\w*']] },
       keywordPattern = [[\k+]],
-      converters = { 'converter_kind_labels' },
+      -- converters = { 'converter_kind_labels' },
+      sorters = { 'sorter_lsp_kind' }
     },
     file = {
       mark = 'F',

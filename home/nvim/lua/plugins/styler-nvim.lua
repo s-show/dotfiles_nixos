@@ -3,11 +3,10 @@ return {
   opts = {
     themes = {
       help = {
-        colorscheme = 'backpack',
-        background = 'light',
+        colorscheme = 'slate',
       },
       markdown = {
-        colorscheme = 'moonfly'
+        colorscheme = 'nightfox'
       }
     }
   }

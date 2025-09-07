@@ -20,6 +20,7 @@ if vim.fn.has('nvim-0.11') == 1 then
   }
 
   vim.lsp.enable(lsp_names)
+  local _, result = pcall(vim.lsp.document_color.enable, true, 0, { style = 'virtual' })
 else
   local capabilities = require("ddc_source_lsp").make_client_capabilities()
   -- local capabilities = require("cmp_nvim_lsp").default_capabilities()
