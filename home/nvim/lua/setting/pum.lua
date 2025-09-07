@@ -44,7 +44,7 @@ function InsertEnterPre()
     if vim.fn['pum#visible']() then
       return vim.fn['pum#map#confirm']()
     elseif vim.g['skkeleton#state'].phase == 'henkan' then
-      return vim.fn['skkeleton#handle']('handleKey', { key = '', ['function'] = 'kakutei' })
+      return vim.fn['skkeleton#handle']('handleKey', { ['function'] = 'kakutei' })
     else
       vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<tab>', true, false, true), 'n', false)
     end

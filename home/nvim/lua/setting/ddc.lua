@@ -1,7 +1,6 @@
 vim.fn["ddc#custom#patch_global"]({
   -- uiは一番最初に設定する必要がある
   ui = 'pum',
-  -- ui = 'native',
   sources = {
     'lsp',
     'skkeleton',
@@ -61,8 +60,6 @@ vim.fn["ddc#custom#patch_global"]({
       mark = 'lsp',
       forceCompletionPattern = { [['\.\w*|:\w*|->\w*']] },
       keywordPattern = [[\k+]],
-      -- converters = { 'converter_kind_labels' },
-      sorters = { 'sorter_lsp_kind' }
     },
     file = {
       mark = 'F',
@@ -79,17 +76,12 @@ vim.fn["ddc#custom#patch_global"]({
   },
   sourceParams = {
     lsp = {
-      -- lspEngine = 'vim-lsp',
       snippetEngine = vim.fn["denops#callback#register"](
         function(body)
           vim.fn["vsnip#anonymous"](body)
         end),
-      -- snippetEngine = vim.fn["denops#callback#register"](function (body)
-      --   require('luasnip').lsp_expand(body)
-      -- end),
       enableResolveItem = true,
       enableAdditionalTextEdit = true,
-      -- confirmBehavior = 'replace',
     },
     file = {
       filenameChars = "[:keyword:].",
