@@ -43,6 +43,31 @@ end
 vim.keymap.set('n', '<leader>f', ':find ', { desc = 'Find file' })
 vim.keymap.set('n', '<leader>F', ':vert sf ', { desc = 'Find file in vertical split' })
 vim.keymap.set('n', '<leader>d', ':Findqf ', { desc = 'Find with fd and show in quickfix' })
+vim.keymap.set('n', '<leader>z', ':Fzfqf ', { desc = 'Fuzzy find files and show in quickfix' })
+
+-- FuzzyFindの結果をQuickfixに設定する関数
+function FuzzyFindToQuickfix(pattern)
+  local results = FuzzyFindFunc(pattern)
+  
+  if #results == 0 then
+    vim.notify("検索結果が見つかりませんでした: " .. pattern, vim.log.levels.WARN)
+    return
+  end
+  
+  local qflist = {}
+  for _, filepath in ipairs(results) do
+    table.insert(qflist, {
+      filename = filepath,
+      lnum = 1,
+      text = filepath
+    })
+  end
+  
+  vim.fn.setqflist(qflist)
+  vim.g.quickfix_opened_by_findqf = true
+  vim.cmd('copen')
+  vim.notify(#results .. " 件の検索結果が見つかりました", vim.log.levels.INFO)
+end
 
 -- コマンド定義
 vim.api.nvim_create_user_command('Findqf', function(opts)
@@ -50,6 +75,19 @@ vim.api.nvim_create_user_command('Findqf', function(opts)
 end, {
   nargs = '+',
   complete = 'file_in_path'
+})
+
+-- Fuzzy検索結果をQuickfixに表示するコマンド
+vim.api.nvim_create_user_command('Fzfqf', function(opts)
+  local pattern = table.concat(opts.fargs, ' ')
+  if pattern == '' then
+    vim.notify("検索パターンを指定してください", vim.log.levels.WARN)
+    return
+  end
+  FuzzyFindToQuickfix(pattern)
+end, {
+  nargs = '+',
+  desc = 'Fuzzy find files and show in quickfix'
 })
 
 -- ============================
