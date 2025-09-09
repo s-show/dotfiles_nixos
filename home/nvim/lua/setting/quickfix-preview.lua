@@ -35,25 +35,23 @@ function FdSetQuickfix(...)
 
   vim.fn.setqflist(qflist)
   -- Findqfから開かれたことを示すフラグを設定
-  vim.g.quickfix_opened_by_findqf = true
+  vim.g.quickfix_opened_by_custom_find = true
   vim.cmd('copen')
 end
 
 -- キーマッピング
-vim.keymap.set('n', '<leader>f', ':find ', { desc = 'Find file' })
-vim.keymap.set('n', '<leader>F', ':vert sf ', { desc = 'Find file in vertical split' })
 vim.keymap.set('n', '<leader>d', ':Findqf ', { desc = 'Find with fd and show in quickfix' })
 vim.keymap.set('n', '<leader>z', ':Fzfqf ', { desc = 'Fuzzy find files and show in quickfix' })
 
 -- FuzzyFindの結果をQuickfixに設定する関数
 function FuzzyFindToQuickfix(pattern)
   local results = FuzzyFindFunc(pattern)
-  
+
   if #results == 0 then
     vim.notify("検索結果が見つかりませんでした: " .. pattern, vim.log.levels.WARN)
     return
   end
-  
+
   local qflist = {}
   for _, filepath in ipairs(results) do
     table.insert(qflist, {
@@ -62,9 +60,9 @@ function FuzzyFindToQuickfix(pattern)
       text = filepath
     })
   end
-  
+
   vim.fn.setqflist(qflist)
-  vim.g.quickfix_opened_by_findqf = true
+  vim.g.quickfix_opened_by_custom_find = true
   vim.cmd('copen')
   vim.notify(#results .. " 件の検索結果が見つかりました", vim.log.levels.INFO)
 end
@@ -93,7 +91,6 @@ end, {
 -- ============================
 -- Quickfixプレビュー機能の追加
 -- ============================
-
 -- プレビューウィンドウの設定
 local preview_win = nil
 local preview_buf = nil
@@ -101,7 +98,6 @@ local closing_preview = false -- close_preview実行中かどうかのフラグ
 
 -- プレビューウィンドウを作成・更新する関数
 local function show_preview()
-  -- 現在の行の情報を取得
   local qflist = vim.fn.getqflist()
   local current_line = vim.fn.line('.')
 
@@ -133,7 +129,7 @@ local function show_preview()
   local start_line = item.lnum
   local lines = {}
   local result = {}
-  if vim.g.quickfix_opened_by_findqf then
+  if vim.g.quickfix_opened_by_custom_find then
     result = vim.fn.readfile(filename, '', 7)
   else
     lines = vim.fn.readfile(filename)
@@ -146,7 +142,6 @@ local function show_preview()
 
   -- バッファに内容を設定
   vim.bo[preview_buf].modifiable = true
-  -- vim.api.nvim_buf_set_lines(preview_buf, 0, -1, false, lines)
   vim.api.nvim_buf_set_lines(preview_buf, 0, -1, false, result)
   vim.bo[preview_buf].modifiable = false
   vim.bo[preview_buf].filetype = vim.fn.fnamemodify(filename, ':e')
@@ -175,7 +170,6 @@ local function show_preview()
       title = ' Preview: ' .. vim.fn.fnamemodify(filename, ':t') .. ' ',
       title_pos = 'center',
     }
-
     preview_win = vim.api.nvim_open_win(preview_buf, false, opts)
 
     -- プレビューウィンドウのオプション設定
@@ -185,7 +179,6 @@ local function show_preview()
     -- 既存のウィンドウにバッファを設定
     vim.api.nvim_win_set_buf(preview_win, preview_buf)
     -- タイトルを更新
-
     vim.api.nvim_win_set_config(preview_win, {
       title = ' Preview: ' .. vim.fn.fnamemodify(filename, ':t') .. ' ',
     })
@@ -225,6 +218,34 @@ local function close_preview()
   end
 end
 
+-- Quickfix ウィンドウ用の汎用関数（垂直/水平分割で開く）
+local function open_quickfix_item(split_cmd)
+  local qflist = vim.fn.getqflist()
+  local current_line = vim.fn.line('.')
+  local item = qflist[current_line]
+  local filename = item.filename or item.bufnr and vim.fn.bufname(item.bufnr) or ''
+  if filename == '' then
+    vim.notify('Quickfix entry が取得できません', vim.log.levels.WARN)
+    return
+  end
+
+  local lnum = (item.lnum and item.lnum > 0) and item.lnum or 1
+
+  -- split_cmd は "vsplit" か "split"
+  local cmd = string.format('%s +%d %s',
+    split_cmd,
+    lnum,
+    vim.fn.fnameescape(filename))
+
+  vim.cmd('cclose')   -- ウィンドウ操作を簡単にするために Quickfix ウィンドウをいったん閉じる
+  vim.cmd('wincmd t') -- 左上のウィンドウに移動
+  vim.cmd(cmd)        -- 分割してファイルを開く
+  vim.cmd('copen')    -- Quickfix ウィンドウを再度開く
+  if split_cmd == 'split' then
+    vim.cmd('vertical wincmd =')
+  end
+end
+
 -- Quickfixウィンドウ用の自動コマンドグループ
 local augroup = vim.api.nvim_create_augroup('QuickfixPreview', { clear = true })
 
@@ -233,7 +254,7 @@ vim.api.nvim_create_autocmd({ 'CursorMoved' }, {
   group = augroup,
   pattern = '*',
   callback = function()
-    if vim.bo.buftype == 'quickfix' and vim.g.quickfix_opened_by_findqf then
+    if vim.bo.buftype == 'quickfix' and vim.g.quickfix_opened_by_custom_find then
       show_preview()
     end
   end
@@ -250,23 +271,7 @@ vim.api.nvim_create_autocmd({ 'BufLeave', 'WinLeave' }, {
   end
 })
 
--- Quickfixウィンドウが閉じられたときにプレビューも閉じる
-vim.api.nvim_create_autocmd({ 'BufWinLeave' }, {
-  group = augroup,
-  pattern = '*',
-  callback = function()
-    -- close_preview実行中の場合は何もしない
-    if closing_preview then
-      return
-    end
-
-    if vim.bo.buftype == 'quickfix' then
-      close_preview()
-    end
-  end
-})
-
--- プレビューの表示/非表示を切り替えるコマンド（オプション）
+-- プレビューの表示/非表示を切り替えるコマンド
 vim.api.nvim_create_user_command('QuickfixPreviewToggle', function()
   if vim.bo.buftype ~= 'quickfix' then
     vim.notify('This command only works in quickfix window', vim.log.levels.WARN)
@@ -280,7 +285,7 @@ vim.api.nvim_create_user_command('QuickfixPreviewToggle', function()
   end
 end, {})
 
--- Quickfixウィンドウ内でのキーマッピング（オプション）
+-- Quickfixウィンドウ内でのキーマッピング
 vim.api.nvim_create_autocmd('FileType', {
   group = augroup,
   pattern = 'qf',
@@ -291,11 +296,26 @@ vim.api.nvim_create_autocmd('FileType', {
       silent = true,
       desc = 'Toggle preview window'
     })
-    -- Findqfでquickfixを開いた時のみqキーを設定
     vim.keymap.set('n', 'q', ':cclose<CR>', {
       buffer = true,
       silent = true,
       desc = 'Close quickfix window'
+    })
+    -- <C-v> で垂直分割（左端）に開く
+    vim.keymap.set('n', '<C-v>', function()
+      open_quickfix_item('vsplit')
+    end, {
+      buffer = true,
+      silent = true,
+      desc = 'Open quickfix item in vertical split (top left)'
+    })
+    -- <C-s> で水平分割（左上のウィンドウの下半分）に開く
+    vim.keymap.set('n', '<C-s>', function()
+      open_quickfix_item('split')
+    end, {
+      buffer = true,
+      silent = true,
+      desc = 'Open quickfix item in horizontal split (top left bottom half)'
     })
   end
 })
@@ -310,11 +330,14 @@ vim.api.nvim_create_autocmd('BufWinLeave', {
       return
     end
 
-    if vim.bo.buftype == 'quickfix' and vim.g.quickfix_opened_by_findqf then
-      -- フラグをリセット
-      vim.g.quickfix_opened_by_findqf = false
-      -- qキーマッピングを削除（存在する場合のみ）
-      pcall(vim.keymap.del, 'n', 'q', { buffer = true })
+    if vim.bo.buftype == 'quickfix' then
+      local qf_bufnr = vim.api.nvim_get_current_buf()
+      local winids = vim.fn.win_findbuf(qf_bufnr)
+      -- quickfix ウィンドウが閉じられたときにクリーンアップ処理を実行する
+      if #winids == 0 then
+        vim.g.quickfix_opened_by_custom_find = false
+        pcall(vim.keymap.del, 'n', 'q', { buffer = true })
+      end
     end
   end
 })
