@@ -2,7 +2,6 @@
 if vim.fn.has('nvim-0.11') == 1 then
   vim.lsp.config('*', {
     capabilities = require('ddc_source_lsp').make_client_capabilities(),
-    -- capabilities = require('cmp_nvim_lsp').default_capabilities(),
     -- capabilities = require('blink.cmp').get_lsp_capabilities(),
   })
 
@@ -23,7 +22,6 @@ if vim.fn.has('nvim-0.11') == 1 then
   local _, result = pcall(vim.lsp.document_color.enable, true, 0, { style = 'virtual' })
 else
   local capabilities = require("ddc_source_lsp").make_client_capabilities()
-  -- local capabilities = require("cmp_nvim_lsp").default_capabilities()
   -- local capabilities = require("blink.cmp").get_lsp_capabilities()
   capabilities.textDocument.completion.completionItem.snippetSupport = true
 end
