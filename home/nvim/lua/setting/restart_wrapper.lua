@@ -46,7 +46,9 @@ if vim.fn.exists(':restart') >= 1 then
     if vim.fn.exists(":restart") == 2 then
       vim.notify("State saved. Restarting Neovim…", vim.log.levels.INFO)
       vim.cmd('silent! wall')
-      vim.cmd("silent! restart")
+      vim.defer_fn(function()
+        vim.cmd("silent! restart")
+      end, 1000)
     else
       vim.notify("State saved. Quit and start Neovim again to auto-restore.", vim.log.levels.INFO)
     end
