@@ -1,3 +1,4 @@
+-- `adapters.<adapter_name>` and `adapters.opts` is deprecated, use `adapters.http.<adapter_name>` and `adapters.http.opts` instead.
 return {
   'olimorris/codecompanion.nvim',
   dependencies = {
@@ -6,21 +7,26 @@ return {
   },
   opts = {
     adapters = {
-      cerebras = function()
-        return require("codecompanion.adapters").extend("openai_compatible", {
-          env = {
-            url = "https://api.cerebras.ai",
-            api_key = os.getenv("CEREBRAS_API_KEY"),
-            chat_url = "/v1/chat/completions",
-            models_endpoint = "/v1/models",
-          },
-          schema = {
-            model = {
-              default = "gpt-oss-120b",
+      http = {
+        cerebras = function()
+          return require("codecompanion.adapters").extend("openai_compatible", {
+            env = {
+              url = "https://api.cerebras.ai",
+              api_key = os.getenv("CEREBRAS_API_KEY"),
+              chat_url = "/v1/chat/completions",
+              models_endpoint = "/v1/models",
             },
-          },
-        })
-      end,
+            schema = {
+              model = {
+                default = "gpt-oss-120b",
+              },
+            },
+          })
+        end,
+        opts = {
+          language = "Japanese",
+        },
+      }
     },
     strategies = {
       chat = {
@@ -85,7 +91,6 @@ return {
         },
       }
     },
-    language = "Japanese",
   },
   cmd = {
     "CodeCompanion",
