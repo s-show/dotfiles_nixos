@@ -40,8 +40,9 @@ function FdSetQuickfix(...)
 end
 
 -- キーマッピング
-vim.keymap.set('n', '<leader>d', ':Findqf ', { desc = 'Find with fd and show in quickfix' })
-vim.keymap.set('n', '<leader>z', ':Fzfqf ', { desc = 'Fuzzy find files and show in quickfix' })
+vim.keymap.set('n', '<leader>d',  ':Findqf', { desc = 'Find with fd and show in quickfix' })
+vim.keymap.set('n', '<leader>z',  ':Fzfqf',  { desc = 'Fuzzy find files and show in quickfix' })
+vim.keymap.set('n', '<leader>gr', ':Grep',   { desc = 'grep wrapper and show in quickfix' })
 
 -- FuzzyFindの結果をQuickfixに設定する関数
 function FuzzyFindToQuickfix(pattern)
