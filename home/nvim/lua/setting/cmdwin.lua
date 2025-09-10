@@ -39,7 +39,6 @@ local function fuzzy_match(str, pattern)
       end
     end
   end
-
   return false
 end
 
@@ -131,6 +130,15 @@ vim.api.nvim_create_autocmd(
         buffer = true,
         desc = 'Fuzzy search with command line'
       })
+      -- <Esc> で検索結果を破棄して元に戻す
+      vim.keymap.set('n', '<Esc>', function()
+        local buf = vim.api.nvim_get_current_buf()
+        local original = vim.b.cmdwin_original_lines
+        if original then
+          vim.api.nvim_buf_set_lines(buf, 0, -1, false, original)
+          vim.b.cmdwin_original_lines = nil
+        end
+      end, { buffer = true, desc = 'Cancel fuzzy search and restore' })
     end
   }
 )
