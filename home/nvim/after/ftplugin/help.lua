@@ -1,3 +1,8 @@
 if vim.o.buftype == "help" then
-	vim.cmd("wincmd L | vertical resize 83") -- 幅は少し余裕を持たせている
+  if vim.o.columns >= 166 then
+    vim.cmd("wincmd L | vertical resize 80")
+  else
+    local help_win_width = vim.o.columns / 2
+    vim.cmd("wincmd L | vertical resize" .. tostring(help_win_width))
+  end
 end
