@@ -1,103 +1,74 @@
+--- 全体的な設定.
+-- この設定全体で使う設定など.
+-- @section basic
+
 -- Wildmenu設定
 vim.opt.wildmenu = true
 vim.opt.wildmode = { 'noselect:longest:lastused', 'full' }
+local debug_mode = false
+local default_exclude_dirs = {
+  ".git", ".svn", ".hg", ".bzr",
+  "node_modules", "vendor",
+  ".venv", "venv", "env",
+  "__pycache__", ".pytest_cache", ".mypy_cache", ".tox",
+  "dist", "build", "target",
+  ".idea", ".vscode",
+  ".DS_Store", ".cache",
+  ".npm", ".yarn",
+  "coverage", ".nyc_output",
+  ".next", ".nuxt", "out"
+}
 
--- fd と fzf が利用可能な場合、findfunc を設定
-if vim.fn.executable('fd') == 1 and vim.fn.executable('fzf') == 1 then
-  vim.opt.findfunc = 'v:lua.FuzzyFindFunc'
+--- テキストが空白文字だけで構成されているか調べる関数.
+-- @param text string 調べたいテキスト.
+-- @return boolean 空白文字だけなら `true`, 非空白文字があれば `false` を返す
+local function is_blank_text(text)
+  if text == nil or #text == 0 or vim.fn.match(text, '\\S') == -1 then
+    return true
+  else
+    return false
+  end
 end
 
--- FuzzyFind関数
-function FuzzyFindFunc(cmdarg)
-  local cmd = "fd --hidden . | fzf --filter='" .. cmdarg .. "'"
-  return vim.fn.systemlist(cmd)
-end
+--- Quickfix プレビューセクション.
+-- Quickfix のプレビューに関する設定.
+-- @section quickfix
 
--- Quickfixにfdの結果を設定する関数
-function FdSetQuickfix(...)
-  local args = { ... }
-  local cmd = "fd -t f --hidden " .. table.concat(args, " ")
-  local fdresults = vim.fn.systemlist(cmd)
-
-  if vim.v.shell_error ~= 0 then
-    vim.notify("Fd エラー: " .. (fdresults[1] or "不明なエラー"), vim.log.levels.ERROR)
-    return
-  end
-
-  local qflist = {}
-  for _, val in ipairs(fdresults) do
-    table.insert(qflist, {
-      filename = val,
-      lnum = 1,
-      text = val
-    })
-  end
-
-  vim.fn.setqflist(qflist)
-  -- Findqfから開かれたことを示すフラグを設定
-  vim.g.quickfix_opened_by_custom_find = true
-  vim.cmd('copen')
-end
-
--- キーマッピング
-vim.keymap.set('n', '<leader>d',  ':Findqf', { desc = 'Find with fd and show in quickfix' })
-vim.keymap.set('n', '<leader>z',  ':Fzfqf',  { desc = 'Fuzzy find files and show in quickfix' })
-vim.keymap.set('n', '<leader>gr', ':Grep',   { desc = 'grep wrapper and show in quickfix' })
-
--- FuzzyFindの結果をQuickfixに設定する関数
-function FuzzyFindToQuickfix(pattern)
-  local results = FuzzyFindFunc(pattern)
-
-  if #results == 0 then
-    vim.notify("検索結果が見つかりませんでした: " .. pattern, vim.log.levels.WARN)
-    return
-  end
-
-  local qflist = {}
-  for _, filepath in ipairs(results) do
-    table.insert(qflist, {
-      filename = filepath,
-      lnum = 1,
-      text = filepath
-    })
-  end
-
-  vim.fn.setqflist(qflist)
-  vim.g.quickfix_opened_by_custom_find = true
-  vim.cmd('copen')
-  vim.notify(#results .. " 件の検索結果が見つかりました", vim.log.levels.INFO)
-end
-
--- コマンド定義
-vim.api.nvim_create_user_command('Findqf', function(opts)
-  FdSetQuickfix(unpack(opts.fargs))
-end, {
-  nargs = '+',
-  complete = 'file_in_path'
-})
-
--- Fuzzy検索結果をQuickfixに表示するコマンド
-vim.api.nvim_create_user_command('Fzfqf', function(opts)
-  local pattern = table.concat(opts.fargs, ' ')
-  if pattern == '' then
-    vim.notify("検索パターンを指定してください", vim.log.levels.WARN)
-    return
-  end
-  FuzzyFindToQuickfix(pattern)
-end, {
-  nargs = '+',
-  desc = 'Fuzzy find files and show in quickfix'
-})
-
--- ============================
--- Quickfixプレビュー機能の追加
--- ============================
--- プレビューウィンドウの設定
-local preview_win = nil
-local preview_buf = nil
+--- プレビューウィンドウの設定.
+local preview_win     = nil
+local preview_buf     = nil
+local display_preview = false
 local closing_preview = false -- close_preview実行中かどうかのフラグ
 
--- プレビューウィンドウを作成・更新する関数
+--- プレビューウィンドウを閉じる関数.
+local function close_preview()
+  if preview_win and vim.api.nvim_win_is_valid(preview_win) then
+    -- close_preview実行中のフラグを立てる
+    closing_preview = true
+
+    -- ウィンドウを閉じる前に、バッファの参照を一時保存
+    local buf_to_delete = preview_buf
+
+    -- ウィンドウを閉じる
+    pcall(vim.api.nvim_win_close, preview_win, true)
+    preview_win = nil
+
+    -- バッファが有効で、他のウィンドウで使われていない場合のみ削除
+    if buf_to_delete and vim.api.nvim_buf_is_valid(buf_to_delete) then
+      local wins = vim.fn.win_findbuf(buf_to_delete)
+      if #wins == 0 then
+        pcall(vim.api.nvim_buf_delete, buf_to_delete, { force = true })
+      end
+    end
+    preview_buf = nil
+
+    -- フラグをリセット
+    closing_preview = false
+    display_preview = false
+  end
+end
+
+--- プレビューウィンドウを作成・更新する関数.
 local function show_preview()
   local qflist = vim.fn.getqflist()
   local current_line = vim.fn.line('.')
@@ -107,7 +78,9 @@ local function show_preview()
   end
 
   local item = qflist[current_line]
-  -- vim.notify(vim.inspect(item)) -- デバッグ用（必要に応じてコメントアウト）
+  if debug_mode then
+    vim.notify(vim.inspect(item))
+  end
   local filename = item.filename or item.bufnr and vim.fn.bufname(item.bufnr) or ''
 
   if filename == '' then
@@ -143,7 +116,12 @@ local function show_preview()
 
   -- バッファに内容を設定
   vim.bo[preview_buf].modifiable = true
-  vim.api.nvim_buf_set_lines(preview_buf, 0, -1, false, result)
+  local ok, _ = pcall(vim.api.nvim_buf_set_lines, preview_buf, 0, -1, false, result)
+  -- バイナリファイルなどを読み込んだ場合は処理終了
+  if ok == false then
+    vim.api.nvim_buf_set_lines(preview_buf, 0, -1, false, { "Unable to preview this file." })
+    return
+  end
   vim.bo[preview_buf].modifiable = false
   vim.bo[preview_buf].filetype = vim.fn.fnamemodify(filename, ':e')
 
@@ -190,36 +168,11 @@ local function show_preview()
     -- vim.api.nvim_win_set_cursor(preview_win, { math.min(item.lnum, #lines), 0 })
     vim.api.nvim_win_set_cursor(preview_win, { math.min(item.lnum, #result), 0 })
   end
+  display_preview = true
 end
 
--- プレビューウィンドウを閉じる関数
-local function close_preview()
-  if preview_win and vim.api.nvim_win_is_valid(preview_win) then
-    -- close_preview実行中のフラグを立てる
-    closing_preview = true
-
-    -- ウィンドウを閉じる前に、バッファの参照を一時保存
-    local buf_to_delete = preview_buf
-
-    -- ウィンドウを閉じる
-    pcall(vim.api.nvim_win_close, preview_win, true)
-    preview_win = nil
-
-    -- バッファが有効で、他のウィンドウで使われていない場合のみ削除
-    if buf_to_delete and vim.api.nvim_buf_is_valid(buf_to_delete) then
-      local wins = vim.fn.win_findbuf(buf_to_delete)
-      if #wins == 0 then
-        pcall(vim.api.nvim_buf_delete, buf_to_delete, { force = true })
-      end
-    end
-    preview_buf = nil
-
-    -- フラグをリセット
-    closing_preview = false
-  end
-end
-
--- Quickfix ウィンドウ用の汎用関数（垂直/水平分割で開く）
+--- Quickfix ウィンドウのアイテムを垂直/水平分割で開く関数.
+-- @param split_cmd string 垂直/水平分割の指定
 local function open_quickfix_item(split_cmd)
   local qflist = vim.fn.getqflist()
   local current_line = vim.fn.line('.')
@@ -255,7 +208,7 @@ vim.api.nvim_create_autocmd({ 'CursorMoved' }, {
   group = augroup,
   pattern = '*',
   callback = function()
-    if vim.bo.buftype == 'quickfix' and vim.g.quickfix_opened_by_custom_find then
+    if vim.bo.buftype == 'quickfix' and vim.g.quickfix_opened_by_custom_find and display_preview then
       show_preview()
     end
   end
@@ -267,6 +220,7 @@ vim.api.nvim_create_autocmd({ 'BufLeave', 'WinLeave' }, {
   pattern = '*',
   callback = function()
     if vim.bo.buftype == 'quickfix' then
+      display_preview = false
       close_preview()
     end
   end
@@ -280,8 +234,10 @@ vim.api.nvim_create_user_command('QuickfixPreviewToggle', function()
   end
 
   if preview_win and vim.api.nvim_win_is_valid(preview_win) then
+    display_preview = false
     close_preview()
   else
+    display_preview = true
     show_preview()
   end
 end, {})
@@ -370,6 +326,213 @@ vim.api.nvim_create_autocmd('QuickFixCmdPost', {
   end,
 })
 
+
+--- find/fd sections.
+-- find/fd による検索に関する設定.
+-- @section find/fd
+
+--- fdが利用可能かチェック.
+local function is_fd_available()
+  return vim.fn.executable("fd") == 1
+end
+
+--- findコマンドを構築.
+-- @param exclude_dirs string[] 検索対象から除外するディレクトリのリスト
+-- @param search_fils string 検索したいファイル名
+-- @return function() find 検索のコマンド文字列
+local function build_find_command(exclude_dirs, search_file)
+  local prune_parts = {}
+  for i, dir in ipairs(exclude_dirs) do
+    table.insert(prune_parts, "-name " .. dir)
+    if i < #exclude_dirs then
+      table.insert(prune_parts, "-o")
+    end
+  end
+
+  if is_blank_text(search_file) == false then
+    return string.format(
+      [[find . -type d \( %s \) -prune -o -name "*%s*" -type f -print | awk '{ flag = ($0 ~ /^\./ ? 0 : 1); print flag "|" $0 }' | sort -t'|' -k1,1 -k2,2 | cut -d'|' -f2-]],
+      table.concat(prune_parts, " "),
+      search_file
+    )
+  else
+    return string.format(
+      [[find . -type d \( %s \) -prune -o -type f -print | awk '{ flag = ($0 ~ /^\./ ? 0 : 1); print flag "|" $0 }' | sort -t'|' -k1,1 -k2,2 | cut -d'|' -f2-]],
+      table.concat(prune_parts, " ")
+    )
+  end
+end
+
+--- fdコマンドを構築.
+-- @param exclude_dirs string[] 検索対象から除外するディレクトリのリスト
+-- @param search_fils string 検索したいファイル名
+-- @return function() fd 検索のコマンド文字列
+local function build_fd_command(exclude_dirs, search_file)
+  local exclude_parts = {}
+  for _, dir in ipairs(exclude_dirs) do
+    table.insert(exclude_parts, "--exclude " .. vim.fn.shellescape(dir))
+  end
+  local fd_cmd = ""
+  if is_blank_text(search_file) == false then
+    fd_cmd = string.format(
+      [[fd %s --type f --hidden %s . | awk '{ flag = ($0 ~ /^\./ ? 0 : 1); print flag "|" $0 }' | sort -t'|' -k1,1 -k2,2 | cut -d'|' -f2-]],
+      search_file,
+      table.concat(exclude_parts, " ")
+    )
+  else
+    fd_cmd = string.format(
+      [[fd --type f --hidden %s . | awk '{ flag = ($0 ~ /^\./ ? 0 : 1); print flag "|" $0 }' | sort -t'|' -k1,1 -k2,2 | cut -d'|' -f2-]],
+      table.concat(exclude_parts, " ")
+    )
+  end
+
+  return fd_cmd
+end
+
+--- ファイル検索関数.
+-- @param search_file 検索したいファイル名
+-- @return string[] or nil
+local function get_file_list(search_file)
+  local exclude_dirs = default_exclude_dirs
+  local use_fd = is_fd_available()
+
+  local cmd
+  if use_fd then
+    cmd = build_fd_command(exclude_dirs, search_file)
+  else
+    cmd = build_find_command(exclude_dirs, search_file)
+  end
+  if debug_mode then
+    print(cmd)
+  end
+
+  local file_list = vim.fn.systemlist(cmd)
+  if vim.v.shell_error ~= 0 then
+    vim.notify("fd エラー: " .. (file_list[1] or "不明なエラー"), vim.log.levels.ERROR)
+    return nil
+  end
+  return file_list
+end
+
+--- fd の結果のパスを `/` と `.` で分割する.
+-- @param path string find/fd コマンドでリストアップされたファイルリストの各ファイル
+-- @return string[] ファイルのパスを `/` で分割したテーブル
+local function split_path(path)
+  local splited_path = {}
+  local current_text = ""
+  for i = 1, #path do
+    local char = path:sub(i, i)
+    if char:match("[./]") then
+      if #current_text > 0 then
+        -- 区切り文字が出たらそれまでの文字列を返り値に格納する
+        table.insert(splited_path, current_text)
+      end
+      current_text = ""
+    else
+      current_text = current_text .. char
+    end
+  end
+  if #current_text > 0 then
+    table.insert(splited_path, current_text)
+  end
+  return splited_path
+end
+
+--- 曖昧検索を実行してヒットするか否かを返す関数.
+-- @parame text_list string[] `split_path` で分割されたパスが渡されることを想定している
+-- @parame pattern string 曖昧検索の検索文字列
+-- @return boolean 曖昧検索でヒットすれば `true`, ヒットしなければ `false` を返す
+local function fuzzy_match(text_list, pattern)
+  local pattern_lower = pattern:lower()
+  for _, text in ipairs(text_list) do
+    local text_lower = text:lower()
+    local pattern_idx = 1
+    for text_idx = 1, #text_lower do
+      if text_lower:sub(text_idx, text_idx) == pattern_lower:sub(pattern_idx, pattern_idx) then
+        pattern_idx = pattern_idx + 1
+        if pattern_idx > #pattern_lower then
+          return true
+        end
+      end
+    end
+  end
+  return false
+end
+
+--- 引数で渡された find/fd の検索結果を quickfix に挿入する関数.
+-- @param file_list string[] quickfix に挿入するファイルのリスト
+local function find_to_quickfix(file_list)
+  local qflist = {}
+  for _, file in ipairs(file_list) do
+    table.insert(qflist, {
+      filename = file,
+      lnum = 1,
+      text = file
+    })
+  end
+  vim.fn.setqflist(qflist)
+  vim.cmd('copen')
+end
+
+--- fd で検索してその結果を quickfix に挿入する関数.
+-- @param query string fd に渡す検索文字列
+local function fd_to_Quickfix(query)
+  local file_list = get_file_list(query)
+  find_to_quickfix(file_list)
+  -- Findqfから開かれたことを示すフラグを設定
+  vim.g.quickfix_opened_by_custom_find = true
+  show_preview()
+end
+
+-- FuzzyFindの結果をQuickfixに設定する関数
+local function fuzzy_find_to_Quickfix(query)
+  local file_list = get_file_list()
+  local match_list = {}
+  if file_list ~= nil or #file_list > 0 then
+    for _, file in ipairs(file_list) do
+      local splited_path = split_path(file)
+      if fuzzy_match(splited_path, query) then
+        table.insert(match_list, file)
+      end
+    end
+  end
+
+  if #match_list == 0 or match_list == nil then
+    vim.notify("検索結果が見つかりませんでした: " .. query, vim.log.levels.WARN)
+    return
+  end
+
+  find_to_quickfix(match_list)
+  vim.g.quickfix_opened_by_custom_find = true
+  vim.notify(#match_list .. " 件の検索結果が見つかりました", vim.log.levels.INFO)
+  show_preview()
+end
+
+-- Find の結果をQuickfixに表示するコマンド
+vim.api.nvim_create_user_command('Findqf', function(opts)
+  fd_to_Quickfix(unpack(opts.fargs))
+end, {
+  nargs = '+',
+  desc = 'Find files and show in quickfix'
+})
+
+-- Fuzzy find の結果をQuickfixに表示するコマンド
+vim.api.nvim_create_user_command('Fzfqf', function(opts)
+  local pattern = table.concat(opts.fargs, ' ')
+  if pattern == '' then
+    vim.notify("検索パターンを指定してください", vim.log.levels.WARN)
+    return
+  end
+  fuzzy_find_to_Quickfix(pattern)
+end, {
+  nargs = '+',
+  desc = 'Fuzzy find files and show in quickfix'
+})
+
+--- Grep functions.
+-- Grep 検索に関する設定.
+-- @section grep
+
 -- Grep 用ラッパーコマンド（silent かつ quickfix にフォーカス）
 vim.api.nvim_create_user_command('Grep', function(opts)
   -- すべて silent! で実行し、エラーメッセージも抑制
@@ -377,6 +540,14 @@ vim.api.nvim_create_user_command('Grep', function(opts)
   -- QuickFixCmdPost が走った後でも確実に開きたい場合はここでも
   vim.cmd('copen')
 end, {
-  nargs = '*',
-  complete = 'file',
+  nargs = '+',
 })
+
+--- keymap functions.
+-- キーマッピングに関する設定.
+-- @section keymap
+
+-- キーマッピング
+vim.keymap.set('n', '<leader>d',  ':Findqf ', { desc = 'Find file and show in quickfix' })
+vim.keymap.set('n', '<leader>z',  ':Fzfqf ',  { desc = 'Fuzzy find files and show in quickfix' })
+vim.keymap.set('n', '<leader>gr', ':Grep',    { desc = 'grep wrapper and show in quickfix' })
