@@ -155,6 +155,9 @@ vim.api.nvim_create_autocmd(
           vim.b.cmdwin_original_lines = nil
         end
       end, { buffer = true, desc = 'restore command history.' })
+      vim.fn["ddc#custom#patch_global"]({
+        ui = 'none'
+      })
     end
   }
 )
@@ -167,6 +170,9 @@ vim.api.nvim_create_autocmd(
       pcall(vim.keymap.del, 'n', '/')
       pcall(vim.keymap.del, 'n', '<Esc>')
       vim.keymap.set('n', '<ESC><ESC>', '<Cmd>nohlsearch<CR>', { silent = true })
+      vim.fn["ddc#custom#patch_global"]({
+        ui = 'pum'
+      })
     end
   }
 )
