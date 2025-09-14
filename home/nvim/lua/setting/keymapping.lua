@@ -152,7 +152,7 @@ vim.keymap.set('n', 'X', '"_D$', { silent = true })
 vim.keymap.set('x', '<', '<gv', { silent = true })
 vim.keymap.set('x', '>', '>gv', { silent = true })
 -- 行選択でも複数行への挿入を可能にする
-vim.keymap.set( "i", "A",
+vim.keymap.set( "v", "A",
   function()
     if vim.fn.mode(0) == "V" then
       return "<C-v>0o$A"
@@ -162,6 +162,6 @@ vim.keymap.set( "i", "A",
   end,
   {
     expr = true,
-    desc = [[行選択モードでも複数行に挿入できる A]],
+    desc = "行選択モードでも複数行に挿入できる A",
   }
 )

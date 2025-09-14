@@ -1,5 +1,5 @@
 -- 検索設定
-vim.keymap.set('n', '<ESC><ESC>', '<Cmd>nohlsearch<CR>', {silent=true})
+vim.keymap.set('n', '<ESC><ESC>', '<Cmd>nohlsearch<CR>', { silent = true })
 
 -- set help file language
 vim.opt.helplang = 'ja'
@@ -42,16 +42,16 @@ vim.keymap.set('n', 'P', ']P`]')
 
 -- カーソル下の単語をハイライトする
 -- https://zenn.dev/itmammoth/articles/e6d84bc346c78a#1.-%E3%82%AB%E3%83%BC%E3%82%BD%E3%83%AB%E4%B8%8B%E3%81%AE%E5%8D%98%E8%AA%9E%E3%82%92%E3%83%8F%E3%82%A4%E3%83%A9%E3%82%A4%E3%83%88%E3%81%99%E3%82%8B 参照
-vim.keymap.set('n', '<space><space>', function ()
+vim.keymap.set('n', '<space><space>', function()
   vim.fn.setreg('/', vim.fn.expand('<cword>'))
   vim.opt.hlsearch = true
 end)
 
--- カーソル下の単語のヘルプを開く 
+-- カーソル下の単語のヘルプを開く
 -- vim.cmd.help(vim.fn.expand('<cword>')) を rhs に直接設定すると
 -- なぜかエラーになるので、コールバック関数で呼び出している。
 vim.keymap.set('n', '<leader>H', function()
-  vim.cmd[[echon '']]
+  vim.cmd [[echon '']]
   local pcall_result, function_return = pcall(vim.cmd.help, vim.fn.expand('<cword>'))
   if pcall_result ~= true then
     vim.notify('keyword not found in help.', vim.log.levels.WARN)
@@ -72,14 +72,18 @@ vim.api.nvim_create_user_command('Redir', function(ctx)
   vim.cmd('new')
   vim.api.nvim_buf_set_lines(0, 0, -1, false, vim.split(function_return, '\n', { plain = true }))
   vim.opt_local.modified = false
-end, { nargs = '+', complete = 'command' })
+end,
+{
+  nargs = '+',
+  complete = 'command',
+})
 
 -- ヤンクした箇所をハイライトする
 vim.api.nvim_create_autocmd("TextYankPost", {
-    pattern = "*",
-    callback = function()
-      if vim.v.event.operator == "y" then
-        vim.hl.on_yank({ timeout = 300 })
-      end
-    end,
+  pattern = "*",
+  callback = function()
+    if vim.v.event.operator == "y" then
+      vim.hl.on_yank({ timeout = 300 })
+    end
+  end,
 })
