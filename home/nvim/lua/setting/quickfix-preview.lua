@@ -39,6 +39,7 @@ local preview_win     = nil
 local preview_buf     = nil
 local display_preview = false
 local closing_preview = false -- close_preview実行中かどうかのフラグ
+local quickfix_with_custom_find = false -- find/fd から開かれたかどうかのフラグ
 
 --- プレビューウィンドウを閉じる関数.
 local function close_preview()
@@ -103,7 +104,7 @@ local function show_preview()
   local start_line = item.lnum
   local lines = {}
   local result = {}
-  if vim.g.quickfix_opened_by_custom_find then
+  if quickfix_with_custom_find then
     result = vim.fn.readfile(filename, '', 7)
   else
     lines = vim.fn.readfile(filename)
@@ -168,7 +169,7 @@ local function show_preview()
     -- vim.api.nvim_win_set_cursor(preview_win, { math.min(item.lnum, #lines), 0 })
     vim.api.nvim_win_set_cursor(preview_win, { math.min(item.lnum, #result), 0 })
   end
-  display_preview = true
+  -- display_preview = true
 end
 
 --- Quickfix ウィンドウのアイテムを垂直/水平分割で開く関数.
@@ -208,7 +209,7 @@ vim.api.nvim_create_autocmd({ 'CursorMoved' }, {
   group = augroup,
   pattern = '*',
   callback = function()
-    if vim.bo.buftype == 'quickfix' and vim.g.quickfix_opened_by_custom_find and display_preview then
+    if vim.bo.buftype == 'quickfix' and display_preview then
       show_preview()
     end
   end
@@ -292,8 +293,9 @@ vim.api.nvim_create_autocmd('BufWinLeave', {
       local winids = vim.fn.win_findbuf(qf_bufnr)
       -- quickfix ウィンドウが閉じられたときにクリーンアップ処理を実行する
       if #winids == 0 then
-        vim.g.quickfix_opened_by_custom_find = false
+        quickfix_with_custom_find = false
         pcall(vim.keymap.del, 'n', 'q', { buffer = true })
+        display_preview = false
       end
     end
   end
@@ -461,7 +463,7 @@ end
 
 --- 引数で渡された find/fd の検索結果を quickfix に挿入する関数.
 -- @param file_list string[] quickfix に挿入するファイルのリスト
-local function find_to_quickfix(file_list)
+local function filelist_to_quickfix(file_list)
   local qflist = {}
   for _, file in ipairs(file_list) do
     table.insert(qflist, {
@@ -478,9 +480,10 @@ end
 -- @param query string fd に渡す検索文字列
 local function fd_to_Quickfix(query)
   local file_list = get_file_list(query)
-  find_to_quickfix(file_list)
+  filelist_to_quickfix(file_list)
   -- Findqfから開かれたことを示すフラグを設定
-  vim.g.quickfix_opened_by_custom_find = true
+  quickfix_with_custom_find = true
+  display_preview = true
   show_preview()
 end
 
@@ -502,9 +505,10 @@ local function fuzzy_find_to_Quickfix(query)
     return
   end
 
-  find_to_quickfix(match_list)
-  vim.g.quickfix_opened_by_custom_find = true
+  filelist_to_quickfix(match_list)
+  quickfix_with_custom_find = true
   vim.notify(#match_list .. " 件の検索結果が見つかりました", vim.log.levels.INFO)
+  display_preview = true
   show_preview()
 end
 
@@ -538,6 +542,7 @@ vim.api.nvim_create_user_command('Grep', function(opts)
   -- すべて silent! で実行し、エラーメッセージも抑制
   vim.cmd('silent! grep ' .. table.concat(opts.fargs, ' '))
   -- QuickFixCmdPost が走った後でも確実に開きたい場合はここでも
+  display_preview = true
   vim.cmd('copen')
 end, {
   nargs = '+',
