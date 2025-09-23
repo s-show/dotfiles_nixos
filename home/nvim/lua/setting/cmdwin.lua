@@ -3,57 +3,6 @@ local fuzzy_rank = require('util.fuzzy_rank')
 -- cmdwin の高さを 10行に設定
 vim.opt.cmdwinheight = 10
 
-local function is_blank_text(text)
-  if #text == 0 or vim.fn.match(text, '\\S') == -1 then
-    return true
-  else
-    return false
-  end
-end
-
--- コマンド履歴のテキストを区切り文字で分割する
-local function split_command_text(text)
-  -- 区切り文字で分割
-  local splited_text = {}
-  local current_text = ""
-
-  for i = 1, #text do
-    local char = text:sub(i, i)
-    if char:match("[%.%s/_%(%)%[%]{}'\",;:!?<>|\\-]") then
-      if #current_text > 0 then
-        -- 区切り文字が出たらそれまでの文字列を返り値に格納する
-        table.insert(splited_text, current_text)
-      end
-      current_text = ""
-    else
-      current_text = current_text .. char
-    end
-  end
-  if #current_text > 0 then
-    table.insert(splited_text, current_text)
-  end
-  return splited_text
-end
-
--- 曖昧検索の実装
-local function fuzzy_match(splited_text, pattern)
-  local pattern_lower = pattern:lower()
-  for _, text in ipairs(splited_text) do
-    local text_lower = text:lower()
-    local pattern_idx = 1
-
-    for text_idx = 1, #text_lower do
-      if text_lower:sub(text_idx, text_idx) == pattern_lower:sub(pattern_idx, pattern_idx) then
-        pattern_idx = pattern_idx + 1
-        if pattern_idx > #pattern_lower then
-          return true
-        end
-      end
-    end
-  end
-  return false
-end
-
 -- コマンドラインを使ってリアルタイムな曖昧検索
 local function cmdline_fuzzy_search()
   local buf = vim.api.nvim_get_current_buf()
@@ -146,6 +95,7 @@ vim.api.nvim_create_autocmd(
         if original then
           vim.api.nvim_buf_set_lines(buf, 0, -1, false, original)
           vim.b.cmdwin_original_lines = nil
+          vim.cmd('normal! G')
         end
       end, { buffer = true, desc = 'restore command history.' })
       vim.fn["ddc#custom#patch_global"]({

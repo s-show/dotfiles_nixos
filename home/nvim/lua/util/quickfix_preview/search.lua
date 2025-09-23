@@ -1,6 +1,8 @@
 --- ファイル検索機能モジュール.
 -- @module quickfix_preview.search
 
+local util = require('util.utility')
+
 local M = {}
 
 local default_exclude_dirs = {
@@ -15,17 +17,6 @@ local default_exclude_dirs = {
   "coverage", ".nyc_output",
   ".next", ".nuxt", "out"
 }
-
---- テキストが空白文字だけで構成されているか調べる関数.
--- @param text string 調べたいテキスト.
--- @return boolean 空白文字だけなら `true`, 非空白文字があれば `false` を返す
-local function is_blank_text(text)
-  if text == nil or #text == 0 or vim.fn.match(text, '\\S') == -1 then
-    return true
-  else
-    return false
-  end
-end
 
 --- fdが利用可能かチェック.
 local function is_fd_available()
@@ -45,7 +36,7 @@ local function build_find_command(exclude_dirs, search_file)
     end
   end
 
-  if is_blank_text(search_file) == false then
+  if util.is_blank_text(search_file) == false then
     local pattern = "*" .. search_file .. "*"
     return string.format(
       [[find . -type d \( %s \) -prune -o -name %s -type f -print | awk '{ flag = ($0 ~ /(^|\/)\./ ? 0 : 1); print flag "|" $0 }' | sort -t'|' -k1,1 -k2,2 | cut -d'|' -f2-]],
@@ -70,7 +61,7 @@ local function build_fd_command(exclude_dirs, search_file)
     table.insert(exclude_parts, "--exclude " .. vim.fn.shellescape(dir))
   end
   local fd_cmd = ""
-  if is_blank_text(search_file) == false then
+  if util.is_blank_text(search_file) == false then
     fd_cmd = string.format(
       [[fd %s --type f --hidden %s . | awk '{ flag = ($0 ~ /(^|\/)\./ ? 0 : 1); print flag "|" $0 }' | sort -t'|' -k1,1 -k2,2 | cut -d'|' -f2-]],
       vim.fn.shellescape(search_file),
@@ -102,7 +93,7 @@ function M.get_files(search_file, opts)
   else
     cmd = build_find_command(exclude_dirs, search_file)
   end
-  
+
   if debug_mode then
     print(cmd)
   end
@@ -117,3 +108,4 @@ function M.get_files(search_file, opts)
 end
 
 return M
+
