@@ -1,6 +1,7 @@
 --- 全体的な設定.
 -- この設定全体で使う設定など.
 -- @section basic
+local fuzzy_rank = require('util.fuzzy_rank')
 
 -- Wildmenu設定
 vim.opt.wildmenu = true
@@ -416,54 +417,9 @@ local function get_file_list(search_file)
   return file_list
 end
 
---- fd の結果のパスを `/` と `.` で分割する.
--- @param path string find/fd コマンドでリストアップされたファイルリストの各ファイル
--- @return string[] ファイルのパスを `/` で分割したテーブル
-local function split_path(path)
-  local splited_path = {}
-  local current_text = ""
-  for i = 1, #path do
-    local char = path:sub(i, i)
-    if char:match("[./]") then
-      if #current_text > 0 then
-        -- 区切り文字が出たらそれまでの文字列を返り値に格納する
-        table.insert(splited_path, current_text)
-      end
-      current_text = ""
-    else
-      current_text = current_text .. char
-    end
-  end
-  if #current_text > 0 then
-    table.insert(splited_path, current_text)
-  end
-  return splited_path
-end
-
---- 曖昧検索を実行してヒットするか否かを返す関数.
--- @parame text_list string[] `split_path` で分割されたパスが渡されることを想定している
--- @parame pattern string 曖昧検索の検索文字列
--- @return boolean 曖昧検索でヒットすれば `true`, ヒットしなければ `false` を返す
-local function fuzzy_match(text_list, pattern)
-  local pattern_lower = pattern:lower()
-  for _, text in ipairs(text_list) do
-    local text_lower = text:lower()
-    local pattern_idx = 1
-    for text_idx = 1, #text_lower do
-      if text_lower:sub(text_idx, text_idx) == pattern_lower:sub(pattern_idx, pattern_idx) then
-        pattern_idx = pattern_idx + 1
-        if pattern_idx > #pattern_lower then
-          return true
-        end
-      end
-    end
-  end
-  return false
-end
-
 --- 引数で渡された find/fd の検索結果を quickfix に挿入する関数.
 -- @param file_list string[] quickfix に挿入するファイルのリスト
-local function filelist_to_quickfix(file_list)
+local function result_to_quickfix(file_list)
   local qflist = {}
   for _, file in ipairs(file_list) do
     table.insert(qflist, {

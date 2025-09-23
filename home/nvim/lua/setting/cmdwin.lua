@@ -1,3 +1,4 @@
+local fuzzy_rank = require('util.fuzzy_rank')
 -- cmdwin の高さを 10行に設定
 vim.opt.cmdwinheight = 10
 
@@ -77,17 +78,7 @@ local function cmdline_fuzzy_search()
       if query == '' then
         vim.api.nvim_buf_set_lines(buf, 0, -1, false, original_lines)
       else
-        local filtered = {}
-        for _, line in ipairs(original_lines) do
-          if is_blank_text(line) ~= true then
-            local splited_text = split_command_text(line)
-            vim.inspect(splited_text)
-            if fuzzy_match(splited_text, query) then
-              table.insert(filtered, line)
-            end
-          end
-        end
-
+        local filtered = fuzzy_rank.rank(query, original_lines)
         if #filtered > 0 then
           vim.api.nvim_buf_set_lines(buf, 0, -1, false, filtered)
         else
