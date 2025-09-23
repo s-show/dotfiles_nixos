@@ -36,10 +36,10 @@ end
 -- @section quickfix
 
 --- プレビューウィンドウの設定.
-local preview_win     = nil
-local preview_buf     = nil
-local display_preview = false
-local closing_preview = false -- close_preview実行中かどうかのフラグ
+local preview_win               = nil
+local preview_buf               = nil
+local display_preview           = false
+local closing_preview           = false -- close_preview実行中かどうかのフラグ
 local quickfix_with_custom_find = false -- find/fd から開かれたかどうかのフラグ
 
 --- プレビューウィンドウを閉じる関数.
@@ -260,6 +260,15 @@ vim.api.nvim_create_autocmd('FileType', {
       silent = true,
       desc = 'Close quickfix window'
     })
+    -- <C-o> でアイテムを開くと同時に quickfix を閉じる
+    vim.keymap.set('n', '<C-o>', function()
+      vim.cmd('cc ' .. vim.fn.line('.'))
+      vim.cmd('cclose')
+    end, {
+      buffer = true,
+      silent = true,
+      desc = 'Open quickfix item and close quickfix window.'
+    })
     -- <C-v> で垂直分割（左端）に開く
     vim.keymap.set('n', '<C-v>', function()
       open_quickfix_item('vsplit')
@@ -436,7 +445,7 @@ end
 -- @param query string fd に渡す検索文字列
 local function fd_to_Quickfix(query)
   local file_list = get_file_list(query)
-  filelist_to_quickfix(file_list)
+  result_to_quickfix(file_list)
   -- Findqfから開かれたことを示すフラグを設定
   quickfix_with_custom_find = true
   display_preview = true
@@ -446,22 +455,14 @@ end
 -- FuzzyFindの結果をQuickfixに設定する関数
 local function fuzzy_find_to_Quickfix(query)
   local file_list = get_file_list()
-  local match_list = {}
-  if file_list ~= nil or #file_list > 0 then
-    for _, file in ipairs(file_list) do
-      local splited_path = split_path(file)
-      if fuzzy_match(splited_path, query) then
-        table.insert(match_list, file)
-      end
-    end
-  end
+  local match_list = fuzzy_rank.rank(query, file_list)
 
   if #match_list == 0 or match_list == nil then
     vim.notify("検索結果が見つかりませんでした: " .. query, vim.log.levels.WARN)
     return
   end
 
-  filelist_to_quickfix(match_list)
+  result_to_quickfix(match_list)
   quickfix_with_custom_find = true
   vim.notify(#match_list .. " 件の検索結果が見つかりました", vim.log.levels.INFO)
   display_preview = true
@@ -504,11 +505,68 @@ end, {
   nargs = '+',
 })
 
+--- Buffer list functions.
+-- バッファリストをquickfixに流し込む機能.
+-- @section buffers
+
+--- バッファリストをquickfixに送る関数.
+-- listed バッファを収集し、quickfixに設定する
+local function buffers_to_quickfix()
+  -- リストされているバッファのみ取得
+  local bufinfos = vim.fn.getbufinfo({ buflisted = 1 })
+
+  -- lastused でソート（最近使用したものが上に）
+  table.sort(bufinfos, function(a, b)
+    return (a.lastused or 0) > (b.lastused or 0)
+  end)
+
+  local qflist = {}
+  for _, bufinfo in ipairs(bufinfos) do
+    -- 名前のないバッファや特殊なURIスキームは除外
+    if bufinfo.name ~= '' and not bufinfo.name:match('^%w+://') then
+      local text = vim.fn.fnamemodify(bufinfo.name, ':~:.')
+      -- 変更されているバッファには [+] を追加
+      if bufinfo.changed == 1 then
+        text = text .. ' [+]'
+      end
+
+      table.insert(qflist, {
+        bufnr = bufinfo.bufnr,
+        lnum = bufinfo.lnum or 1,
+        col = 1,
+        text = text
+      })
+    end
+  end
+
+  -- quickfixリストを設定
+  vim.fn.setqflist({}, 'r', { items = qflist, title = 'buffer list' })
+
+  if #qflist > 0 then
+    vim.cmd('copen')
+    -- grep的な動作のためにプレビューを有効化
+    display_preview = true
+    -- quickfix_with_custom_find は false のままにして lnum を使用
+    quickfix_with_custom_find = false
+    show_preview()
+  else
+    vim.notify('表示可能なバッファがありません', vim.log.levels.WARN)
+  end
+end
+
+-- バッファリストをQuickfixに表示するコマンド
+vim.api.nvim_create_user_command('Bufqf', function()
+  buffers_to_quickfix()
+end, {
+  desc = 'List buffers in quickfix'
+})
+
 --- keymap functions.
 -- キーマッピングに関する設定.
 -- @section keymap
 
 -- キーマッピング
-vim.keymap.set('n', '<leader>d',  ':Findqf ', { desc = 'Find file and show in quickfix' })
-vim.keymap.set('n', '<leader>z',  ':Fzfqf ',  { desc = 'Fuzzy find files and show in quickfix' })
-vim.keymap.set('n', '<leader>gr', ':Grep',    { desc = 'grep wrapper and show in quickfix' })
+vim.keymap.set('n', '<leader>d', ':Findqf ', { desc = 'Find file and show in quickfix' })
+vim.keymap.set('n', '<leader>z', ':Fzfqf ', { desc = 'Fuzzy find files and show in quickfix' })
+vim.keymap.set('n', '<leader>gr', ':Grep', { desc = 'grep wrapper and show in quickfix' })
+vim.keymap.set('n', '<leader>qb', ':Bufqf<CR>', { desc = 'Buffers -> quickfix' })

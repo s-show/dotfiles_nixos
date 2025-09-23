@@ -1,4 +1,5 @@
 local fuzzy_rank = require('util.fuzzy_rank')
+
 -- cmdwin の高さを 10行に設定
 vim.opt.cmdwinheight = 10
 
@@ -87,6 +88,7 @@ local function cmdline_fuzzy_search()
       end
       -- コマンドラインを再描画
       vim.cmd('redraw')
+      vim.cmd('normal! gg')
     end
   })
 
