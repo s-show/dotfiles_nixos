@@ -31,13 +31,13 @@ let
         sha512 = "VO9Ht/+p3SN7SKWqcrgEzjGbRSJYTx+Q1pTQC0wrWqHx0vpJraQ6GtHx8tvcg1rlK1byhU5gccxgOgj7B0TDkQ==";
       };
     };
-    "debug-4.4.1" = {
+    "debug-4.4.3" = {
       name = "debug";
       packageName = "debug";
-      version = "4.4.1";
+      version = "4.4.3";
       src = fetchurl {
-        url = "https://registry.npmjs.org/debug/-/debug-4.4.1.tgz";
-        sha512 = "KcKCqiftBJcZr++7ykoDIEwSa3XWowTfNPo92BYxjXiyYEVrUQh2aLyhxBCwww+heortUFxEJYcRzosstTEBYQ==";
+        url = "https://registry.npmjs.org/debug/-/debug-4.4.3.tgz";
+        sha512 = "RGwwWnwQvkVfavKVt22FGLw+xYSdzARwm0ru6DhTVA3umU5hZc28V3kO4stgYryrTlLpuvgI9GiijltAjNbcqA==";
       };
     };
     "fd-slicer-1.1.0" = {
@@ -136,16 +136,16 @@ in
   "@openai/codex" = nodeEnv.buildNodePackage {
     name = "_at_openai_slash_codex";
     packageName = "@openai/codex";
-    version = "0.30.0";
+    version = "0.39.0";
     src = fetchurl {
-      url = "https://registry.npmjs.org/@openai/codex/-/codex-0.30.0.tgz";
-      sha512 = "mlGjiePjbJm52coSQsGxLuoVOjvvo86Rbw7kdFh1ZxCtMZHfcyK8jFJLBrc4O2HkOs/uWjP46PJLm/iRAvrxEA==";
+      url = "https://registry.npmjs.org/@openai/codex/-/codex-0.39.0.tgz";
+      sha512 = "UEcswDFZ9dwmMWuZlECff3CDTj1lEVO3Vm3mqqJrY7azLMIa2PLmC2+qHkF94RIQBD8/tkgAmKxiSnUQMr8Lgw==";
     };
     dependencies = [
       sources."@vscode/ripgrep-1.15.14"
       sources."agent-base-7.1.4"
       sources."buffer-crc32-0.2.13"
-      sources."debug-4.4.1"
+      sources."debug-4.4.3"
       sources."fd-slicer-1.1.0"
       sources."https-proxy-agent-7.0.6"
       sources."ms-2.1.3"
