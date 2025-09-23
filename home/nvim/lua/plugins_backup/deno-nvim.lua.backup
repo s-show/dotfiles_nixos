@@ -1,6 +1,0 @@
-return {
-  {
-    "sigmaSd/deno-nvim",
-    config = true,
-  },
-}
