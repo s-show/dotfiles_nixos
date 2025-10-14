@@ -1,1 +1,1 @@
-[{ "@anthropic-ai/claude-code": "1.0.24" }, "@openai/codex", { "vscode-languageserver-protocol": "3.17.5" }]
+["@anthropic-ai/claude-code", "@openai/codex", { "vscode-languageserver-protocol": "3.17.5" }]

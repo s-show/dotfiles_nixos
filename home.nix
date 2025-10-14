@@ -89,7 +89,7 @@ in
       sops
       nodejs_24
       node2nix
-      nodePkgs."@anthropic-ai/claude-code-1.0.24"
+      nodePkgs."@anthropic-ai/claude-code"
       nodePkgs."@openai/codex"
       nodePkgs."vscode-languageserver-protocol-3.17.5"
 
