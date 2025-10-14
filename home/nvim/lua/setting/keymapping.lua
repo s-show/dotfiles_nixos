@@ -82,7 +82,7 @@ vim.keymap.set('n', '<leader>tt', function()
 -- Hのマッピング（条件分岐あり）
 vim.keymap.set('n', 'H',
   function()
-    if vim.fn.winline() == 1 then
+    if vim.fn.line('.') == vim.fn.line('w0') then
       return '<PageUp>H<Plug>(H)'
     else
       return 'H<Plug>(H)'
@@ -96,7 +96,7 @@ vim.keymap.set('n', 'H',
 -- Lのマッピング（条件分岐あり）
 vim.keymap.set('n', 'L',
   function()
-    if vim.fn.winline() == vim.fn.winheight(0) then
+    if vim.fn.line('.') == vim.fn.line('w$') then
       return '<PageDown>Lzb<Plug>(L)'
     else
       return 'L<Plug>(L)'
@@ -107,6 +107,7 @@ vim.keymap.set('n', 'L',
     desc = 'L to L and PageDown'
   })
 
+-- [Vimでz連打でカーソル行を画面中央・上・下に移動させる](https://zenn.dev/vim_jp/articles/67ec77641af3f2) を Lua に書き直し -- [Vimでz連打でカーソル行を画面中央・上・下に移動させる](https://zenn.dev/vim_jp/articles/67ec77641af3f2) を Lua に書き直し
 -- [Vimでz連打でカーソル行を画面中央・上・下に移動させる](https://zenn.dev/vim_jp/articles/67ec77641af3f2) を Lua に書き直し
 vim.keymap.set('n', 'zz', 'zz<Plug>(z1)', { desc = "multiple z type 'recenter-top-bottom'" })
 vim.keymap.set('n', '<Plug>(z1)z', 'zt<plug>(z2)')
@@ -135,10 +136,6 @@ vim.keymap.set("i", "<C-f>", "<C-g>U<Right>")
 -- 大文字の Y で行末までヤンク
 vim.keymap.set('n', 'Y', 'y$', { silent = true })
 
--- i<space>でWORD選択
-vim.keymap.set('x', 'i<leader>', 'iW', { silent = true })
-vim.keymap.set('o', 'i<leader>', 'iW', { silent = true })
-
 -- 大文字の U でリドゥ
 vim.keymap.set('n', 'U', '<c-r>', { silent = true })
 
@@ -151,6 +148,15 @@ vim.keymap.set('n', 'X', '"_D$', { silent = true })
 -- Visual <, >で連続してインデントを操作
 vim.keymap.set('x', '<', '<gv', { silent = true })
 vim.keymap.set('x', '>', '>gv', { silent = true })
+
+-- 直前・直後の空行に飛ぶ
+vim.keymap.set('n', 'f<CR>', function ()
+  vim.cmd('normal! }')
+end)
+vim.keymap.set('n', 'F<CR>', function ()
+  vim.cmd('normal! {')
+end)
+
 -- 行選択でも複数行への挿入を可能にする
 vim.keymap.set( "v", "A",
   function()
