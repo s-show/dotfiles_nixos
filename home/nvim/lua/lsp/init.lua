@@ -26,6 +26,21 @@ else
   capabilities.textDocument.completion.completionItem.snippetSupport = true
 end
 
+vim.diagnostic.config({
+  virtual_text = { prefix = "●", spacing = 4 },
+  signs = true,
+  underline = true,
+  update_in_insert = false,
+  severity_sort = true,
+  float = {
+    border = "rounded",
+    source = true,
+    header = "",
+    prefix = "",
+  },
+})
+
+
 -- You will likely want to reduce updatetime which affects CursorHold
 -- note: this setting is global and should be set only once
 vim.api.nvim_create_autocmd(
@@ -61,6 +76,12 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.keymap.set('n', 'g[', '<cmd>lua vim.diagnostic.jump({ count = -1 })<CR>', bufopt)
     vim.keymap.set('n', 'g]', '<cmd>lua vim.diagnostic.jump({ count = 1 })<CR>', bufopt)
     vim.keymap.set('n', 'gf', '<cmd>lua vim.lsp.buf.format({buffer = true})<CR>', bufopt)
+
+    -- Typescript の型情報を Inlay Hints で表示するための設定
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+    if client and client.server_capabilities.inlayHintProvider then
+      vim.lsp.inlay_hint.enable(true, { bufnr = args.buf })
+    end
   end
 })
 
