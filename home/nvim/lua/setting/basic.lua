@@ -5,7 +5,7 @@ vim.keymap.set('n', '<ESC><ESC>', '<Cmd>nohlsearch<CR>', { silent = true })
 vim.opt.helplang = 'ja'
 
 -- netrw disabled
-vim.api.nvim_set_var('loaded_netrwPlugin', 1)
+-- vim.api.nvim_set_var('loaded_netrwPlugin', 1)
 
 -- skkeleton + ddc.vim で変換候補が出たら一番上を自動的に選択するための設定
 vim.opt.completeopt = 'menu,menuone'
@@ -37,7 +37,7 @@ end)
 -- なぜかエラーになるので、コールバック関数で呼び出している。
 vim.keymap.set('n', '<leader>H', function()
   vim.cmd [[echon '']]
-  local pcall_result, function_return = pcall(vim.cmd.help, vim.fn.expand('<cword>'))
+  local pcall_result, _ = pcall(vim.cmd.help, vim.fn.expand('<cword>'))
   if pcall_result ~= true then
     vim.notify('keyword not found in help.', vim.log.levels.WARN)
   end
@@ -53,7 +53,7 @@ vim.opt.whichwrap = ""
 -- コマンドラインの実行結果を新しいバッファに追記するコマンドを作成
 -- https://www.reddit.com/r/neovim/comments/zhweuc/whats_a_fast_way_to_load_the_output_of_a_command/ を参考に作成
 vim.api.nvim_create_user_command('Redir', function(ctx)
-  local pcall_result, function_return = pcall(vim.fn.execute, ctx.args)
+  local _, function_return = pcall(vim.fn.execute, ctx.args)
   vim.cmd('new')
   vim.api.nvim_buf_set_lines(0, 0, -1, false, vim.split(function_return, '\n', { plain = true }))
   vim.opt_local.modified = false
