@@ -90,6 +90,15 @@ local function create_bottom_window()
     buffer = true,
     desc = 'ノーマルモードで `q` で入力用バッファを閉じる'
   })
+  vim.keymap.set('i', '<C-c>', function()
+    -- 元のバッファが設定されている場合のみ実行
+    if original_buf_id then
+      yank_and_close()
+    end
+  end, {
+    buffer = true,
+    desc = 'インサートモードで `<C-c>` で入力用バッファを閉じる'
+  })
 
   -- 200ms 待機してからインサートモードに入る
   vim.defer_fn(function()
