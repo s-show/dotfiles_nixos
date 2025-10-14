@@ -1,6 +1,6 @@
 --skkeleton
-vim.keymap.set( { 'i', 'c', 't' } , '<C-j>', '<plug>(skkeleton-enable)', {})
-vim.keymap.set( { 'i', 'c', 't' } , '<C-l>', '<plug>(skkeleton-disable)', {})
+vim.keymap.set({ 'i', 'c', 't' }, '<C-j>', '<plug>(skkeleton-enable)', {})
+vim.keymap.set({ 'i', 'c', 't' }, '<C-l>', '<plug>(skkeleton-disable)', {})
 vim.fn['skkeleton#config']({
   globalDictionaries = {
     vim.fn["expand"]('~/.config/nvim/skk_dict/SKK-JISYO.L'),
@@ -12,6 +12,8 @@ vim.fn['skkeleton#config']({
   keepState = true,
   showCandidatesCount = 2,
   registerConvertResult = true,
+  markerHenkan = '',
+  markerHenkanSelect = ''
 })
 
 vim.g.denops_server_deno_args = { '--unstable-kv' }
@@ -36,3 +38,4 @@ vim.fn['skkeleton#register_kanatable']('rom', {
   ['z10'] = { '⑩', '' },
 })
 
+vim.cmd('source ~/.config/nvim/lua/setting/skkeleton-henkan-highlight.vim')
