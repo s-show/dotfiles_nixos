@@ -28,13 +28,14 @@ local function fd_to_quickfix(query)
 end
 
 -- FuzzyFindの結果をQuickfixに設定する関数
+-- @param query string 検索文字列
 local function fuzzy_find_to_quickfix(query)
   local file_list = search.get_files(nil, { debug_mode = debug_mode })
   if not file_list or #file_list == 0 then
     vim.notify("ファイルリストが取得できませんでした", vim.log.levels.WARN)
     return
   end
-  
+
   local match_list = fuzzy_rank.rank(query, file_list)
   if not match_list or #match_list == 0 then
     vim.notify("検索結果が見つかりませんでした: " .. query, vim.log.levels.WARN)
@@ -52,6 +53,15 @@ end
 local function buffers_to_quickfix()
   if qf.populate_buffers() then
     state.set_source('buffers')
+    state.set_display_preview(true)
+    preview.show({ debug_mode = debug_mode })
+  end
+end
+
+--- バッファリストをquickfixに表示
+local function oldfiles_to_quickfix()
+  if qf.populate_oldfiles() then
+    state.set_source('oldfiles')
     state.set_display_preview(true)
     preview.show({ debug_mode = debug_mode })
   end
@@ -127,8 +137,8 @@ function M.setup(opts)
         silent = true,
         desc = 'Close quickfix window'
       })
-      -- <C-o> でアイテムを開くと同時に quickfix を閉じる
-      vim.keymap.set('n', '<C-o>', function()
+      -- `o` でアイテムを開くと同時に quickfix を閉じる
+      vim.keymap.set('n', 'o', function()
         vim.cmd('cc ' .. vim.fn.line('.'))
         vim.cmd('cclose')
       end, {
@@ -136,17 +146,42 @@ function M.setup(opts)
         silent = true,
         desc = 'Open quickfix item and close quickfix window.'
       })
-      -- <C-v> で垂直分割（左端）に開く
-      vim.keymap.set('n', '<C-v>', function()
+      -- `<Enter>` でアイテムを開くと同時に quickfix を閉じる
+      vim.keymap.set('n', '<Enter>', function()
+        vim.cmd('cc ' .. vim.fn.line('.'))
+        vim.cmd('cclose')
+      end, {
+        buffer = true,
+        silent = true,
+        desc = 'Open quickfix item and close quickfix window.'
+      })
+      -- `v` で垂直分割（左端）に開くと同時にquickfixを閉じる
+      vim.keymap.set('n', 'v', function()
         qf.open_in_split('vsplit')
+      end, {
+        buffer = true,
+        silent = true,
+        desc = 'Open quickfix item in vertical split (top left) and close quickfix window.'
+      })
+      -- `s` で水平分割（左上のウィンドウの下半分）に開くと同時にquickfixを閉じる
+      vim.keymap.set('n', 's', function()
+        qf.open_in_split('split')
+      end, {
+        buffer = true,
+        silent = true,
+        desc = 'Open quickfix item in horizontal split (top left bottom half) and close quickfix window.'
+      })
+      -- <Ctrl-v> で垂直分割（左端）に開く
+      vim.keymap.set('n', '<C-v>', function()
+        qf.open_in_split('vsplit', false)
       end, {
         buffer = true,
         silent = true,
         desc = 'Open quickfix item in vertical split (top left)'
       })
-      -- <C-s> で水平分割（左上のウィンドウの下半分）に開く
+      -- <Ctrl-s> で水平分割（左上のウィンドウの下半分）に開く
       vim.keymap.set('n', '<C-s>', function()
-        qf.open_in_split('split')
+        qf.open_in_split('split', false)
       end, {
         buffer = true,
         silent = true,
@@ -230,10 +265,18 @@ function M.setup(opts)
     desc = 'List buffers in quickfix'
   })
 
+  -- ファイル履歴をQuickfixに表示するコマンド
+  vim.api.nvim_create_user_command('Oldfileqf', function()
+    oldfiles_to_quickfix()
+  end, {
+    desc = 'List oldfiles in quickfix'
+  })
+
   -- キーマッピング
-  vim.keymap.set('n', '<leader>d', ':Findqf ', { desc = 'Find file and show in quickfix' })
-  vim.keymap.set('n', '<leader>z', ':Fzfqf ', { desc = 'Fuzzy find files and show in quickfix' })
+  vim.keymap.set('n', '<leader>d',  ':Findqf ', { desc = 'Find file and show in quickfix' })
+  vim.keymap.set('n', '<leader>z',  ':Fzfqf ', { desc = 'Fuzzy find files and show in quickfix' })
   vim.keymap.set('n', '<leader>gr', ':Grep ', { desc = 'grep wrapper and show in quickfix' })
+  vim.keymap.set('n', '<leader>ol', ':Oldfileqf<CR>', { desc = 'oldfiles -> quickfix' })
   vim.keymap.set('n', '<leader>qb', ':Bufqf<CR>', { desc = 'Buffers -> quickfix' })
 end
 
@@ -244,3 +287,4 @@ M.qf = qf
 M.state = state
 
 return M
+

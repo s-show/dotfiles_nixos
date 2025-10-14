@@ -26,17 +26,21 @@ end
 function M.current_item()
   local qflist = vim.fn.getqflist()
   local current_line = vim.fn.line('.')
-  
+
   if current_line < 1 or current_line > #qflist then
     return nil
   end
-  
+
   return qflist[current_line]
 end
 
 --- Quickfix ウィンドウのアイテムを垂直/水平分割で開く.
 -- @param split_cmd string 垂直/水平分割の指定 ('vsplit' or 'split')
-function M.open_in_split(split_cmd)
+-- @param close boolean アイテムを開いた後にquickfixを閉じるか否かを指定
+function M.open_in_split(split_cmd, close)
+  if close == nil then
+    close = true
+  end
   local qflist = vim.fn.getqflist()
   local current_line = vim.fn.line('.')
   local item = qflist[current_line]
@@ -57,7 +61,9 @@ function M.open_in_split(split_cmd)
   vim.cmd('cclose')   -- ウィンドウ操作を簡単にするために Quickfix ウィンドウをいったん閉じる
   vim.cmd('wincmd t') -- 左上のウィンドウに移動
   vim.cmd(cmd)        -- 分割してファイルを開く
-  vim.cmd('copen')    -- Quickfix ウィンドウを再度開く
+  if close == false then
+    vim.cmd('copen')  -- Quickfix ウィンドウを再度開く
+  end
   if split_cmd == 'split' then
     vim.cmd('vertical wincmd =')
   end
@@ -100,6 +106,33 @@ function M.populate_buffers()
     return true
   else
     vim.notify('表示可能なバッファがありません', vim.log.levels.WARN)
+    return false
+  end
+end
+
+-- ファイル履歴をquickfixに送る
+function M.populate_oldfiles()
+  local oldfiles = vim.v.oldfiles
+  local qflist = {}
+  for _, oldfile in ipairs(oldfiles) do
+    if oldfile ~= '' then
+      table.insert(qflist, {
+        filename = oldfile,
+        lnum     = 1,
+        col      = 1,
+        text     = oldfile
+      })
+    end
+  end
+
+  -- quickfixリストを設定
+  vim.fn.setqflist({}, 'r', { items = qflist, title = 'oldfile list' })
+
+  if #qflist > 0 then
+    vim.cmd('copen')
+    return true
+  else
+    vim.notify('表示可能なファイル履歴がありません', vim.log.levels.WARN)
     return false
   end
 end
