@@ -58,7 +58,7 @@ local function buffers_to_quickfix()
   end
 end
 
---- バッファリストをquickfixに表示
+--- ファイル履歴をquickfixに表示
 local function oldfiles_to_quickfix()
   if qf.populate_oldfiles() then
     state.set_source('oldfiles')
@@ -132,7 +132,10 @@ function M.setup(opts)
         silent = true,
         desc = 'Toggle preview window'
       })
-      vim.keymap.set('n', 'q', ':cclose<CR>', {
+      vim.keymap.set('n', 'q', function()
+        vim.api.nvim_set_current_win(state.win_id)
+        vim.cmd('cclose')
+      end, {
         buffer = true,
         silent = true,
         desc = 'Close quickfix window'
@@ -227,6 +230,7 @@ function M.setup(opts)
   -- Find の結果をQuickfixに表示するコマンド
   vim.api.nvim_create_user_command('Findqf', function(args)
     local query = table.concat(args.fargs, ' ')
+    state.win_id = vim.api.nvim_get_current_win()
     fd_to_quickfix(query)
   end, {
     nargs = '+',
@@ -236,6 +240,7 @@ function M.setup(opts)
   -- Fuzzy find の結果をQuickfixに表示するコマンド
   vim.api.nvim_create_user_command('Fzfqf', function(args)
     local pattern = table.concat(args.fargs, ' ')
+    state.win_id = vim.api.nvim_get_current_win()
     if pattern == '' then
       vim.notify("検索パターンを指定してください", vim.log.levels.WARN)
       return
@@ -248,6 +253,7 @@ function M.setup(opts)
 
   -- Grep 用ラッパーコマンド（silent かつ quickfix にフォーカス）
   vim.api.nvim_create_user_command('Grep', function(args)
+    state.win_id = vim.api.nvim_get_current_win()
     -- すべて silent! で実行し、エラーメッセージも抑制
     vim.cmd('silent! grep ' .. table.concat(args.fargs, ' '))
     -- QuickFixCmdPost が走った後でも確実に開きたい場合はここでも
@@ -260,6 +266,7 @@ function M.setup(opts)
 
   -- バッファリストをQuickfixに表示するコマンド
   vim.api.nvim_create_user_command('Bufqf', function()
+    state.win_id = vim.api.nvim_get_current_win()
     buffers_to_quickfix()
   end, {
     desc = 'List buffers in quickfix'
@@ -267,6 +274,7 @@ function M.setup(opts)
 
   -- ファイル履歴をQuickfixに表示するコマンド
   vim.api.nvim_create_user_command('Oldfileqf', function()
+    state.win_id = vim.api.nvim_get_current_win()
     oldfiles_to_quickfix()
   end, {
     desc = 'List oldfiles in quickfix'
@@ -287,4 +295,3 @@ M.qf = qf
 M.state = state
 
 return M
-

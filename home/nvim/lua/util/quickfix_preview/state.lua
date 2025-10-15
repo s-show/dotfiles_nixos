@@ -48,6 +48,12 @@ function M.set_source(source)
   state.source = source
 end
 
+--- quickfix を開く前にカーソルがあったウィンドウの ID を設定.
+-- @param win_id number ウィンドウの ID
+function M.set_win_id(win_id)
+  state.win_id = win_id
+end
+
 --- find/fd から開かれたかどうかを判定.
 -- @return boolean find/fdから開かれた場合はtrue
 function M.is_from_find()
@@ -64,3 +70,4 @@ function M.reset()
 end
 
 return M
+

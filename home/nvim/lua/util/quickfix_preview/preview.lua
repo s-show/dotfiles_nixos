@@ -39,7 +39,7 @@ end
 function M.show(opts)
   opts = opts or {}
   local debug_mode = opts.debug_mode or false
-  
+
   local qflist = vim.fn.getqflist()
   local current_line = vim.fn.line('.')
 
@@ -51,7 +51,7 @@ function M.show(opts)
   if debug_mode then
     vim.notify(vim.inspect(item))
   end
-  
+
   local filename = (item.bufnr and vim.fn.bufname(item.bufnr)) or item.filename or ''
   if filename == '' then
     return
@@ -63,7 +63,7 @@ function M.show(opts)
   end
 
   local s = state.get()
-  
+
   -- プレビューバッファが存在しない場合は作成
   if not s.preview_buf or not vim.api.nvim_buf_is_valid(s.preview_buf) then
     local buf = vim.api.nvim_create_buf(false, true)
@@ -75,7 +75,7 @@ function M.show(opts)
   -- ファイルの内容を読み込み
   local lnum = (type(item.lnum) == "number" and item.lnum > 0) and item.lnum or 1
   local result = {}
-  
+
   if state.is_from_find() then
     -- fd/find の場合は最初の7行
     result = vim.fn.readfile(filename, '', 7)
