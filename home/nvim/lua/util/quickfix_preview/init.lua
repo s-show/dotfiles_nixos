@@ -12,6 +12,25 @@ local M = {}
 -- デバッグモード
 local debug_mode = false
 
+--- 前のウィンドウにフォーカスを戻す関数.
+-- state.win_id が有効ならそのウィンドウに移動、無効なら通常バッファを探す
+local function focus_previous_window()
+  -- state.win_idが有効ならそのウィンドウに移動
+  if state.win_id and vim.api.nvim_win_is_valid(state.win_id) then
+    pcall(vim.api.nvim_set_current_win, state.win_id)
+    return
+  end
+
+  -- フォールバック: 同タブ内の通常バッファウィンドウを探す
+  for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+    local buf = vim.api.nvim_win_get_buf(win)
+    if vim.api.nvim_get_option_value('buftype', { buf = buf }) == '' then
+      pcall(vim.api.nvim_set_current_win, win)
+      return
+    end
+  end
+end
+
 --- fd で検索してその結果を quickfix に挿入する関数.
 -- @param query string fd に渡す検索文字列
 local function fd_to_quickfix(query)
@@ -75,6 +94,15 @@ function M.setup(opts)
   -- Quickfixウィンドウ用の自動コマンドグループ
   local augroup = vim.api.nvim_create_augroup('QuickfixPreview', { clear = true })
 
+  -- Quickfix コマンド実行前に現在のウィンドウIDを記録
+  vim.api.nvim_create_autocmd('QuickFixCmdPre', {
+    group = augroup,
+    pattern = '*',
+    callback = function()
+      state.win_id = vim.api.nvim_get_current_win()
+    end
+  })
+
   -- Quickfixウィンドウでカーソルが動いたときにプレビューを更新
   vim.api.nvim_create_autocmd({ 'CursorMoved' }, {
     group = augroup,
@@ -116,6 +144,7 @@ function M.setup(opts)
           state.set_source('grep')
           pcall(vim.keymap.del, 'n', 'q', { buffer = true })
           state.set_display_preview(false)
+          state.win_id = nil  -- 古いウィンドウIDをクリア
         end
       end
     end
@@ -133,7 +162,7 @@ function M.setup(opts)
         desc = 'Toggle preview window'
       })
       vim.keymap.set('n', 'q', function()
-        vim.api.nvim_set_current_win(state.win_id)
+        focus_previous_window()
         vim.cmd('cclose')
       end, {
         buffer = true,
