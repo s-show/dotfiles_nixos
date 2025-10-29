@@ -1,25 +1,16 @@
-local blink = require('blink.cmp')
--- autocmd で skkeleton のイベントにフックして関数を実行
-function _G.blink_enable_skk()
-  blink.setup({
-    sources = {
-      default = { 'skkeleton' }
-    }
-  })
-end
+-- BlinkCmpMenu のハイライトグループ設定
+vim.api.nvim_create_autocmd("ColorScheme", {
+  pattern = "*",
+  callback = function()
+    vim.api.nvim_set_hl(0, 'BlinkCmpMenuCustom', {
+      fg = '#C0C0C0',  -- 銀色
+      bg = 'NONE',     -- 背景は透過（テーマの背景色を使用）
+    })
+  end,
+})
 
-function _G.blink_disable_skk()
-  blink.setup({
-    sources = {
-      default = { "snippets", "lsp", "path", "buffer", "cmdline" }
-    }
-  })
-end
-
-vim.cmd([[
-  augroup skkeleton_blink_cmp
-    autocmd!
-    autocmd User skkeleton-enable-pre lua _G.blink_enable_skk()
-    autocmd User skkeleton-disable-pre lua _G.blink_disable_skk()
-  augroup END
-]])
+-- 初回読み込み時にも適用
+vim.api.nvim_set_hl(0, 'BlinkCmpMenuCustom', {
+  fg = '#C0C0C0',
+  bg = 'NONE',
+})
