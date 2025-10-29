@@ -28,10 +28,10 @@ in
   "@anthropic-ai/claude-code" = nodeEnv.buildNodePackage {
     name = "_at_anthropic-ai_slash_claude-code";
     packageName = "@anthropic-ai/claude-code";
-    version = "2.0.5";
+    version = "2.0.28";
     src = fetchurl {
-      url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-2.0.5.tgz";
-      sha512 = "A7Nnbxf4yvfgnzIbML+IYYkyz4Wmg7McHpqi0pzDmyoz3TUQI1KJc798mlQ0bY7ZeLdrzA0IRCv7yR6bwTa3fA==";
+      url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-2.0.28.tgz";
+      sha512 = "H5tfhYoAwv6wZ7KhTAe2vj3dus+3GaapD0EkmG3ckxoP6aTo3dfjXRLZ+7dxDA4M1h34pBMpN36Hud6B/0m+0A==";
     };
     buildInputs = globalBuildInputs;
     meta = {
@@ -46,14 +46,14 @@ in
   "@openai/codex" = nodeEnv.buildNodePackage {
     name = "_at_openai_slash_codex";
     packageName = "@openai/codex";
-    version = "0.42.0";
+    version = "0.50.0";
     src = fetchurl {
-      url = "https://registry.npmjs.org/@openai/codex/-/codex-0.42.0.tgz";
-      sha512 = "jLpMrQuq1gIBzBKbKMwAzXOh+5uwE+ht3RHUb2Ov7P50fjAxPKDZa0+zpqkhHTspm8Rw6Vdrm4I4L+Z03usCkg==";
+      url = "https://registry.npmjs.org/@openai/codex/-/codex-0.50.0.tgz";
+      sha512 = "JsyznJwTdHZIY4u5m1Ok76WMdT54qjLRqKN93EJTPUeNSdE1kzkahSqjCwTIhrnx1vvn3uJtZ24HuOcsfTEPdA==";
     };
     buildInputs = globalBuildInputs;
     meta = {
-      description = "<h1 align=\"center\">OpenAI Codex CLI</h1>";
+      description = "<p align=\"center\"><code>npm i -g @openai/codex</code><br />or <code>brew install --cask codex</code></p>";
       homepage = "https://github.com/openai/codex#readme";
       license = "Apache-2.0";
     };
