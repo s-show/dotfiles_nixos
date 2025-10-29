@@ -155,6 +155,7 @@ in
     ".config/nvim".source = mkDotfileSymlink "home/nvim";
     ".config/nvim_ime".source = mkDotfileSymlink "home/nvim_ime";
     ".config/nvim_demo".source = mkDotfileSymlink "home/nvim_demo";
+    ".config/zellij/config.kdl".source = mkDotfileSymlink "home/zellij/config.kdl";
     ".local/bin/home-update".source = mkDotfileSymlink "home/home-update";
     ".local/bin/flakes-update".source = mkDotfileSymlink "home/flakes-update.sh";
     ".local/bin/flakes-and-node2nix-update".source =
