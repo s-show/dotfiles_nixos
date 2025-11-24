@@ -142,6 +142,7 @@ in
       
       # AI coding tools
       inputs.serena.packages.${pkgs.system}.default
+      (pkgs.callPackage ./home/gemini.nix { })
     ];
   };
 
