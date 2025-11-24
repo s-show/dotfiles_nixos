@@ -165,6 +165,7 @@ in
     ".local/bin/nvim_ime".source = mkDotfileSymlink "home/nvim_ime.sh";
     ".local/bin/nvim_demo".source = mkDotfileSymlink "home/nvim_demo.sh";
     ".local/bin/nbw".source = mkDotfileSymlink "home/wrap_nb.sh";
+    ".local/bin/statusline-command".source = mkDotfileSymlink "home/statusline-command.sh";
   };
 
   # Home activation scripts
