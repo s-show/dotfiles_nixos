@@ -139,7 +139,7 @@ in
       wsl-notify-send
       browsh
       firefox
-      
+
       # AI coding tools
       inputs.serena.packages.${pkgs.system}.default
       (pkgs.callPackage ./home/gemini.nix { })
@@ -156,6 +156,7 @@ in
     ".config/nvim".source = mkDotfileSymlink "home/nvim";
     ".config/nvim_ime".source = mkDotfileSymlink "home/nvim_ime";
     ".config/nvim_demo".source = mkDotfileSymlink "home/nvim_demo";
+    ".config/nvim_minimum".source = mkDotfileSymlink "home/nvim_minimum";
     ".config/zellij/config.kdl".source = mkDotfileSymlink "home/zellij/config.kdl";
     ".local/bin/home-update".source = mkDotfileSymlink "home/home-update";
     ".local/bin/flakes-update".source = mkDotfileSymlink "home/flakes-update.sh";
@@ -164,6 +165,7 @@ in
     ".local/bin/notify".source = mkDotfileSymlink "home/notify.sh";
     ".local/bin/nvim_ime".source = mkDotfileSymlink "home/nvim_ime.sh";
     ".local/bin/nvim_demo".source = mkDotfileSymlink "home/nvim_demo.sh";
+    ".local/bin/nvim_minimum".source = mkDotfileSymlink "home/nvim_minimum.sh";
     ".local/bin/nbw".source = mkDotfileSymlink "home/wrap_nb.sh";
     ".local/bin/statusline-command".source = mkDotfileSymlink "home/statusline-command.sh";
   };
