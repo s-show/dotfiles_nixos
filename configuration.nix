@@ -38,6 +38,13 @@ in
   sops.secrets.CEREBRAS_API_KEY = {
     owner = config.users.users.s-show.name;
   };
+  sops.secrets.GEMINI_API_KEY = {
+    owner = config.users.users.s-show.name;
+  };
+  sops.secrets.BRAVE_SEARCH_API_KEY = {
+    owner = config.users.users.s-show.name;
+  };
+
 
   wsl.enable = true;
   wsl.defaultUser = "nixos";
