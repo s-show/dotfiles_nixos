@@ -16,6 +16,25 @@ vim.api.nvim_create_autocmd('InsertEnter', {
   end
 })
 
+vim.api.nvim_create_autocmd(
+  { 'User' },
+  {
+    pattern = 'PumOpen',
+    group = pum_au_group,
+    callback = function()
+      if vim.g['skkeleton#mode'] == 'abbrev' then
+        vim.fn['pum#set_option']({
+          auto_select = false
+        })
+      else
+        vim.fn['pum#set_option']({
+          auto_select = true
+        })
+      end
+    end
+  }
+)
+
 function InsertEnterPre()
   vim.keymap.set({ 'i', 't' }, '<C-n>',
     [[pum#visible() ? pum#map#select_relative(+1, 'loop') : ddc#map#manual_complete()]],
