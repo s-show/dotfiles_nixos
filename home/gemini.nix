@@ -2,16 +2,16 @@
 
 pkgs.buildNpmPackage rec {
   pname = "gemini-cli";
-  version = "0.17.1";
+  version = "0.18.0";
 
   src = pkgs.fetchFromGitHub {
     owner = "google-gemini";
     repo = "gemini-cli";
     rev = "v${version}";
-    hash = "sha256-zfORrAMVozHiUawWiy3TMT+pjEaRJ/DrHeDFPJiCp38=";
+    hash = "sha256-oPO+pb98fp/OqEaIDInVVxh5L0KtM2rC6EYoH3xHE+s=";
   };
 
-  npmDepsHash = "sha256-dKaKRuHzvNJgi8LP4kKsb68O5k2MTqblQ+7cjYqLqs0=";
+  npmDepsHash = "sha256-1/UuGEoRj4Ul1fyb3mLAw9CTCSRNdKLpJwAkRrvhCmk=";
 
   nodejs = pkgs.nodejs_22;
 
