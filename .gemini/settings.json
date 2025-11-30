@@ -1,0 +1,20 @@
+{
+  "mcpServers": {
+    "codex": {
+      "command": "codex",
+      "args": [
+        "mcp-server"
+      ]
+    },
+    "serena": {
+      "command": "serena",
+      "args": [
+        "start-mcp-server",
+        "--context",
+        "ide-assistant-enhanced",
+        "--project",
+        "/home/s-show/.dotfiles"
+      ]
+    }
+  }
+}
