@@ -92,7 +92,12 @@ vim.api.nvim_create_autocmd('LspAttach', {
     if vim.fn.maparg('K', 'n') ~= '' then
       vim.api.nvim_buf_del_keymap(bufnr, 'n', 'K')
     end
-    vim.keymap.set('n', '<C-g>d', '<cmd>lua vim.lsp.buf.definition()<CR>',
+    vim.keymap.set('n', '<C-g>d', function()
+        vim.lsp.buf.definition()
+        vim.schedule(function()
+          vim.cmd("normal! zz")
+        end)
+      end,
       vim.tbl_extend('force', bufopt, { desc = 'Go to definition' }))
     vim.keymap.set('n', '<C-g>p', peek_definition,
       vim.tbl_extend('force', bufopt, { desc = 'Peek definition' }))
