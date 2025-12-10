@@ -8,7 +8,8 @@ vim.fn["ddc#custom#patch_global"]({
     'buffer',
     'vsnip',
     'cmdline',
-    'cmdline_history'
+    'cmdline_history',
+    'input'
   },
   autoCompleteEvents = {
     'InsertEnter',
@@ -21,14 +22,16 @@ vim.fn["ddc#custom#patch_global"]({
     [":"] = {
       'cmdline_history',
       'cmdline',
+      'file',
     },
     ["@"] = {
-      'cmdline_history',
       'cmdline',
+      'file',
+      'input'
     },
     [">"] = {
-      'cmdline_history',
       'cmdline',
+      'input'
     },
     ["/"] = {
       'buffer',
@@ -36,9 +39,12 @@ vim.fn["ddc#custom#patch_global"]({
     ["?"] = {
       'buffer',
     },
-    ["i"] = {
-      'cmdline',
+    ["-"] = {
+      'line',
     },
+    ["="] = {
+      'input'
+    }
   },
   sourceOptions = {
     _ = {

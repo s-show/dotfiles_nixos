@@ -2,35 +2,27 @@ vim.fn["ddu#custom#patch_global"]({
   ui = 'ff',
   uiParams = {
     ff = {
-      filterFloatingPosition = "bottom",
+      filterFloatingPosition = "top",
       floatingBorder = "rounded",
       floatingTitle = 'list',
       previewFloating = true,
       previewFloatingBorder = "rounded",
       previewFloatingTitle = "Preview",
-      previewSplit = "horizontal",
-      -- previewSplit = "vertical",
+      -- previewSplit = "horizontal",
+      previewSplit = "vertical",
       split = "floating",
       startAutoAction = true,
       autoAction = {
         name = "preview"
       },
-      -- previewHeight = '&lines - 8 + 1',
-      -- previewWidth = '&columns / 3 - 1',
-      -- previewRow = 0,
-      -- previewCol = '&columns / 2 + 1',
-      -- winHeight = '&lines - 8',
-      -- winWidth = '&columns / 3 - 1',
-      -- winRow = '&lines / 2',
-      -- winCol = '&columns / 2 - &columns / 3',
-      winHeight = '&lines / 4',
-      winWidth = '&columns / 2',
-      winRow = '&lines / 4 - 2',
-      winCol = '&columns / 4',
-      previewHeight = '&lines / 3',
-      previewWidth = '&columns / 2',
-      previewRow = '&lines / 2 + &lines / 3 + 1',
-      previewCol = '&columns / 4',
+      winHeight = '&lines * 6 / 10',
+      winWidth = '&columns * 4 / 10',
+      previewHeight = '&lines * 6 / 10',
+      previewWidth = '&columns * 4 / 10',
+      winRow = '&lines * 2 / 10',
+      winCol = '&columns * 1 / 10',
+      previewRow = '&lines * 2 / 10',
+      previewCol = '&columns * 5.1 / 10',
       prompt = "> ",
     }
   },
@@ -185,6 +177,19 @@ vim.fn["ddu#custom#patch_local"]("window", {
   }
 })
 
+vim.fn["ddu#custom#patch_local"]("jumplist", {
+  sources = {
+    {
+      name = { "jumplist" },
+    }
+  },
+  kindOptions = {
+    window = {
+      defaultAction = 'open',
+    }
+  }
+})
+
 local ddu_vim_autocmd_group = vim.api.nvim_create_augroup('ddu_vim', {})
 
 vim.api.nvim_create_autocmd("FileType",
@@ -213,7 +218,7 @@ vim.api.nvim_create_autocmd("User",
   {
     pattern = 'Ddu:ui:ff:openFilterWindow',
     callback = function()
-      vim.keymap.set({ 'n', 'i' }, '<CR>', [[<Esc><Cmd>close<CR>]], { expr = true, buffer = true })
+      vim.keymap.set({ 'n', 'i', 'c' }, '<CR>', [[<Cmd>close<CR>]], { expr = true, buffer = true })
       vim.fn['ddc#enable_cmdline_completion']()
     end,
   }
@@ -225,6 +230,7 @@ vim.api.nvim_create_autocmd({ 'User' },
     callback = function()
       vim.keymap.del('n', '<CR>', { buffer = true })
       vim.keymap.del('i', '<CR>', { buffer = true })
+      vim.keymap.del('c', '<CR>', { buffer = true })
       -- vim.keymap.del('c', '<CR>', { buffer = true })
       -- アイテムリスト用のキーバインドを復活させる
       vim.keymap.set("n", "<CR>", [[<Cmd>call ddu#ui#do_action("itemAction")<CR>]], { buffer = true })
@@ -238,26 +244,14 @@ vim.api.nvim_create_autocmd({ 'User' },
 
 -- `<cmd>call` を使わない場合 `{expr=true}` オプションが必要になるが、
 -- それだとカーソルが行頭に移動するので、`<cmd>call ` を使っている。
--- vim.keymap.set('n', ';b', [[ddu#start(#{name: 'buffer'})]],         { expr = true })
--- vim.keymap.set('n', ';c', [[ddu#start(#{name: 'cmdline-history'})]],{ expr = true })
--- vim.keymap.set('n', ';l', [[ddu#start(#{name: 'lsp_documentSymbol'})]], { expr = true })
--- vim.keymap.set('n', ';e', [[ddu#start(#{name: 'lsp_diagnostic'})]], { expr = true })
--- vim.keymap.set('n', ';d', [[ddu#start(#{name: 'window'})]],         { expr = true })
 vim.keymap.set('n', '<leader>gb', [[<cmd>call ddu#start(#{name: 'buffer'})<CR>]])
 vim.keymap.set('n', '<leader>gc', [[<cmd>call ddu#start(#{name: 'cmdline-history'})<CR>]])
 vim.keymap.set('n', '<leader>gl', [[<cmd>call ddu#start(#{name: 'lsp_documentSymbol'})<CR>]], { expr = true })
 vim.keymap.set('n', '<leader>ge', [[<cmd>call ddu#start(#{name: 'lsp_diagnostic'})<CR>]])
 vim.keymap.set('n', '<leader>gd', [[<cmd>call ddu#start(#{name: 'window'})<CR>]])
-vim.keymap.set('n', '<leader>gh',
-  function()
-    Ddu_start_with_filter_window('help')
-  end
-)
-vim.keymap.set('n', '<leader>gf',
-  function()
-    Ddu_start_with_filter_window('file_recursive')
-  end
-)
+vim.keymap.set('n', '<leader>gh', [[<cmd>call ddu#start(#{name: 'help'})<CR>]])
+vim.keymap.set('n', '<leader>gf', [[<cmd>call ddu#start(#{name: 'file_recursive'})<CR>]])
+vim.keymap.set('n', '<leader>gj', [[<cmd>call ddu#start(#{name: 'jumplist'})<CR>]])
 
 function Ddu_start_with_filter_window(source_name)
   vim.fn['ddu#start']({ name = source_name })
