@@ -89,8 +89,6 @@ in
       sops
       nodejs_24
       node2nix
-      nodePkgs."@anthropic-ai/claude-code"
-      nodePkgs."@openai/codex"
       nodePkgs."vscode-languageserver-protocol-3.17.5"
 
       # Shell and terminal
@@ -137,12 +135,13 @@ in
 
       # misc tools
       wsl-notify-send
-      browsh
       firefox
 
       # AI coding tools
       inputs.serena.packages.${pkgs.system}.default
-      (pkgs.callPackage ./home/gemini.nix { })
+      gemini-cli
+      codex
+      claude-code
     ];
   };
 
@@ -158,6 +157,7 @@ in
     ".config/nvim_demo".source = mkDotfileSymlink "home/nvim_demo";
     ".config/nvim_minimum".source = mkDotfileSymlink "home/nvim_minimum";
     ".config/zellij/config.kdl".source = mkDotfileSymlink "home/zellij/config.kdl";
+    ".config/zellij/layout_vertical.kdl".source = mkDotfileSymlink "home/zellij/layout_vertical.kdl";
     ".local/bin/home-update".source = mkDotfileSymlink "home/home-update";
     ".local/bin/flakes-update".source = mkDotfileSymlink "home/flakes-update.sh";
     ".local/bin/flakes-and-node2nix-update".source =
