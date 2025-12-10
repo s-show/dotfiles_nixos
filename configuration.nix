@@ -44,6 +44,9 @@ in
   sops.secrets.BRAVE_SEARCH_API_KEY = {
     owner = config.users.users.s-show.name;
   };
+  sops.secrets.GITHUB_MCP_PAT = {
+    owner = config.users.users.s-show.name;
+  };
 
 
   wsl.enable = true;
