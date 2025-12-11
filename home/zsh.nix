@@ -34,6 +34,7 @@ in
       gitm = "git commit -m '%'";
       gitc = "git clone '%'";
       mkdir = "mkdir -p %";
+      zb = "zellij --layout ~/.config/zellij/layout_vertical.kdl";
     };
     initContent =
       let

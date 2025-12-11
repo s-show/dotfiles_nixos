@@ -117,6 +117,7 @@ in
       nixfmt-rfc-style
       eslint_d
       bash-language-server
+      kdlfmt
 
       # Media and display
       libsixel
