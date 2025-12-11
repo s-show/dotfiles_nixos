@@ -79,7 +79,6 @@ return {
                 height = math.floor(win_config.height),
                 row = math.floor(win_config.row),
                 col = math.floor(win_config.col + win_config.width / 2),
-                style = "minimal",
                 border = "rounded"
               }
               vim.api.nvim_open_win(buf, true, opts)
