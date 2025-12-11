@@ -48,11 +48,20 @@ in
     owner = config.users.users.s-show.name;
   };
 
-
+  # WSL specific settings
   wsl.enable = true;
-  wsl.defaultUser = "nixos";
+  wsl.defaultUser = "s-show";
   wsl.interop.includePath = false;
   wsl.wslConf.interop.appendWindowsPath = false;
+
+  # Disable boot loader and file system checks for WSL
+  boot.loader.grub.enable = false;
+  fileSystems."/" = {
+    device = "none";
+    fsType = "tmpfs";
+  };
+
+  virtualisation.docker.enable = true;
 
   nix = {
     settings = {
@@ -65,7 +74,10 @@ in
   nixpkgs.config.allowUnfree = true;
   users.users.s-show = {
     isNormalUser = true;
-    extraGroups = [ "wheel" ];
+    extraGroups = [
+      "wheel"
+      "docker"
+    ];
     shell = pkgs.zsh;
   };
 
