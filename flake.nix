@@ -8,6 +8,9 @@
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
     serena.url = "github:oraios/serena";
     serena.inputs.nixpkgs.follows = "nixpkgs";
+    # zellij のプラグインの harpoon をビルドするための設定
+    rust-overlay.url = "github:oxalica/rust-overlay";
+    rust-overlay.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =
@@ -33,6 +36,7 @@
               # nixpkgsにoverlayを適用
               nixpkgs.overlays = [
                 inputs.neovim-nightly-overlay.overlays.default
+                inputs.rust-overlay.overlays.default
               ];
               # Home Manager設定
               home-manager.useGlobalPkgs = true;

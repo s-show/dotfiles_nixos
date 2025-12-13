@@ -16,9 +16,10 @@ keybinds clear-defaults=true {
         bind "j" { MoveFocus "down"; SwitchToMode "locked"; }
         bind "k" { MoveFocus "up"; SwitchToMode "locked"; }
         bind "l" { MoveFocus "right"; SwitchToMode "locked"; }
-        bind "n" { GoToNextTab; SwitchToMode "locked"; }
-        bind "p" { GoToPreviousTab; SwitchToMode "locked"; }
+        bind "L" { GoToNextTab; SwitchToMode "locked"; }
+        bind "H" { GoToPreviousTab; SwitchToMode "locked"; }
         bind "x" { CloseFocus; SwitchToMode "locked"; }
+        bind "Ctrl s" { ToggleActiveSyncTab; SwitchToMode "locked"; }
         bind "z" { ToggleFocusFullscreen; SwitchToMode "locked"; }
         bind "esc" { SwitchToMode "locked"; }
         bind "n" { SwitchToMode "resize"; }
@@ -28,10 +29,31 @@ keybinds clear-defaults=true {
         bind "2" { GoToTab 2; }
         bind "3" { GoToTab 3; }
         bind "f" { ToggleFloatingPanes; SwitchToMode "locked"; }
+        bind "Q" { Quit; }
+        bind "Ctrl f" {
+            LaunchOrFocusPlugin "forgot" {
+                floating true
+                move_to_focused_tab true
+            }
+            SwitchToMode "locked"
+        }
+        bind "Ctrl a" {
+            LaunchOrFocusPlugin "zjpane" {
+                floating true
+                // move_to_focused_tab true
+            }
+            SwitchToMode "locked"
+        }
+        bind "Ctrl h" {
+            // Bind the plugin to a shortcut
+            LaunchOrFocusPlugin "harpoon" {
+                floating true; 
+                move_to_focused_tab true
+            }
+            SwitchToMode "locked"
+        }
     }
-    // resize モードから抜けるキーバインド
     resize {
-        bind "Esc" { SwitchToMode "locked"; }
         bind "Enter" { SwitchToMode "locked"; }
         bind "Ctrl b" { SwitchToMode "locked"; }
         bind "h" { Resize "Left"; }
@@ -42,10 +64,10 @@ keybinds clear-defaults=true {
         bind "down" { Resize "Increase down"; }
         bind "up" { Resize "Increase up"; }
         bind "right" { Resize "Increase right"; }
-    }
-    // search モードから抜けるキーバインド
-    search {
+        // resize モードから抜けるキーバインド
         bind "Esc" { SwitchToMode "locked"; }
+    }
+    search {
         bind "Ctrl b" { SwitchToMode "locked"; }
         bind "e" { EditScrollback; SwitchToMode "locked"; }
         bind "c" { SearchToggleOption "CaseSensitivity"; }
@@ -53,10 +75,10 @@ keybinds clear-defaults=true {
         bind "w" { SearchToggleOption "Wrap"; }
         bind "n" { Search "down"; }
         bind "p" { Search "up"; }
-    }
-    // session モードから抜けるキーバインド
-    session {
+        // search モードから抜けるキーバインド
         bind "Esc" { SwitchToMode "locked"; }
+    }
+    session {
         bind "Ctrl b" { SwitchToMode "locked"; }
         bind "d" { Detach; }
         bind "q" { Quit; }
@@ -66,7 +88,11 @@ keybinds clear-defaults=true {
                 move_to_focused_tab true
             }
             SwitchToMode "locked"
-        } // ... セッション用のキーバインド
+        }
+        // session モードから抜けるキーバインド
+        bind "Esc" { SwitchToMode "locked"; }
+    }
+    shared_except "locked" {
     }
 }
 
@@ -87,17 +113,30 @@ plugins {
     welcome-screen location="zellij:session-manager" {
         welcome_screen true
     }
-}
+    forgot location="file:~/.config/zellij/plugins/zellij_forgot.wasm"
+    zjpane location="file:~/.config/zellij/plugins/harpoon.wasm"
+    harpoon location="file:~/.config/zellij/plugins/harpoon.wasm"
+  }
 
 // Plugins to load in the background when a new session starts
 // eg. "file:/path/to/my-plugin.wasm"
 // eg. "https://example.com/my-plugin.wasm"
 load_plugins {
+  forgot
+  harpoon
 }
+
+layout {
+    // Create a pane with zjpane alias
+    pane {
+        plugin location="zjpane"
+    }
+}
+
 web_client {
     font "monospace"
 }
- 
+
 // Use a simplified UI without special fonts (arrow glyphs)
 // Options:
 //   - true
