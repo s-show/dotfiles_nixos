@@ -104,7 +104,7 @@ return {
       }
     },
     keys = {
-      { "<leader>go", "<Cmd>Fyler kind=float<Cr>", desc = "Open Fyler View" },
+      { "-", "<Cmd>Fyler kind=float<Cr>", desc = "Open Fyler View" },
     }
   }
 }
