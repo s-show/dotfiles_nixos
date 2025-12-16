@@ -186,6 +186,8 @@ in
     ".local/bin/notify".source = mkDotfileSymlink "home/notify.sh";
     ".local/bin/nbw".source = mkDotfileSymlink "home/wrap_nb.sh";
     ".local/bin/statusline-command".source = mkDotfileSymlink "home/statusline-command.sh";
+    ".local/bin/claude_wrapper".source = mkDotfileSymlink "home/claude_wrapper.sh";
+    ".local/bin/gemini_wrapper".source = mkDotfileSymlink "home/gemini_wrapper.sh";
   };
 
   # Home activation scripts
