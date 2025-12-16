@@ -7,7 +7,7 @@ trap 'unset NVIM_APPNAME' EXIT
 export NVIM_APPNAME="nvim_ime"
 
 # nvim コマンドを実行（引数があれば引数も渡す）
-nvim "$@"
+nvim +startinsert "$@"
 
 # nvim の終了コードを保存して終了
 exit $?
