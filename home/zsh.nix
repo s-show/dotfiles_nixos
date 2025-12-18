@@ -71,7 +71,21 @@ in
             ${wsl-notify-send}/bin/wsl-notify-send.exe --category "$WSL_DISTRO_NAME" "$@"
           }
           fpath+="$HOME/.local/bin/"
-        '';
+          # fzf で zellij セッションを選択してアタッチ
+          function zellij-session-widget() {
+            local selected session
+            selected=$(zellij ls -r 2>/dev/null | fzf --height 40% --reverse --prompt="zellij session> ")
+            if [[ -n "$selected" ]]; then
+              # ANSIエスケープシーケンスを除去してからセッション名を抽出
+              session=$(echo "$selected" | sed 's/\x1b\[[0-9;]*m//g' | awk '{print $1}')
+              BUFFER="zellij attach $session"
+              zle accept-line
+            fi
+            zle redisplay
+          }
+          zle -N zellij-session-widget
+          bindkey '^z' zellij-session-widget  # Ctrl+z で起動
+          '';
       in
       lib.mkMerge [
         zshConfigEarlyInit

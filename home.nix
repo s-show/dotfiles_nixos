@@ -174,7 +174,7 @@ in
     ".local/bin/nvim_minimum".source = mkDotfileSymlink "home/nvim_minimum.sh";
     # Zellij 
     ".config/zellij/config.kdl".source = mkDotfileSymlink "home/zellij/config.kdl";
-    ".config/zellij/layout_vertical.kdl".source = mkDotfileSymlink "home/zellij/layout_vertical.kdl";
+    ".config/zellij/layouts/layout_vertical.kdl".source = mkDotfileSymlink "home/zellij/layout_vertical.kdl";
     ".config/zellij/plugins/zellij_forgot.wasm".source = zellijForgotWasm;
     ".config/zellij/plugins/zjpane.wasm".source = zjpane;
     ".config/zellij/plugins/harpoon.wasm".source = "${zellij-harpoon}/share/zellij/plugins/harpoon.wasm";
