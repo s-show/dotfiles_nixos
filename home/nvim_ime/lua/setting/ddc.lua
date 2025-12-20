@@ -4,6 +4,7 @@ vim.fn["ddc#custom#patch_global"]({
   -- ui = 'native',
   sources = {
     'skkeleton',
+    'file',
   },
   autoCompleteEvents = {
     'InsertEnter',
@@ -24,6 +25,18 @@ vim.fn["ddc#custom#patch_global"]({
       converters = {},
       isVolatile = true,
       minAutoCompleteLength = 1,
+    },
+    file = {
+      mark = 'F',
+      isVolatile = true,
+      forceCompletionPattern = [[\S/\S*]],
+      minAutoCompleteLength = 1000,
+    },
+  },
+  sourceParams = {
+    file = {
+      filenameChars = "[:keyword:].",
+      projFromCwdMaxItems = {},
     },
   },
 })
