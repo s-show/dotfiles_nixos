@@ -94,7 +94,6 @@ in
       zig
       go
       deno
-      lazysql
       nix-direnv
       age
       sops
@@ -110,8 +109,6 @@ in
       sheldon
 
       # Programming languages and runtimes
-      # cl
-      # python313  # Serenaと競合するため削除。プロジェクトごとにnix-shellで管理
       lua51Packages.luarocks-nix
       libgcc
       gnumake
@@ -123,7 +120,6 @@ in
       typescript-language-server
       vim-language-server
       vscode-langservers-extracted
-      clang-tools
       nixd
       nixfmt-rfc-style
       eslint_d
@@ -147,7 +143,6 @@ in
 
       # misc tools
       wsl-notify-send
-      firefox
 
       # AI coding tools
       inputs.serena.packages.${pkgs.system}.default
@@ -162,6 +157,7 @@ in
 
   # Dotfiles management
   home.file = {
+    # App
     ".config/starship.toml".source = mkDotfileSymlink "home/starship.toml";
     ".config/superfile".source = mkDotfileSymlink "home/superfile";
     # Neovim
@@ -175,7 +171,7 @@ in
     # ZSH
     ".config/zsh".source = mkDotfileSymlink "home/zsh";
     ".config/sheldon/plugins.toml".source = mkDotfileSymlink "home/plugins.toml";
-    # Zellij 
+    # Zellij
     ".config/zellij/config.kdl".source = mkDotfileSymlink "home/zellij/config.kdl";
     ".config/zellij/layouts/layout_vertical.kdl".source = mkDotfileSymlink "home/zellij/layout_vertical.kdl";
     ".config/zellij/plugins/zellij_forgot.wasm".source = zellijForgotWasm;
