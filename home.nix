@@ -105,9 +105,9 @@ in
       # Shell and terminal
       starship
       zellij
-      zsh-abbr
       nb
       superfile
+      sheldon
 
       # Programming languages and runtimes
       # cl
@@ -172,6 +172,9 @@ in
     ".local/bin/nvim_ime".source = mkDotfileSymlink "home/nvim_ime.sh";
     ".local/bin/nvim_demo".source = mkDotfileSymlink "home/nvim_demo.sh";
     ".local/bin/nvim_minimum".source = mkDotfileSymlink "home/nvim_minimum.sh";
+    # ZSH
+    ".config/zsh".source = mkDotfileSymlink "home/zsh";
+    ".config/sheldon/plugins.toml".source = mkDotfileSymlink "home/plugins.toml";
     # Zellij 
     ".config/zellij/config.kdl".source = mkDotfileSymlink "home/zellij/config.kdl";
     ".config/zellij/layouts/layout_vertical.kdl".source = mkDotfileSymlink "home/zellij/layout_vertical.kdl";
@@ -196,6 +199,18 @@ in
       cp "${homeDirectory}/.dotfiles/home/git-pre-commit" \
          "${homeDirectory}/.dotfiles/.git/hooks/pre-commit"
     '';
+  };
+
+  # ssh setting
+  programs.ssh.matchBlocks = {
+    "github.com" = {
+      addKeysToAgent = "yes";
+    };
+  };
+
+  # Nix が管理するパスを環境変数として渡す
+  home.sessionVariables = {
+    WSL_NOTIFY_SEND = "${wsl-notify-send}/bin/wsl-notify-send.exe";
   };
 
   # Import additional modules

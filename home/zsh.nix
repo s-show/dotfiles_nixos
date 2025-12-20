@@ -6,10 +6,10 @@ in
 {
   programs.zsh = {
     enable = true;
-    autocd = true; # cdなしでファイルパスだけで移動
+    autocd = true;
     enableCompletion = true; # 自動補完
     autosuggestion.enable = true; # 入力サジェスト
-    syntaxHighlighting.enable = true; # シンタックスハイライト
+    # syntaxHighlighting.enable = true; # シンタックスハイライト
     history = {
       ignorePatterns = [
         "fg *"
@@ -23,73 +23,25 @@ in
       ignoreAllDups = true;
       share = true;
     };
-    zsh-abbr.enable = true;
-    zsh-abbr.abbreviations = {
-      cat = "bat %";
-      ls = "eza --icons always --classify always %";
-      la = "eza --icons always --classify always --all %";
-      ll = "eza --icons always --long --all --git %";
-      tree = "eza --icons always --classify always --tree %";
-      grep = "rg '%' %";
-      gitm = "git commit -m '%'";
-      gitc = "git clone '%'";
-      mkdir = "mkdir -p %";
-      zb = "zellij --layout ~/.config/zellij/layout_vertical.kdl";
-    };
-    initContent =
-      let
-        zshConfigEarlyInit = lib.mkOrder 500 ''
-          ABBR_DEFAULT_BINDINGS=0
-        '';
-        # $EDITOR=vim としているため、`;`や`Enter`にabbrの動作を割り当てるには
-        # `-M emacs` オプションが必要になる。
-        zshConfigLastInit = lib.mkOrder 1500 ''
-          ABBR_SET_EXPANSION_CURSOR=1
-          ABBR_SET_LINE_CURSOR=1
-          compinit
-          bindkey -e
-          bindkey -M emacs ";" abbr-expand-and-insert
-          bindkey -M emacs "Enter" abbr-expand-and-accept
-          bindkey -s '^X^I' 'editprompt -e nvim_ime\n'
-          zstyle ':completion:*:default' menu select=1
-          zstyle ':completion:*:default' ignore-parents parent pwd ..
-          eval "$(direnv hook zsh)"
-          export OPENROUTER_API_KEY=$(cat "/run/secrets/OPENROUTER_API_KEY")
-          export OPENAI_API_KEY=$(cat "/run/secrets/OPENAI_API_KEY")
-          export CEREBRAS_API_KEY=$(cat "/run/secrets/CEREBRAS_API_KEY")
-          export GEMINI_API_KEY=$(cat "/run/secrets/GEMINI_API_KEY")
-          export BRAVE_SEARCH_API_KEY=$(cat "/run/secrets/BRAVE_SEARCH_API_KEY")
-          export GITHUB_MCP_PAT=$(cat "/run/secrets/GITHUB_MCP_PAT")
-          export EDITOR=nvim
-          autoload -Uz run-help run-help-git run-help-ip run-help-sudo
-          precmd() {
-            # Mark end of previous command (no exit code here, since Zsh lacks easy last status in prompt):
-            print -P "\e]133;D;\a"
-          }
-          PROMPT=$'%{\e]133;A\a%}'$PROMPT$'%{\e]133;B\a%}'
-          notify-send() {
-            ${wsl-notify-send}/bin/wsl-notify-send.exe --category "$WSL_DISTRO_NAME" "$@"
-          }
-          fpath+="$HOME/.local/bin/"
-          # fzf で zellij セッションを選択してアタッチ
-          function zellij-session-widget() {
-            local selected session
-            selected=$(zellij ls -r 2>/dev/null | fzf --height 40% --reverse --prompt="zellij session> ")
-            if [[ -n "$selected" ]]; then
-              # ANSIエスケープシーケンスを除去してからセッション名を抽出
-              session=$(echo "$selected" | sed 's/\x1b\[[0-9;]*m//g' | awk '{print $1}')
-              BUFFER="zellij attach $session"
-              zle accept-line
-            fi
-            zle redisplay
-          }
-          zle -N zellij-session-widget
-          bindkey '^z' zellij-session-widget  # Ctrl+z で起動
-          '';
-      in
-      lib.mkMerge [
-        zshConfigEarlyInit
-        zshConfigLastInit
-      ];
+
+    # カスタム設定を追加
+    initExtra = ''
+      # Sheldon plugin manager
+      if command -v sheldon &> /dev/null; then
+        eval "$(sheldon source)"
+      fi
+
+      source ~/.config/zsh/env.zsh
+      source ~/.config/zsh/aliases.zsh
+      source ~/.config/zsh/functions.zsh
+      source ~/.config/zsh/keybindings.zsh
+      source ~/.config/zsh/completion.zsh
+      source ~/.config/zsh/zeno.zsh
+    '';
+  };
+
+  # Nix が管理するパスを環境変数として渡す
+  home.sessionVariables = {
+    WSL_NOTIFY_SEND = "${wsl-notify-send}/bin/wsl-notify-send.exe";
   };
 }
