@@ -5,21 +5,34 @@ export default defineConfig(({ projectRoot, currentDirectory }) => ({
   completions: [
     {
       name: "kill signal",
-      patterns: ["^kill -s $"],
+      patterns: [
+        "^kill -s $",
+      ],
       sourceCommand: "kill -l | tr ' ' '\\n'",
-      options: { "--prompt": "'Kill Signal> '" },
+      options: {
+        "--prompt": "'Kill Signal> '",
+      },
     },
     {
       name: "kill pid",
-      patterns: ["^kill( .*)? $"],
-      excludePatterns: [" -[lns] $"],
+      patterns: [
+        "^kill( .*)? $",
+      ],
+      excludePatterns: [
+        " -[lns] $",
+      ],
       sourceCommand: "LANG=C ps -ef | sed 1d",
-      options: { "--multi": true, "--prompt": "'Kill Process> '" },
+      options: {
+        "--multi": true,
+        "--prompt": "'Kill Process> '",
+      },
       callback: "awk '{print $2}'",
     },
     {
       name: "cd",
-      patterns: ["^cd $"],
+      patterns: [
+        "^cd $",
+      ],
       sourceCommand:
         "find . -path '*/.git' -prune -o -maxdepth 5 -type d -print0",
       options: {
@@ -32,13 +45,18 @@ export default defineConfig(({ projectRoot, currentDirectory }) => ({
     },
     {
       name: "zellij sessions",
-      patterns: ["^zellij attach $"],
-      excludePatterns: [" -[lns] $"],
+      patterns: [
+        "^zellij attach $",
+      ],
+      excludePatterns: [
+        " -[lns] $",
+      ],
       sourceCommand: "zellij ls --reverse",
       options: {
         "--ansi": true,
         "--prompt": "'zellij attach> '",
       },
+      callback: "awk '{print $1}'",
     },
     {
       name: "nb edit",
@@ -64,6 +82,41 @@ export default defineConfig(({ projectRoot, currentDirectory }) => ({
       options: {
         "--prompt": "'nb subcommand >'",
       },
+    },
+    {
+      name: "npm scripts",
+      patterns: [
+        "^pnpm $",
+      ],
+      sourceFunction: async ({ projectRoot }) => {
+        try {
+          const pkgPath = join(projectRoot, "package.json");
+          const pkg = JSON.parse(
+            await Deno.readTextFile(pkgPath),
+          ) as { scripts?: Record<string, unknown> };
+          return Object.keys(pkg.scripts ?? {});
+        } catch {
+          return [];
+        }
+      },
+      options: {
+        "--prompt": "'pnpm scripts> '",
+      },
+      callback: "pnpm {{}}",
+    },
+    {
+      name: "bat",
+      patterns: [
+        "^bat $",
+      ],
+      sourceCommand: "find . -path '*/.git' -prune -o -maxdepth 3 -type f -print0",
+      options: {
+        "--prompt": "'bat> '",
+        "--read0": true,
+        "--preview": "head -q {}",
+      },
+      callback: "cut -z -c 3-",
+      callbackZero: true,
     },
   ],
 }));

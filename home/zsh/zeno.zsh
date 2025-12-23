@@ -28,6 +28,4 @@ if [[ -n $ZENO_LOADED ]]; then
   # fallback if completion not matched
   # (default: fzf-completion if exists; otherwise expand-or-complete)
   # export ZENO_COMPLETION_FALLBACK=expand-or-complete
-else
-  echo 'why not loaded?'
 fi

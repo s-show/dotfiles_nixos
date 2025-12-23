@@ -21,7 +21,9 @@ export default defineConfig(({ projectRoot, currentDirectory }) => ({
       name: "branch",
       keyword: "B",
       snippet: "git symbolic-ref --short HEAD",
-      context: { lbuffer: "^git\\s+checkout\\s+" },
+      context: {
+        buffer: "^git\\s+checkout\\s+",
+      },
       evaluate: true,
     },
     {
@@ -33,9 +35,6 @@ export default defineConfig(({ projectRoot, currentDirectory }) => ({
       name: "ll",
       keyword: "ll",
       snippet: "eza --icons always --long --all --git {{foo_bar}}",
-      context: {
-        lbuffer: "^",
-      },
     },
     {
       name: "tree",
