@@ -1,5 +1,7 @@
 -- Esc 二連打で検索でヒットした箇所のハイライトを消去する
-vim.keymap.set('n', '<ESC><ESC>', '<Cmd>nohlsearch<CR>', { silent = true })
+vim.keymap.set('n', '<ESC><ESC>', '<Cmd>nohlsearch<CR>',
+{ silent = true, desc = 'Clear find result highlight when double tap <Esc>' }
+)
 
 -- set help file language
 vim.opt.helplang = 'ja'
@@ -20,6 +22,7 @@ vim.api.nvim_create_autocmd("ModeChanged", {
       vim.fn.histdel(":", -1)
     end
   end,
+  { desc = "Not record 'w', 'q' etc command in history" }
 })
 
 -- コマンド履歴の保存件数を1000件にする
@@ -35,13 +38,16 @@ end)
 -- カーソル下の単語のヘルプを開く
 -- vim.cmd.help(vim.fn.expand('<cword>')) を rhs に直接設定すると
 -- なぜかエラーになるので、コールバック関数で呼び出している。
-vim.keymap.set('n', '<leader>H', function()
-  vim.cmd [[echon '']]
-  local pcall_result, _ = pcall(vim.cmd.help, vim.fn.expand('<cword>'))
-  if pcall_result ~= true then
-    vim.notify('keyword not found in help.', vim.log.levels.WARN)
-  end
-end)
+vim.keymap.set('n', '<leader>H',
+  function()
+    vim.cmd [[echon '']]
+    local pcall_result, _ = pcall(vim.cmd.help, vim.fn.expand('<cword>'))
+    if pcall_result ~= true then
+      vim.notify('keyword not found in help.', vim.log.levels.WARN)
+    end
+  end,
+{ desc = 'Open help under the cursor' }
+)
 
 -- `K` をタイプするとカーソル下のキーワードのヘルプを表示
 -- ヘルプ画面でも使用可能
@@ -67,4 +73,31 @@ vim.api.nvim_create_autocmd("TextYankPost", {
       vim.hl.on_yank({ timeout = 300 })
     end
   end,
+  desc = 'Highlight yank strings',
+})
+
+
+-- Vim/Neovimをquitするときに特殊ウィンドウを一気に閉じる
+-- https://zenn.dev/vim_jp/articles/ff6cd224fab0c7
+vim.api.nvim_create_autocmd('QuitPre', {
+  callback = function()
+    -- 現在のウィンドウ番号を取得
+    local current_win = vim.api.nvim_get_current_win()
+    -- すべてのウィンドウをループして調べる
+    for _, win in ipairs(vim.api.nvim_list_wins()) do
+      -- カレント以外を調査
+      if win ~= current_win then
+        local buf = vim.api.nvim_win_get_buf(win)
+        -- buftypeが空文字（通常のバッファ）があればループ終了
+        if vim.bo[buf].buftype == '' then
+          return
+        end
+      end
+    end
+    -- ここまで来たらカレント以外がすべて特殊ウィンドウということなので
+    -- カレント以外をすべて閉じる
+    vim.cmd.only({ bang = true })
+    -- この後、ウィンドウ1つの状態でquitが実行されるので、Vimが終了する
+  end,
+  desc = 'Close all special buffers and quit Neovim',
 })
