@@ -55,11 +55,11 @@ let
   # zellij のプラグインをインストール
   zellijForgotWasm = pkgs.fetchurl {
     url = "https://github.com/karimould/zellij-forgot/releases/latest/download/zellij_forgot.wasm";
-    hash = "sha256-MRlBRVGdvcEoaFtFb5cDdDePoZ/J2nQvvkoyG6zkSds="; # 後で埋める
+    hash = "sha256-MRlBRVGdvcEoaFtFb5cDdDePoZ/J2nQvvkoyG6zkSds=";
   };
   zjpane = pkgs.fetchurl {
     url = "https://github.com/FuriouZz/zjpane/releases/latest/download/zjpane.wasm ";
-    hash = "sha256-N2u0nPY//EpnJ6YoFGgoS7taL3S/SxfrE2qKfgywqt4="; # 後で埋める
+    hash = "sha256-N2u0nPY//EpnJ6YoFGgoS7taL3S/SxfrE2qKfgywqt4=";
   };
   zellij-harpoon = import ./home/packages/zellij-harpoon.nix { inherit pkgs lib; };
 
@@ -165,28 +165,32 @@ in
     ".config/nvim_ime".source = mkDotfileSymlink "home/nvim_ime";
     ".config/nvim_demo".source = mkDotfileSymlink "home/nvim_demo";
     ".config/nvim_minimum".source = mkDotfileSymlink "home/nvim_minimum";
-    ".local/bin/nvim_ime".source = mkDotfileSymlink "home/nvim_ime.sh";
-    ".local/bin/nvim_demo".source = mkDotfileSymlink "home/nvim_demo.sh";
-    ".local/bin/nvim_minimum".source = mkDotfileSymlink "home/nvim_minimum.sh";
+    ".local/bin/nvim_ime".source = mkDotfileSymlink "home/scripts/nvim_ime.sh";
+    ".local/bin/nvim_demo".source = mkDotfileSymlink "home/scripts/nvim_demo.sh";
+    ".local/bin/nvim_minimum".source = mkDotfileSymlink "home/scripts/nvim_minimum.sh";
     # ZSH
     ".config/zsh".source = mkDotfileSymlink "home/zsh";
     ".config/sheldon/plugins.toml".source = mkDotfileSymlink "home/plugins.toml";
     # Zellij
     ".config/zellij/config.kdl".source = mkDotfileSymlink "home/zellij/config.kdl";
-    ".config/zellij/layouts/layout_vertical.kdl".source = mkDotfileSymlink "home/zellij/layout_vertical.kdl";
+    ".config/zellij/layouts/layout_vertical.kdl".source =
+      mkDotfileSymlink "home/zellij/layout_vertical.kdl";
     ".config/zellij/plugins/zellij_forgot.wasm".source = zellijForgotWasm;
     ".config/zellij/plugins/zjpane.wasm".source = zjpane;
-    ".config/zellij/plugins/harpoon.wasm".source = "${zellij-harpoon}/share/zellij/plugins/harpoon.wasm";
+    ".config/zellij/plugins/harpoon.wasm".source =
+      "${zellij-harpoon}/share/zellij/plugins/harpoon.wasm";
     # my script
-    ".local/bin/home-update".source = mkDotfileSymlink "home/home-update";
-    ".local/bin/flakes-update".source = mkDotfileSymlink "home/flakes-update.sh";
+    ".local/bin/flakes-update".source = mkDotfileSymlink "home/scripts/flakes-update.sh";
     ".local/bin/flakes-and-node2nix-update".source =
-      mkDotfileSymlink "home/flakes-and-node2nix-update.sh";
-    ".local/bin/notify".source = mkDotfileSymlink "home/notify.sh";
-    ".local/bin/nbw".source = mkDotfileSymlink "home/wrap_nb.sh";
-    ".local/bin/statusline-command".source = mkDotfileSymlink "home/statusline-command.sh";
-    ".local/bin/claude_wrapper".source = mkDotfileSymlink "home/claude_wrapper.sh";
-    ".local/bin/gemini_wrapper".source = mkDotfileSymlink "home/gemini_wrapper.sh";
+      mkDotfileSymlink "home/scripts/flakes-and-node2nix-update.sh";
+    ".local/bin/notify".source = mkDotfileSymlink "home/scripts/notify.sh";
+    ".local/bin/nbw".source = mkDotfileSymlink "home/scripts/wrap_nb.sh";
+    ".local/bin/statusline-command".source = mkDotfileSymlink "home/scripts/statusline-command.sh";
+    ".local/bin/claude_wrapper".source = mkDotfileSymlink "home/scripts/claude_wrapper.sh";
+    ".local/bin/gemini_wrapper".source = mkDotfileSymlink "home/scripts/gemini_wrapper.sh";
+    # tmux-which-key
+    ".config/tmux/plugins/tmux-which-key/config.yaml".source = mkDotfileSymlink "home/tmux-which-key/config.yaml";
+    ".local/share/tmux/plugins/tmux-which-key/init.tmux".source = mkDotfileSymlink "home/tmux-which-key/init.tmux";
   };
 
   # Home activation scripts
