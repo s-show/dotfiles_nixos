@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-
-cd ~/.dotfiles
-git add .
-home-manager switch --show-trace --flake .
-cd ~/
