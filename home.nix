@@ -107,6 +107,15 @@ in
       nb
       superfile
       sheldon
+      tmux
+      tmuxPlugins.continuum
+      tmuxPlugins.resurrect
+      tmuxPlugins.mode-indicator
+      tmuxPlugins.tmux-which-key
+      tmuxPlugins.tmux-fzf
+      tmuxPlugins.tmux-thumbs
+      tmuxPlugins.gruvbox
+      tmuxPlugins.tmux-nova
 
       # Programming languages and runtimes
       lua51Packages.luarocks-nix
@@ -219,5 +228,6 @@ in
     ./home/fzf.nix
     ./home/git.nix
     ./home/direnv.nix
+    ./home/tmux.nix
   ];
 }
