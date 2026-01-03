@@ -11,12 +11,16 @@ require('nvim-treesitter.configs').setup {
   highlight = {
     enable = true,
   },
+  incremental_selection = {
+    enable = true
+  },
+  textobjects = {
+    enable = true
+  },
 }
 
 vim.filetype.add({ extension = { ejs = "ejs" } })
 vim.treesitter.language.register("html", "ejs")
-vim.treesitter.language.register("javascript", "ejs")
-vim.treesitter.language.register("embedded_template", "ejs")
 
 -- パーサーディレクトリを追加
 vim.opt.runtimepath:append(vim.fn.stdpath("data") .. "/treesitter")

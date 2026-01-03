@@ -23,12 +23,15 @@
 --- ```
 return {
   cmd = { 'vscode-html-language-server', '--stdio' },
-  filetypes = { 'html', 'templ' },
+  filetypes = { 'html', 'templ', 'ejs' },
   root_markers = { 'package.json', '.git' },
   settings = {},
   init_options = {
     provideFormatter = true,
-    embeddedLanguages = { css = true, javascript = true },
+    embeddedLanguages = {
+      css = true,
+      javascript = true,
+    },
     configurationSection = { 'html', 'css', 'javascript' },
   },
 }

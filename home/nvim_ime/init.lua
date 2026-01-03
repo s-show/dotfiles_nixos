@@ -42,3 +42,17 @@ require('setting.ddc')
 require('setting.skkeleton')
 require('setting.clipboard')
 
+vim.api.nvim_create_autocmd("BufWinEnter", {
+  pattern = "*.md",
+  callback = function()
+    vim.schedule(function()
+      -- "<C-j>" を内部コードに変換
+      local key = vim.api.nvim_replace_termcodes("<C-j>", true, false, true)
+
+      -- モードの選択（重要）:
+      -- "n": noremap (既存のマッピングを無視。単純に Ctrl+j 信号を送る)
+      -- "m": remap (既存のマッピングを有効化。プラグイン等の機能を呼び出すならこちら)
+      vim.api.nvim_feedkeys(key, "m", true)
+    end)
+  end,
+})

@@ -1,5 +1,9 @@
 require('colorizer').setup({
   'css';
+  'scss';
   'html';
+  'ejs';
   'lua';
+  'tmux';
+  'nix';
 })

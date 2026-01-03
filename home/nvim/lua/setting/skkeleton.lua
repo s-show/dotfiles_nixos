@@ -12,8 +12,8 @@ vim.fn['skkeleton#config']({
   keepState = true,
   showCandidatesCount = 2,
   registerConvertResult = true,
-  markerHenkan = '',
-  markerHenkanSelect = ''
+  -- markerHenkan = '',
+  -- markerHenkanSelect = ''
 })
 
 vim.g.denops_server_deno_args = { '--unstable-kv' }
@@ -40,40 +40,40 @@ vim.fn['skkeleton#register_kanatable']('rom', {
 
 vim.cmd('source ~/.config/nvim/lua/setting/skkeleton-henkan-highlight.vim')
 
-vim.fn['skkeleton_state_popup#config']({
-  labels = {
-    input = {
-      hira = "あ",
-      kata = "ア",
-      hankata = "ｶﾅ",
-      zenkaku = "Ａ",
-    },
-    ["input:okurinasi"] = {
-      hira = "▽▽",
-      kata = "▽▽",
-      hankata = "▽▽",
-      abbrev = "ab",
-    },
-    ["input:okuriari"]   = {
-      hira = "▽▽",
-      kata = "▽▽",
-      hankata = "▽▽",
-    },
-    henkan = {
-      hira = "▼▼",
-      kata = "▼▼",
-      hankata = "▼▼",
-      abbrev = "ab",
-    },
-    latin = "_A",
-  },
-  opts = {
-    relative = "cursor",
-    col = 0,
-    row = 1,
-    anchor = "NW",
-    style = "minimal",
-    border = { "╔", "═" ,"╗", "║", "╝", "═", "╚", "║" }
-  },
-})
-vim.fn['skkeleton_state_popup#enable']()
+-- vim.fn['skkeleton_state_popup#config']({
+--   labels = {
+--     input = {
+--       hira = "あ",
+--       kata = "ア",
+--       hankata = "ｶﾅ",
+--       zenkaku = "Ａ",
+--     },
+--     ["input:okurinasi"] = {
+--       hira = "▽▽",
+--       kata = "▽▽",
+--       hankata = "▽▽",
+--       abbrev = "ab",
+--     },
+--     ["input:okuriari"]   = {
+--       hira = "▽▽",
+--       kata = "▽▽",
+--       hankata = "▽▽",
+--     },
+--     henkan = {
+--       hira = "▼▼",
+--       kata = "▼▼",
+--       hankata = "▼▼",
+--       abbrev = "ab",
+--     },
+--     latin = "_A",
+--   },
+--   opts = {
+--     relative = "cursor",
+--     col = 0,
+--     row = 1,
+--     anchor = "NW",
+--     style = "minimal",
+--     border = { "╔", "═" ,"╗", "║", "╝", "═", "╚", "║" }
+--   },
+-- })
+-- vim.fn['skkeleton_state_popup#enable']()

@@ -1,6 +1,6 @@
 -- Esc 二連打で検索でヒットした箇所のハイライトを消去する
 vim.keymap.set('n', '<ESC><ESC>', '<Cmd>nohlsearch<CR>',
-{ silent = true, desc = 'Clear find result highlight when double tap <Esc>' }
+{ silent = true }
 )
 
 -- set help file language
@@ -22,7 +22,7 @@ vim.api.nvim_create_autocmd("ModeChanged", {
       vim.fn.histdel(":", -1)
     end
   end,
-  { desc = "Not record 'w', 'q' etc command in history" }
+  desc = "Not record 'w', 'q' etc command in command_history"
 })
 
 -- コマンド履歴の保存件数を1000件にする
@@ -33,7 +33,9 @@ vim.opt.history = 1000
 vim.keymap.set('n', '<space><space>', function()
   vim.fn.setreg('/', vim.fn.expand('<cword>'))
   vim.opt.hlsearch = true
-end)
+end,
+{ desc = "Highlight word under cursor" }
+)
 
 -- カーソル下の単語のヘルプを開く
 -- vim.cmd.help(vim.fn.expand('<cword>')) を rhs に直接設定すると
