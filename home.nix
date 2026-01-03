@@ -100,6 +100,7 @@ in
       nodejs_24
       node2nix
       nodePkgs."vscode-languageserver-protocol-3.17.5"
+      delta
 
       # Shell and terminal
       starship
