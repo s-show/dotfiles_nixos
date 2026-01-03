@@ -1,7 +1,0 @@
-return {
-  { dir = "~/.config/nvim/lua/custom_nvim_plugin/extended_word_motion",  -- ローカルプラグインのパス
-    config = function ()
-      require('extended_word_motion').setup({})
-    end
-  }
-}
