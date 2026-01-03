@@ -57,7 +57,7 @@ export default defineConfig(({ projectRoot, currentDirectory }) => ({
     {
       name: "mkdir -p",
       keyword: "mkdir",
-      snippet: "mkdir -p {{directory name}}",
+      snippet: "mkdir -p {{directory_name}}",
     },
     {
       name: "zellij attach",

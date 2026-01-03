@@ -159,6 +159,11 @@ in
       gemini-cli
       codex
       claude-code
+
+      # Path to windows App
+      (pkgs.writeShellScriptBin "clip.exe" ''
+        /mnt/c/windows/System32/clip.exe "$@"
+      '')
     ];
   };
 

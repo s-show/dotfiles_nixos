@@ -22,6 +22,7 @@ in
     clock24 = true;
     keyMode = "vi";
     historyLimit = 20000;
+    baseIndex = 1;
     extraConfig = ''
       # status-left の表示長を拡張（日時 + mode-indicator を表示するため）
       set -g status-left-length 40
@@ -42,7 +43,7 @@ in
       set -g window-style 'fg=#bcbcbc,bg=#333333'
 
       # ステータスバーを透明化する
-      # set -g status-style bg=default
+      set -g status-style bg=default
 
       # ベルが鳴ったウィンドウのウィンドウ名の左にベルマークを表示
       set-option -g monitor-bell on
@@ -60,19 +61,15 @@ in
 
       # クリップボードを有効化
       set -g set-clipboard on
+
+      # ウィンドウ番号を自動リナンバー（削除時に詰める）
+      set -g renumber-windows on
+
+      # 分割時に現在のパスを引き継ぐ
+      bind v split-window -h -c "#{pane_current_path}"
+      bind s split-window -v -c "#{pane_current_path}"
     '';
     plugins = with pkgs; [
-      # { 
-      #   plugin = tmuxPlugins.gruvbox;
-      #   extraConfig = ''
-      #     set -g @tmux-gruvbox-left-status-a "\
-      #     #{?client_prefix,[PREFIX] ,\
-      #     #{?pane_in_mode,[COPY] ,\
-      #     #{?pane_synchronized,[SYNC] ,[TMUX] \
-      #     }}}\
-      #     '#S'"
-      #   '';
-      # }
       {
         plugin = tmuxPlugins.tmux-nova;
         extraConfig = ''
@@ -102,11 +99,13 @@ in
           set -g "@nova-pane-border-style" "#827d51"
 
           ### STATUS BAR ###
-          set -g @nova-segment-prefix "\
+          set -g @nova-segment-prefix ["\
           #{?client_prefix,PREFIX ,\
-          #{?pane_in_mode,COPY ,\
+          #{?#{m:copy-mode,#{pane_mode}},COPY ,\
+          #{?#{m:tree-mode,#{pane_mode}},TREE ,\
+          #{?#{pane_in_mode},SELECT ,\
           #{?pane_synchronized,SYNC ,TMUX \
-          }}}\
+          }}}}}}]\
           [#S]"
           set -g @nova-segment-prefix-colors "$seg_b"
           set -g @nova-segment-session "#{session_name}"
@@ -124,28 +123,13 @@ in
         plugin = tmuxPlugins.continuum;
         extraConfig = ''
           set -g @continuum-restore 'on'
-          set -g @continuum-save-interval '10' # minutes
+          set -g @continuum-save-interval '3' # minutes
         '';
       }
       {
         plugin = tmuxPlugins.resurrect;
         extraConfig = "set -g @resurrect-strategy-nvim 'session'";
       }
-      # {
-      #   plugin = tmuxPlugins.mode-indicator;
-      #   extraConfig = ''
-      #     set -g status-left 'session: #{session_name} | mode: #{tmux_mode_indicator} | '
-      #     # プラグインの設定
-      #     set -g @mode_indicator_prefix_prompt 'PREFIX'
-      #     set -g @mode_indicator_copy_prompt 'COPY'
-      #     set -g @mode_indicator_sync_prompt 'SYNC'
-      #     set -g @mode_indicator_empty_prompt 'TMUX'
-      #     set -g @mode_indicator_prefix_mode_style 'bg=blue,fg=black'
-      #     set -g @mode_indicator_copy_mode_style 'bg=yellow,fg=black'
-      #     set -g @mode_indicator_sync_mode_style 'bg=red,fg=black'
-      #     set -g @mode_indicator_empty_mode_style 'bg=cyan,fg=black'
-      #   '';
-      # }
       {
         plugin = tmuxPlugins.tmux-which-key;
         extraConfig = ''
