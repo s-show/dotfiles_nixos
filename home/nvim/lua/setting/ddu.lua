@@ -33,6 +33,9 @@ vim.fn["ddu#custom#patch_global"]({
     },
   },
   kindOptions = {
+    _ = {
+      defaultAction = "open"
+    },
     action = {
       defaultAction = "do",
     },
@@ -65,15 +68,8 @@ vim.fn["ddu#custom#patch_local"]("file_recursive", {
     },
   },
   sourceOptions = {
-    file_rec = {
-      sorters = { 'sorter_alpha' },
-    }
+    sorters = { 'sorter_alpha' }
   },
-  kindOptions = {
-    file = {
-      defaultAction = "open",
-    }
-  }
 })
 
 vim.fn["ddu#custom#patch_local"]("buffer", {
@@ -82,11 +78,6 @@ vim.fn["ddu#custom#patch_local"]("buffer", {
       name = { "buffer" },
     },
   },
-  kindOptions = {
-    file = {
-      defaultAction = "open",
-    }
-  }
 })
 
 vim.fn["ddu#custom#patch_local"]("cmdline-history", {
@@ -121,14 +112,7 @@ vim.fn["ddu#custom#patch_local"]("help", {
     },
   },
   sourceOptions = {
-    help = {
-      sorters = { 'sorter_alpha' },
-    }
-  },
-  kindOptions = {
-    help = {
-      defaultAction = "open",
-    }
+    sorters = { 'sorter_alpha' }
   },
 })
 
@@ -141,11 +125,6 @@ vim.fn["ddu#custom#patch_local"]("lsp_documentSymbol", {
       }
     }
   },
-  kindOptions = {
-    lsp = {
-      defaultAction = "open",
-    }
-  },
 })
 
 vim.fn["ddu#custom#patch_local"]("lsp_diagnostic", {
@@ -157,11 +136,6 @@ vim.fn["ddu#custom#patch_local"]("lsp_diagnostic", {
       }
     }
   },
-  kindOptions = {
-    lsp = {
-      defaultAction = "open",
-    }
-  },
 })
 
 vim.fn["ddu#custom#patch_local"]("lsp_diagnostic", {
@@ -171,11 +145,6 @@ vim.fn["ddu#custom#patch_local"]("lsp_diagnostic", {
       params = {
         buffer = 0,
       }
-    }
-  },
-  kindOptions = {
-    lsp = {
-      defaultAction = "open",
     }
   },
 })
@@ -197,6 +166,7 @@ vim.fn["ddu#custom#patch_local"]("jumplist", {
 })
 
 local ddu_vim_autocmd_group = vim.api.nvim_create_augroup('ddu_vim', {})
+Caller_source = ""
 
 vim.api.nvim_create_autocmd("FileType",
   {
@@ -216,7 +186,10 @@ vim.api.nvim_create_autocmd("FileType",
         [[<Cmd>call ddu#ui#do_action("previewExecute", {'command': 'execute "normal! \<C-y>"'})<CR>]], { buffer = true })
       vim.keymap.set("n", "<C-n>",
         [[<Cmd>call ddu#ui#do_action("previewExecute", {'command': 'execute "normal! \<C-e>"'})<CR>]], { buffer = true })
-      vim.keymap.set("n", "e", [[<Cmd>call ddu#ui#do_action("itemAction", {'name': 'edit'})<CR>]], { buffer = true })
+      if Caller_source == "cmdline-history" then
+        vim.keymap.set("n", "e", [[<Cmd>call ddu#ui#do_action("itemAction", {'name': 'edit'})<CR>]], { buffer = true })
+        vim.keymap.set("n", "dd", [[<Cmd>call ddu#ui#do_action("itemAction", {'name': 'delete'})<CR>]], { buffer = true })
+      end
     end,
   }
 )
@@ -238,7 +211,6 @@ vim.api.nvim_create_autocmd({ 'User' },
       vim.keymap.del('n', '<CR>', { buffer = true })
       vim.keymap.del('i', '<CR>', { buffer = true })
       vim.keymap.del('c', '<CR>', { buffer = true })
-      -- vim.keymap.del('c', '<CR>', { buffer = true })
       -- アイテムリスト用のキーバインドを復活させる
       vim.keymap.set("n", "<CR>", [[<Cmd>call ddu#ui#do_action("itemAction")<CR>]], { buffer = true })
       local autocmd_id = Get_autocmd_id({ group = ddu_vim_autocmd_group, pattern = 'Ddu:uiDone' })
@@ -254,6 +226,7 @@ vim.keymap.set('n', '<leader>gb', function()
 end)
 vim.keymap.set('n', '<leader>gc', function()
   vim.fn['ddu#start']({ name = 'cmdline-history' })
+  Caller_source = "cmdline-history"
 end)
 vim.keymap.set('n', '<leader>gl', function()
   vim.fn['ddu#start']({ name = 'lsp_documentSymbol' })
