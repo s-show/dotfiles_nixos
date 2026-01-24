@@ -35,6 +35,9 @@ vim.fn["ddu#custom#patch_global"]({
   kindOptions = {
     action = {
       defaultAction = "do",
+    },
+    source = {
+      defaultAction = "execute",
     }
   },
   actionOptions = {
@@ -161,33 +164,36 @@ vim.fn["ddu#custom#patch_local"]("lsp_diagnostic", {
   },
 })
 
-vim.fn["ddu#custom#patch_local"]("window", {
+vim.fn["ddu#custom#patch_local"]("lsp_diagnostic", {
   sources = {
     {
-      name = { "window" },
+      name = { "lsp_diagnostic" },
       params = {
-        format = [['tab\|%tn:%w:%wi']]
+        buffer = 0,
       }
     }
   },
   kindOptions = {
-    window = {
-      defaultAction = 'open',
+    lsp = {
+      defaultAction = "open",
     }
-  }
+  },
 })
 
 vim.fn["ddu#custom#patch_local"]("jumplist", {
   sources = {
     {
       name = { "jumplist" },
+      params = {
+        tabnr = 1,
+      }
     }
   },
-  kindOptions = {
-    window = {
-      defaultAction = 'open',
+  sourceOptions = {
+    jumplist = {
+      sorters = { 'sorter_reversed' },
     }
-  }
+  },
 })
 
 local ddu_vim_autocmd_group = vim.api.nvim_create_augroup('ddu_vim', {})
@@ -210,6 +216,7 @@ vim.api.nvim_create_autocmd("FileType",
         [[<Cmd>call ddu#ui#do_action("previewExecute", {'command': 'execute "normal! \<C-y>"'})<CR>]], { buffer = true })
       vim.keymap.set("n", "<C-n>",
         [[<Cmd>call ddu#ui#do_action("previewExecute", {'command': 'execute "normal! \<C-e>"'})<CR>]], { buffer = true })
+      vim.keymap.set("n", "e", [[<Cmd>call ddu#ui#do_action("itemAction", {'name': 'edit'})<CR>]], { buffer = true })
     end,
   }
 )
@@ -242,16 +249,30 @@ vim.api.nvim_create_autocmd({ 'User' },
   }
 )
 
--- `<cmd>call` を使わない場合 `{expr=true}` オプションが必要になるが、
--- それだとカーソルが行頭に移動するので、`<cmd>call ` を使っている。
-vim.keymap.set('n', '<leader>gb', [[<cmd>call ddu#start(#{name: 'buffer'})<CR>]])
-vim.keymap.set('n', '<leader>gc', [[<cmd>call ddu#start(#{name: 'cmdline-history'})<CR>]])
-vim.keymap.set('n', '<leader>gl', [[<cmd>call ddu#start(#{name: 'lsp_documentSymbol'})<CR>]], { expr = true })
-vim.keymap.set('n', '<leader>ge', [[<cmd>call ddu#start(#{name: 'lsp_diagnostic'})<CR>]])
-vim.keymap.set('n', '<leader>gd', [[<cmd>call ddu#start(#{name: 'window'})<CR>]])
-vim.keymap.set('n', '<leader>gh', [[<cmd>call ddu#start(#{name: 'help'})<CR>]])
-vim.keymap.set('n', '<leader>gf', [[<cmd>call ddu#start(#{name: 'file_recursive'})<CR>]])
-vim.keymap.set('n', '<leader>gj', [[<cmd>call ddu#start(#{name: 'jumplist'})<CR>]])
+vim.keymap.set('n', '<leader>gb', function()
+  vim.fn['ddu#start']({ name = 'buffer' })
+end)
+vim.keymap.set('n', '<leader>gc', function()
+  vim.fn['ddu#start']({ name = 'cmdline-history' })
+end)
+vim.keymap.set('n', '<leader>gl', function()
+  vim.fn['ddu#start']({ name = 'lsp_documentSymbol' })
+end)
+vim.keymap.set('n', '<leader>ge', function()
+  vim.fn['ddu#start']({ name = 'lsp_diagnostic' })
+end)
+vim.keymap.set('n', '<leader>gh', function()
+  vim.fn['ddu#start']({ name = 'help' })
+end)
+vim.keymap.set('n', '<leader>gf', function()
+  vim.fn['ddu#start']({ name = 'file_recursive' })
+end)
+vim.keymap.set('n', '<leader>gj', function()
+  vim.fn['ddu#start']({ name = 'jumplist' })
+end)
+vim.keymap.set('n', '<leader>gs', function()
+  vim.fn['ddu#start']({ sources = { { name = 'source' } } })
+end)
 
 function Ddu_start_with_filter_window(source_name)
   vim.fn['ddu#start']({ name = source_name })
