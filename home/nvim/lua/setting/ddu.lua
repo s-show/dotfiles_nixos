@@ -8,7 +8,6 @@ vim.fn["ddu#custom#patch_global"]({
       previewFloating = true,
       previewFloatingBorder = "rounded",
       previewFloatingTitle = "Preview",
-      -- previewSplit = "horizontal",
       previewSplit = "vertical",
       split = "floating",
       startAutoAction = true,
@@ -31,6 +30,9 @@ vim.fn["ddu#custom#patch_global"]({
       matchers = { 'matcher_substring' },
       ignoreCase = true,
     },
+    source = {
+      sorters = { 'sorter_alpha' },
+    }
   },
   kindOptions = {
     _ = {
@@ -39,16 +41,80 @@ vim.fn["ddu#custom#patch_global"]({
     action = {
       defaultAction = "do",
     },
+    -- ここで設定しないと反映されない。原因不明。
     source = {
-      defaultAction = "execute",
-    }
+      defaultAction = "execute"
+    },
+    colorscheme = {
+      defaultAction = "set",
+    },
+    word = {
+      defaultAction = "append"
+    },
   },
   actionOptions = {
     quit = false
   }
 })
 
-vim.fn["ddu#custom#patch_local"]("file_recursive", {
+vim.fn["ddu#custom#patch_local"]("smart", {
+  uiParams = {
+    ff = {
+      displaySourceName = "long"
+    }
+  },
+  sources = {
+    {
+      name = { "buffer" },
+      options = {
+        converters = {
+          "converter_devicon",
+        },
+      },
+    },
+    {
+      name = { "mr" },
+      options = {
+        converters = {
+          "converter_devicon",
+        },
+      },
+      params = {
+        kind = "mru",
+      },
+    },
+    {
+      name = { "file_rec" },
+      options = {
+        converters = {
+          "converter_devicon",
+        },
+      },
+      params = {
+        ignoredDirectories = {
+          "node_modules",
+          ".git",
+          "dist",
+          "direnv",
+        },
+      },
+    },
+  },
+  -- sourceOptions = {
+  --   buffer = {
+  --     matchers = { 'matcher_relative' },
+  --   },
+  --   mr = {
+  --     matchers = { 'matcher_relative' },
+  --   },
+  -- },
+  postFilters = {
+    'sorter_mtime',
+    'deduplicate_path',
+  }
+})
+
+vim.fn["ddu#custom#patch_local"]("file_rec", {
   sources = {
     {
       name = { "file_rec" },
@@ -80,12 +146,7 @@ vim.fn["ddu#custom#patch_local"]("buffer", {
   },
 })
 
-vim.fn["ddu#custom#patch_local"]("cmdline-history", {
-  sources = {
-    {
-      name = { "command_history" },
-    },
-  },
+vim.fn["ddu#custom#patch_local"]("command_history", {
   uiParams = {
     ff = {
       previewFloating = false,
@@ -93,7 +154,13 @@ vim.fn["ddu#custom#patch_local"]("cmdline-history", {
       winWidth = '&columns / 3',
       winRow = '&lines / 4',
       winCol = '&columns / 6 * 2',
+      displaySourceName = "no",
     }
+  },
+  sources = {
+    {
+      name = { "command_history" },
+    },
   },
   kindOptions = {
     command_history = {
@@ -110,9 +177,6 @@ vim.fn["ddu#custom#patch_local"]("help", {
         style = { "allLang" },
       },
     },
-  },
-  sourceOptions = {
-    sorters = { 'sorter_alpha' }
   },
 })
 
@@ -165,6 +229,85 @@ vim.fn["ddu#custom#patch_local"]("jumplist", {
   },
 })
 
+vim.fn["ddu#custom#patch_local"]("mr", {
+  sources = {
+    {
+      name = { "mr" },
+      options = {
+        converters = {
+          "converter_devicon",
+        },
+      },
+      params = {
+        kind = "mrw",
+      },
+    },
+  },
+})
+
+vim.fn["ddu#custom#patch_local"]("source", {
+  uiParams = {
+    ff = {
+      previewFloating = false,
+      winHeight = '&lines / 2',
+      winWidth = '&columns / 3',
+      winRow = '&lines / 4',
+      winCol = '&columns / 6 * 2',
+      displaySourceName = "no",
+    }
+  },
+  sources = {
+    {
+      name = { "source" },
+    },
+  },
+  -- defaultAction は patch_global で設定している
+})
+
+vim.fn["ddu#custom#patch_local"]("colorscheme", {
+  uiParams = {
+    ff = {
+      previewFloating = false,
+      winHeight = '&lines / 2',
+      winWidth = '&columns / 3',
+      winRow = '&lines / 4',
+      winCol = '&columns / 6 * 2',
+      displaySourceName = "no",
+    }
+  },
+  sources = {
+    {
+      name = { "colorscheme" },
+    },
+  },
+})
+
+vim.fn["ddu#custom#patch_local"]("rg", {
+  sources = {
+    {
+      name = { "rg" },
+      options = {
+        matchers = {},
+        volatile = true,
+      },
+    }
+  },
+  uiParams = {
+    ff = {
+      ignoreEmpty = false,
+      autoResize = false,
+    }
+  }
+})
+
+vim.fn["ddu#custom#patch_local"]("register", {
+  sources = {
+    {
+      name = { "register" },
+    }
+  },
+})
+
 local ddu_vim_autocmd_group = vim.api.nvim_create_augroup('ddu_vim', {})
 Caller_source = ""
 
@@ -175,9 +318,9 @@ vim.api.nvim_create_autocmd("FileType",
       vim.keymap.set("n", "q", [[<Cmd>call ddu#ui#do_action("quit")<CR>]], { buffer = true })
       vim.keymap.set("n", "<Esc>", [[<Cmd>call ddu#ui#do_action("quit")<CR>]], { buffer = true })
       vim.keymap.set("n", "<CR>", [[<Cmd>call ddu#ui#do_action("itemAction")<CR>]], { buffer = true })
-      vim.keymap.set("n", "vo", [[<Cmd>call ddu#ui#do_action("itemAction", {'params': {'command': 'vsplit'}})<CR>]],
+      vim.keymap.set("n", "<C-v>", [[<Cmd>call ddu#ui#do_action("itemAction", {'params': {'command': 'vsplit'}})<CR>]],
         { buffer = true })
-      vim.keymap.set("n", "so", [[<Cmd>call ddu#ui#do_action("itemAction", {'params': {'command': 'split'}})<CR>]],
+      vim.keymap.set("n", "<C-s>", [[<Cmd>call ddu#ui#do_action("itemAction", {'params': {'command': 'split'}})<CR>]],
         { buffer = true })
       vim.keymap.set("n", "a", [[<Cmd>call ddu#ui#do_action('chooseAction')<CR>]], { buffer = true })
       vim.keymap.set("n", "i", [[<Cmd>call ddu#ui#do_action("openFilterWindow")<CR>]], { buffer = true })
@@ -221,30 +364,53 @@ vim.api.nvim_create_autocmd({ 'User' },
   }
 )
 
+vim.keymap.set('n', '<leader>gs', function()
+  vim.fn['ddu#start']({ name = 'smart' })
+  Caller_source = "smart"
+end)
+vim.keymap.set('n', '<leader>gf', function()
+  vim.fn['ddu#start']({ name = 'file_rec' })
+  Caller_source = "file_recursive"
+end)
+vim.keymap.set('n', '<leader>gm', function()
+  vim.fn['ddu#start']({ name = 'mr' })
+  Caller_source = "mr"
+end)
 vim.keymap.set('n', '<leader>gb', function()
   vim.fn['ddu#start']({ name = 'buffer' })
+  Caller_source = "buffer"
 end)
 vim.keymap.set('n', '<leader>gc', function()
-  vim.fn['ddu#start']({ name = 'cmdline-history' })
+  vim.fn['ddu#start']({ name = 'command_history' })
   Caller_source = "cmdline-history"
 end)
 vim.keymap.set('n', '<leader>gl', function()
   vim.fn['ddu#start']({ name = 'lsp_documentSymbol' })
+  Caller_source = "lsp_documentSymbol"
 end)
 vim.keymap.set('n', '<leader>ge', function()
   vim.fn['ddu#start']({ name = 'lsp_diagnostic' })
+  Caller_source = "lsp_diagnostic"
 end)
 vim.keymap.set('n', '<leader>gh', function()
   vim.fn['ddu#start']({ name = 'help' })
-end)
-vim.keymap.set('n', '<leader>gf', function()
-  vim.fn['ddu#start']({ name = 'file_recursive' })
+  Caller_source = "help"
 end)
 vim.keymap.set('n', '<leader>gj', function()
   vim.fn['ddu#start']({ name = 'jumplist' })
+  Caller_source = "jumplist"
 end)
-vim.keymap.set('n', '<leader>gs', function()
-  vim.fn['ddu#start']({ sources = { { name = 'source' } } })
+vim.keymap.set('n', '<leader>gp', function()
+  vim.fn['ddu#start']({ name = 'source' })
+  Caller_source = "source"
+end)
+vim.keymap.set('n', '<leader>gg', function()
+  vim.fn['ddu#start']({ name = 'rg' })
+  Caller_source = "rg"
+end)
+vim.keymap.set('n', '<leader>gr', function()
+  vim.fn['ddu#start']({ name = 'register' })
+  Caller_source = "register"
 end)
 
 function Ddu_start_with_filter_window(source_name)
@@ -294,6 +460,15 @@ vim.fn['ddu#custom#action']('source', 'buffer', 'deleteBuffer', function(args)
   vim.cmd['bd'](args["items"][1]["action"]["bufNr"])
   return 0
 end)
+
+-- vim.api.nvim_create_autocmd("User",
+--   {
+--     pattern = 'Ddu:uiDone',
+--     callback = function()
+--       vim.print(vim.inspect(vim.fn['ddu#ui#get_items']()))
+--     end,
+--   }
+-- )
 
 -- ddu#custom#action を呼び出した時に与えられる引数の内容
 -- {
