@@ -8,6 +8,8 @@
       enable = true;
       options = {
         side-by-side = true;
+        syntax-theme = "GitHub";
+        keep-plus-minus-markers = true;
       };
     };
     extraConfig = {
@@ -23,7 +25,9 @@
   # GitHub CLI
   programs.gh = {
     enable = true;
-    extensions = with pkgs; [gh-markdown-preview]; # オススメ
+    extensions = with pkgs; [
+      gh-markdown-preview
+    ];
     settings = {
       editor = "nvim";
     };

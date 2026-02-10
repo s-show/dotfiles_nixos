@@ -160,6 +160,9 @@ in
       (pkgs.writeShellScriptBin "clip.exe" ''
         /mnt/c/windows/System32/clip.exe "$@"
       '')
+      (pkgs.writeShellScriptBin "explorer.exe" ''
+        /mnt/c/windows/explorer.exe "$@"
+      '')
     ];
   };
 

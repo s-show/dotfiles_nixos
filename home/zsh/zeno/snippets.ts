@@ -84,5 +84,10 @@ export default defineConfig(({ projectRoot, currentDirectory }) => ({
       keyword: "nbg",
       snippet: "rg '{{keyword}}' '$(nb notebooks current --path)'",
     },
+    {
+      name: "nb sync",
+      keyword: "nbs",
+      snippet: "nb sync",
+    },
   ],
 }));

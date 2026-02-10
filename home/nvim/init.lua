@@ -26,7 +26,13 @@ vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
   dev = {
     path = "~/my_neovim_plugins",
-    patterns = { 'extend_word_motion.nvim', 'ft_mapper.nvim' },
+    patterns = {
+      'extend_word_motion.nvim',
+      'ft_mapper.nvim',
+      'ddu-source-source',
+      'ddu-source-nb',
+      'ddu-filter-deduplicate_path'
+    },
   },
   spec = {
     import = 'plugins',
@@ -61,3 +67,7 @@ require('setting.cmdwin')
 require('setting.vim-gin')
 vim.cmd('source ~/.config/nvim/lua/setting/helpfile_formatter.vim')
 vim.cmd('source ~/.config/nvim/lua/setting/AbbrevCmd.vim')
+
+-- 特定のディレクトリだけで有効な設定を追加するための設定
+vim.o.exrc = true
+vim.o.secure = true

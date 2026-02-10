@@ -26,6 +26,7 @@ in
     extraConfig = ''
       # status-left の表示長を拡張（日時 + mode-indicator を表示するため）
       set -g status-left-length 40
+      set -g status-right-length 100
 
       # スクロールアップするとコピーモードに入る
       bind-key -n WheelUpPane if-shell -F -t = "#{mouse_any_flag}" "send-keys -M" "if -Ft= '#{pane_in_mode}' 'send-keys -M' 'select-pane -t=; copy-mode -e; send-keys -M'"
@@ -35,9 +36,6 @@ in
 
       # 境界線の種類を変更（single, double, heavy, simple, number から選択）
       set -g pane-border-lines heavy
-
-      # アクティブなペイン（背景を少し明るいチャコール #333333 に、文字を colour250 に）
-      set -g window-active-style 'fg=#949494,bg=#262626'
 
       # 非アクティブなペイン（colour235 と colour247 を使用）
       set -g window-style 'fg=#bcbcbc,bg=#333333'
@@ -67,7 +65,12 @@ in
 
       # 分割時に現在のパスを引き継ぐ
       bind v split-window -h -c "#{pane_current_path}"
+      bind | split-window -h -c "#{pane_current_path}"
       bind s split-window -v -c "#{pane_current_path}"
+      bind - split-window -v -c "#{pane_current_path}"
+
+      # Alt-i で pane 選択のインデックスを表示
+      bind-key -n M-i display-panes
     '';
     plugins = with pkgs; [
       {
@@ -112,8 +115,9 @@ in
           set -g @nova-segment-session-colors "$seg_a"
           set -g @nova-segment-whoami "#(whoami)@#h"
           set -g @nova-segment-whoami-colors "$seg_a"
+          set -g @nova-segment-continuum "Continuum status: #{continuum_status}"
           set -g @nova-segments-0-left "prefix session"
-          set -g @nova-segments-0-right "whoami"
+          set -g @nova-segments-0-right "continuum whoami"
 
           ### WINDOW BAR ###
           set -g @nova-pane "#I   #W"
@@ -137,7 +141,12 @@ in
           set -g @tmux-which-key-disable-autobuild 1
         '';
       }
-      tmuxPlugins.tmux-fzf
+      {
+        plugin = tmuxPlugins.tmux-fzf;
+        extraConfig = ''
+          TMUX_FZF_LAUNCH_KEY="M-f"
+        '';
+      }
       {
         plugin = tmux-menus;
         extraConfig = ''

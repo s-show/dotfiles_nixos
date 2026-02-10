@@ -22,6 +22,13 @@ vim.cmd('source ~/.config/nvim/lua/setting/keymapping.vim')
 vim.keymap.set('i', '<Left>', '<C-G>U<Left>')
 vim.keymap.set('i', '<Right>', '<C-G>U<Right>')
 
+-- Ctrl-d/u の移動をジャンプリストに追加しない
+-- [Vim/Neovimでjumplistに影響を与えず<C-f>,<C-b>などの中規模移動を行う](https://zenn.dev/nikekukuri/articles/6201c27ba12985)
+vim.keymap.set({ 'n', 'v' }, '<C-d>', '<Cmd>keepjumps normal! <C-d><CR>')
+vim.keymap.set({ 'n', 'v' }, '<C-u>', '<Cmd>keepjumps normal! <C-u><CR>')
+vim.keymap.set({ 'n', 'v' }, '}', '<Cmd>keepjumps normal! }<CR>')
+vim.keymap.set({ 'n', 'v' }, '{', '<Cmd>keepjumps normal! {<CR>')
+
 --=======================================================================================
 -- ファイル操作系
 --=======================================================================================
