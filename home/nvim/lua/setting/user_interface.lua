@@ -49,7 +49,7 @@ vim.opt.pumheight = 15
 --=======================================================================================
 -- cmdline 系
 --=======================================================================================
-local ok, extui = pcall(require, 'vim._extui')
+local ok, extui = pcall(require, 'vim._core.ui2')
 if ok then
   extui.enable({
     enable = true,    -- extuiを有効化
@@ -68,11 +68,11 @@ if ok then
   vim.api.nvim_create_autocmd("CmdlineEnter", {
     group = augroup,
     callback = function()
-      if not require("vim._extui.shared").cfg.enable then
+      if not require("vim._core.ui2").cfg.enable then
         return
       end
       local tabpage = vim.api.nvim_get_current_tabpage()
-      local extuiwins = require("vim._extui.shared").wins
+      local extuiwins = require("vim._core.ui2").wins
       for _, w in pairs(extuiwins) do
         require("styler").set_theme(w, { colorscheme = extui_colorscheme })
       end
