@@ -5,20 +5,73 @@ if vim.fn.has('nvim-0.11') == 1 then
     -- capabilities = require('blink.cmp').get_lsp_capabilities(),
   })
 
-  local lsp_names = {
+  -- 常に有効にする LSP
+  local always_enabled = {
     'clangd',
     'lua_ls',
-    'html',
-    'css',
-    'ts_ls',
     'eslint',
-    'emmet_ls',
     'nixd',
-    'ruby_lsp',
     'bash-language-server',
   }
+  vim.lsp.enable(always_enabled)
 
-  vim.lsp.enable(lsp_names)
+  -- プロジェクト固有の LSP をファイルタイプに応じて有効化
+  local project_lsp = {
+    {
+      filetypes = { 'html' },
+      lsp = 'html',
+      markers = { 'package.json', 'index.html' },
+    },
+    {
+      filetypes = { 'css', 'scss', 'less' },
+      lsp = 'css',
+      markers = { 'package.json' },
+    },
+    {
+      filetypes = { 'typescript', 'javascript', 'typescriptreact', 'javascriptreact' },
+      lsp = 'ts_ls',
+      markers = { 'package.json', 'tsconfig.json', 'deno.jsonc' },
+    },
+    {
+      filetypes = { 'html', 'css', 'typescriptreact', 'javascriptreact' },
+      lsp = 'emmet_ls',
+      markers = { 'package.json' },
+    },
+    {
+      filetypes = { 'ruby' },
+      lsp = 'ruby_lsp',
+      markers = { 'Gemfile', '.ruby-version' },
+    },
+  }
+
+  -- 有効化済みの LSP を追跡（重複起動を防ぐ）
+  local enabled_lsp = {}
+
+  vim.api.nvim_create_autocmd('FileType', {
+    group = vim.api.nvim_create_augroup('project_lsp_enable', { clear = true }),
+    callback = function(args)
+      local ft = args.match
+      for _, config in ipairs(project_lsp) do
+        if vim.tbl_contains(config.filetypes, ft) then
+          -- マーカーファイルが存在するか確認
+          local root = vim.fs.root(args.buf, config.markers)
+          if root then
+            if not enabled_lsp[config.lsp] then
+              vim.lsp.enable(config.lsp)
+              enabled_lsp[config.lsp] = true
+            end
+            -- 現在のバッファに LSP をアタッチ
+            vim.schedule(function()
+              local lsp_config = vim.lsp.config[config.lsp]
+              if lsp_config then
+                vim.lsp.start(lsp_config, { bufnr = args.buf })
+              end
+            end)
+          end
+        end
+      end
+    end,
+  })
   local _, result = pcall(vim.lsp.document_color.enable, true, 0, { style = 'virtual' })
 else
   local capabilities = require("ddc_source_lsp").make_client_capabilities()

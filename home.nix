@@ -61,7 +61,6 @@ let
     url = "https://github.com/FuriouZz/zjpane/releases/latest/download/zjpane.wasm ";
     hash = "sha256-N2u0nPY//EpnJ6YoFGgoS7taL3S/SxfrE2qKfgywqt4=";
   };
-  zellij-harpoon = import ./home/packages/zellij-harpoon.nix { inherit pkgs lib; };
 
   # User configuration constants
   username = "s-show";
@@ -126,13 +125,10 @@ in
 
       # Language servers and formatters
       lua-language-server
-      emmet-ls
-      typescript-language-server
       vim-language-server
       vscode-langservers-extracted
       nixd
       nixfmt-rfc-style
-      eslint_d
       bash-language-server
       kdlfmt
 
@@ -192,8 +188,6 @@ in
       mkDotfileSymlink "home/zellij/layout_vertical.kdl";
     ".config/zellij/plugins/zellij_forgot.wasm".source = zellijForgotWasm;
     ".config/zellij/plugins/zjpane.wasm".source = zjpane;
-    ".config/zellij/plugins/harpoon.wasm".source =
-      "${zellij-harpoon}/share/zellij/plugins/harpoon.wasm";
     # my script
     ".local/bin/flakes-update".source = mkDotfileSymlink "home/scripts/flakes-update.sh";
     ".local/bin/flakes-and-node2nix-update".source =
