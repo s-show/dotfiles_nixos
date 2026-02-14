@@ -71,6 +71,21 @@ in
 
       # Alt-i で pane 選択のインデックスを表示
       bind-key -n M-i display-panes
+
+      # Windows / Sessions control
+      bind-key -n M-Left previous-window
+      bind-key -n M-Right next-window
+      bind-key -n M-Up switch-client -p
+      bind-key -n M-Down switch-client -n
+
+      # Panes control
+      bind-key -n S-Left select-pane -L
+      bind-key -n S-Right select-pane -R
+      bind-key -n S-Up select-pane -U
+      bind-key -n S-Down select-pane -D
+
+      # popup
+      bind-key u display-popup -d '#{pane_current_path}' -w 70% -h 70% -E
     '';
     plugins = with pkgs; [
       {
