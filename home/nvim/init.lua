@@ -30,7 +30,6 @@ require("lazy").setup({
       'extend_word_motion.nvim',
       'ft_mapper.nvim',
       'ddu-source-source',
-      'ddu-source-nb',
       'ddu-filter-deduplicate_path'
     },
   },
