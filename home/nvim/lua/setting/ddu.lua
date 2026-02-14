@@ -1,3 +1,20 @@
+function GetNbDir()
+  local handle = io.popen("nb env | grep NB_DIR=")
+  if handle then
+    local result = handle:read("*a")
+    local success, err_msg, err_code = handle:close()
+    if success and result ~= "" then
+      local path = vim.fn.substitute(result, 'NB_DIR=', '', "g")
+      path = vim.fn.substitute(path, '\n', '', "g")
+      return path
+    else
+      return ""
+    end
+  else
+    return ""
+  end
+end
+
 vim.fn["ddu#custom#patch_global"]({
   ui = 'ff',
   uiParams = {
@@ -134,7 +151,34 @@ vim.fn["ddu#custom#patch_local"]("file_rec", {
     },
   },
   sourceOptions = {
-    sorters = { 'sorter_alpha' }
+    file_rec = {
+      sorters = { 'sorter_alpha' },
+    }
+  },
+})
+
+vim.fn["ddu#custom#patch_local"]("nb_list", {
+  sources = {
+    {
+      name = { "file_rec" },
+      options = {
+        converters = {
+          "converter_devicon",
+        },
+      },
+      params = {
+        ignoredDirectories = {
+          ".cache",
+          ".git",
+        },
+      },
+    },
+  },
+  sourceOptions = {
+    file_rec = {
+      path = GetNbDir(),
+      sorters = { 'sorter_alpha' },
+    }
   },
 })
 
@@ -300,11 +344,41 @@ vim.fn["ddu#custom#patch_local"]("rg", {
   }
 })
 
+vim.fn["ddu#custom#patch_local"]("nb_rg", {
+  sources = {
+    {
+      name = { "rg" },
+      options = {
+        matchers = {},
+        volatile = true,
+        path = GetNbDir()
+      },
+    }
+  },
+  uiParams = {
+    ff = {
+      ignoreEmpty = false,
+      autoResize = false,
+    }
+  }
+})
+
 vim.fn["ddu#custom#patch_local"]("register", {
   sources = {
     {
       name = { "register" },
     }
+  },
+})
+
+vim.fn["ddu#custom#patch_local"]("nb", {
+  sources = {
+    {
+      name = { "nb" },
+      params = {
+        limit = 15,
+      }
+    },
   },
 })
 
@@ -364,53 +438,61 @@ vim.api.nvim_create_autocmd({ 'User' },
   }
 )
 
-vim.keymap.set('n', '<leader>gs', function()
+vim.keymap.set('n', '<leader>ds', function()
   vim.fn['ddu#start']({ name = 'smart' })
   Caller_source = "smart"
 end)
-vim.keymap.set('n', '<leader>gf', function()
+vim.keymap.set('n', '<leader>df', function()
   vim.fn['ddu#start']({ name = 'file_rec' })
   Caller_source = "file_recursive"
 end)
-vim.keymap.set('n', '<leader>gm', function()
+vim.keymap.set('n', '<leader>dm', function()
   vim.fn['ddu#start']({ name = 'mr' })
   Caller_source = "mr"
 end)
-vim.keymap.set('n', '<leader>gb', function()
+vim.keymap.set('n', '<leader>db', function()
   vim.fn['ddu#start']({ name = 'buffer' })
   Caller_source = "buffer"
 end)
-vim.keymap.set('n', '<leader>gc', function()
+vim.keymap.set('n', '<leader>dc', function()
   vim.fn['ddu#start']({ name = 'command_history' })
   Caller_source = "cmdline-history"
 end)
-vim.keymap.set('n', '<leader>gl', function()
+vim.keymap.set('n', '<leader>dl', function()
   vim.fn['ddu#start']({ name = 'lsp_documentSymbol' })
   Caller_source = "lsp_documentSymbol"
 end)
-vim.keymap.set('n', '<leader>ge', function()
+vim.keymap.set('n', '<leader>de', function()
   vim.fn['ddu#start']({ name = 'lsp_diagnostic' })
   Caller_source = "lsp_diagnostic"
 end)
-vim.keymap.set('n', '<leader>gh', function()
+vim.keymap.set('n', '<leader>dh', function()
   vim.fn['ddu#start']({ name = 'help' })
   Caller_source = "help"
 end)
-vim.keymap.set('n', '<leader>gj', function()
+vim.keymap.set('n', '<leader>dj', function()
   vim.fn['ddu#start']({ name = 'jumplist' })
   Caller_source = "jumplist"
 end)
-vim.keymap.set('n', '<leader>gp', function()
+vim.keymap.set('n', '<leader>dp', function()
   vim.fn['ddu#start']({ name = 'source' })
   Caller_source = "source"
 end)
-vim.keymap.set('n', '<leader>gg', function()
+vim.keymap.set('n', '<leader>dg', function()
   vim.fn['ddu#start']({ name = 'rg' })
   Caller_source = "rg"
 end)
-vim.keymap.set('n', '<leader>gr', function()
+vim.keymap.set('n', '<leader>dr', function()
   vim.fn['ddu#start']({ name = 'register' })
   Caller_source = "register"
+end)
+vim.keymap.set('n', '<leader>ne', function()
+  vim.fn['ddu#start']({ name = 'nb_list' })
+  Caller_source = "nb_list"
+end)
+vim.keymap.set('n', '<leader>nr', function()
+  vim.fn['ddu#start']({ name = 'nb_rg' })
+  Caller_source = "nb_rg"
 end)
 
 function Ddu_start_with_filter_window(source_name)
