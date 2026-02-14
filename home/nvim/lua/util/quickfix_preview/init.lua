@@ -310,10 +310,10 @@ function M.setup(opts)
   })
 
   -- キーマッピング
-  vim.keymap.set('n', '<leader>d',  ':Findqf ', { desc = 'Find file and show in quickfix' })
-  vim.keymap.set('n', '<leader>z',  ':Fzfqf ', { desc = 'Fuzzy find files and show in quickfix' })
-  vim.keymap.set('n', '<leader>gr', ':Grep ', { desc = 'grep wrapper and show in quickfix' })
-  vim.keymap.set('n', '<leader>ol', ':Oldfileqf<CR>', { desc = 'oldfiles -> quickfix' })
+  vim.keymap.set('n', '<leader>qf',  ':Findqf ', { desc = 'Find file and show in quickfix' })
+  vim.keymap.set('n', '<leader>qz',  ':Fzfqf ', { desc = 'Fuzzy find files and show in quickfix' })
+  vim.keymap.set('n', '<leader>qr', ':Grep ', { desc = 'grep wrapper and show in quickfix' })
+  vim.keymap.set('n', '<leader>qo', ':Oldfileqf<CR>', { desc = 'oldfiles -> quickfix' })
   vim.keymap.set('n', '<leader>qb', ':Bufqf<CR>', { desc = 'Buffers -> quickfix' })
 end
 
