@@ -1,1 +1,1 @@
-vim.cmd.colorscheme "backpack"
+vim.cmd.colorscheme "sonokai"

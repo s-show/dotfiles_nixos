@@ -89,7 +89,7 @@ in
       # Language servers and formatters
       lua-language-server
       vim-language-server
-      vscode-langservers-extracted
+      # vscode-langservers-extracted
       nixd
       nixfmt-rfc-style
       bash-language-server

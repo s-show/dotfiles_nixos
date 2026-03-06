@@ -27,10 +27,9 @@ require("lazy").setup({
   dev = {
     path = "~/my_neovim_plugins",
     patterns = {
-      'extend_word_motion.nvim',
-      'ft_mapper.nvim',
-      'ddu-source-source',
-      'ddu-filter-deduplicate_path'
+      -- 'extend_word_motion.nvim',
+      -- 'ft_mapper.nvim',
+      -- 'ddu-source-source',
     },
   },
   spec = {
