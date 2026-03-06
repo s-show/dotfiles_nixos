@@ -24,7 +24,7 @@ let
   wsl-notify-send = import ./home/packages/wsl-notify-send.nix { inherit pkgs lib; };
 
   # node2nix を組み込む
-  nodePkgs = pkgs.callPackage ./home/node2nix { inherit pkgs; };
+  # nodePkgs = pkgs.callPackage ./home/node2nix { inherit pkgs; };
 
   # User configuration constants
   username = "s-show";
@@ -61,8 +61,8 @@ in
       age
       sops
       nodejs_24
-      node2nix
-      nodePkgs."vscode-languageserver-protocol-3.17.5"
+      # node2nix
+      # nodePkgs."vscode-languageserver-protocol-3.17.5"
       delta
 
       # Shell and terminal
