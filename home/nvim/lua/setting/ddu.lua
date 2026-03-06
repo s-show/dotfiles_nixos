@@ -47,9 +47,6 @@ vim.fn["ddu#custom#patch_global"]({
       matchers = { 'matcher_substring' },
       ignoreCase = true,
     },
-    source = {
-      sorters = { 'sorter_alpha' },
-    }
   },
   kindOptions = {
     _ = {
@@ -57,13 +54,6 @@ vim.fn["ddu#custom#patch_global"]({
     },
     action = {
       defaultAction = "do",
-    },
-    -- ここで設定しないと反映されない。原因不明。
-    source = {
-      defaultAction = "execute"
-    },
-    colorscheme = {
-      defaultAction = "set",
     },
     word = {
       defaultAction = "append"
@@ -125,9 +115,9 @@ vim.fn["ddu#custom#patch_local"]("smart", {
   --     matchers = { 'matcher_relative' },
   --   },
   -- },
+  unique = true,
   postFilters = {
     'sorter_mtime',
-    'deduplicate_path',
   }
 })
 
@@ -206,11 +196,12 @@ vim.fn["ddu#custom#patch_local"]("command_history", {
       name = { "command_history" },
     },
   },
-  kindOptions = {
+  sourceOptions = {
     command_history = {
       defaultAction = "execute",
     }
-  }
+  },
+  unique = true,
 })
 
 vim.fn["ddu#custom#patch_local"]("help", {
@@ -222,6 +213,7 @@ vim.fn["ddu#custom#patch_local"]("help", {
       },
     },
   },
+  unique = true,
 })
 
 vim.fn["ddu#custom#patch_local"]("lsp_documentSymbol", {
@@ -305,7 +297,12 @@ vim.fn["ddu#custom#patch_local"]("source", {
       name = { "source" },
     },
   },
-  -- defaultAction は patch_global で設定している
+  sourceOptions = {
+    source = {
+      defaultAction = "execute",
+      sorters = { 'sorter_alpha' }
+    }
+  }
 })
 
 vim.fn["ddu#custom#patch_local"]("colorscheme", {
@@ -324,6 +321,11 @@ vim.fn["ddu#custom#patch_local"]("colorscheme", {
       name = { "colorscheme" },
     },
   },
+  sourceOptions = {
+    colorscheme = {
+      defaultAction = "set"
+    }
+  }
 })
 
 vim.fn["ddu#custom#patch_local"]("rg", {
@@ -383,7 +385,6 @@ vim.fn["ddu#custom#patch_local"]("nb", {
 })
 
 local ddu_vim_autocmd_group = vim.api.nvim_create_augroup('ddu_vim', {})
-Caller_source = ""
 
 vim.api.nvim_create_autocmd("FileType",
   {
@@ -403,7 +404,7 @@ vim.api.nvim_create_autocmd("FileType",
         [[<Cmd>call ddu#ui#do_action("previewExecute", {'command': 'execute "normal! \<C-y>"'})<CR>]], { buffer = true })
       vim.keymap.set("n", "<C-n>",
         [[<Cmd>call ddu#ui#do_action("previewExecute", {'command': 'execute "normal! \<C-e>"'})<CR>]], { buffer = true })
-      if Caller_source == "cmdline-history" then
+      if vim.fn["ddu#custom#get_current"]().name == "command_history" then
         vim.keymap.set("n", "e", [[<Cmd>call ddu#ui#do_action("itemAction", {'name': 'edit'})<CR>]], { buffer = true })
         vim.keymap.set("n", "dd", [[<Cmd>call ddu#ui#do_action("itemAction", {'name': 'delete'})<CR>]], { buffer = true })
       end
@@ -440,59 +441,45 @@ vim.api.nvim_create_autocmd({ 'User' },
 
 vim.keymap.set('n', '<leader>ds', function()
   vim.fn['ddu#start']({ name = 'smart' })
-  Caller_source = "smart"
 end)
 vim.keymap.set('n', '<leader>df', function()
   vim.fn['ddu#start']({ name = 'file_rec' })
-  Caller_source = "file_recursive"
 end)
 vim.keymap.set('n', '<leader>dm', function()
   vim.fn['ddu#start']({ name = 'mr' })
-  Caller_source = "mr"
 end)
 vim.keymap.set('n', '<leader>db', function()
   vim.fn['ddu#start']({ name = 'buffer' })
-  Caller_source = "buffer"
 end)
 vim.keymap.set('n', '<leader>dc', function()
   vim.fn['ddu#start']({ name = 'command_history' })
-  Caller_source = "cmdline-history"
 end)
 vim.keymap.set('n', '<leader>dl', function()
   vim.fn['ddu#start']({ name = 'lsp_documentSymbol' })
-  Caller_source = "lsp_documentSymbol"
 end)
 vim.keymap.set('n', '<leader>de', function()
   vim.fn['ddu#start']({ name = 'lsp_diagnostic' })
-  Caller_source = "lsp_diagnostic"
 end)
 vim.keymap.set('n', '<leader>dh', function()
   vim.fn['ddu#start']({ name = 'help' })
-  Caller_source = "help"
 end)
 vim.keymap.set('n', '<leader>dj', function()
   vim.fn['ddu#start']({ name = 'jumplist' })
-  Caller_source = "jumplist"
 end)
 vim.keymap.set('n', '<leader>dp', function()
   vim.fn['ddu#start']({ name = 'source' })
-  Caller_source = "source"
 end)
 vim.keymap.set('n', '<leader>dg', function()
   vim.fn['ddu#start']({ name = 'rg' })
-  Caller_source = "rg"
 end)
 vim.keymap.set('n', '<leader>dr', function()
   vim.fn['ddu#start']({ name = 'register' })
-  Caller_source = "register"
 end)
 vim.keymap.set('n', '<leader>ne', function()
   vim.fn['ddu#start']({ name = 'nb_list' })
-  Caller_source = "nb_list"
 end)
 vim.keymap.set('n', '<leader>nr', function()
   vim.fn['ddu#start']({ name = 'nb_rg' })
-  Caller_source = "nb_rg"
 end)
 
 function Ddu_start_with_filter_window(source_name)
@@ -662,4 +649,229 @@ end)
 --     },
 --     unique = false
 --   }
+-- }
+--
+-- vim.fn["ddu#custom#get_current"]('sources') の出力
+-- {
+--   actionOptions = {
+--     quit = false
+--   },
+--   actionParams = vim.empty_dict(),
+--   actions = {},
+--   columnOptions = vim.empty_dict(),
+--   columnParams = vim.empty_dict(),
+--   expandInput = false,
+--   filterOptions = {
+--     converter_devicon = {
+--       minInputLength = 0
+--     },
+--     matcher_substring = {
+--       minInputLength = 0
+--     }
+--   },
+--   filterParams = {
+--     converter_devicon = {
+--       defaultIcon = "",
+--       defaultIconHlgroup = "",
+--       extentionIcons = vim.empty_dict(),
+--       padding = 0,
+--       specificFileIcons = vim.empty_dict()
+--     },
+--     matcher_substring = {
+--       highlightMatched = "",
+--       limit = 1000,
+--       maxLength = 500
+--     }
+--   },
+--   input = "",
+--   kindOptions = {
+--     _ = {
+--       defaultAction = "open"
+--     },
+--     action = {
+--       defaultAction = "do"
+--     },
+--     colorscheme = {
+--       defaultAction = "set"
+--     },
+--     source = {
+--       defaultAction = "execute"
+--     },
+--     word = {
+--       defaultAction = "append"
+--     }
+--   },
+--   kindParams = vim.empty_dict(),
+--   name = "smart",
+--   postFilters = { "sorter_mtime", "deduplicate_path" },
+--   profile = false,
+--   push = false,
+--   refresh = false,
+--   resume = false,
+--   searchPath = "",
+--   sourceOptions = {
+--     _ = {
+--       ignoreCase = true,
+--       matchers = { "matcher_substring" }
+--     },
+--     buffer = {
+--       actions = {
+--         deleteBuffer = "f3d759476d692152cdbf1e5a382ddd70898782935eb6176a670c8a5b3b593eeb"
+--       },
+--       columns = {},
+--       converters = { "converter_devicon" },
+--       defaultAction = "",
+--       dynamicFilters = "",
+--       ignoreCase = true,
+--       limitPath = "",
+--       matcherKey = "word",
+--       matchers = { "matcher_substring" },
+--       maxItems = 10000,
+--       path = "",
+--       preview = true,
+--       smartCase = false,
+--       sorters = {},
+--       volatile = false
+--     },
+--     file_rec = {
+--       actions = {
+--         insertPath = "be6af6154c6f4ed6f2850a01c7bd99dd77be927970dc8530c6b00fe78a9b5f4f"
+--       },
+--       columns = {},
+--       converters = { "converter_devicon" },
+--       defaultAction = "",
+--       dynamicFilters = "",
+--       ignoreCase = true,
+--       limitPath = "",
+--       matcherKey = "word",
+--       matchers = { "matcher_substring" },
+--       maxItems = 10000,
+--       path = "",
+--       preview = true,
+--       smartCase = false,
+--       sorters = {},
+--       volatile = false
+--     },
+--     mr = {
+--       actions = vim.empty_dict(),
+--       columns = {},
+--       converters = { "converter_devicon" },
+--       defaultAction = "",
+--       dynamicFilters = "",
+--       ignoreCase = true,
+--       limitPath = "",
+--       matcherKey = "word",
+--       matchers = { "matcher_substring" },
+--       maxItems = 10000,
+--       path = "",
+--       preview = true,
+--       smartCase = false,
+--       sorters = {},
+--       volatile = false
+--     },
+--     source = {
+--       sorters = { "sorter_alpha" }
+--     }
+--   },
+--   sourceParams = {
+--     buffer = vim.empty_dict(),
+--     file_rec = {
+--       chunkSize = 1000,
+--       expandSymbolicLink = false,
+--       ignoredDirectories = { "node_modules", ".git", "dist", "direnv" }
+--     },
+--     mr = {
+--       kind = "mru"
+--     }
+--   },
+--   sources = { {
+--       name = { "buffer" },
+--       options = {
+--         converters = { "converter_devicon" }
+--       }
+--     }, {
+--       name = { "mr" },
+--       options = {
+--         converters = { "converter_devicon" }
+--       },
+--       params = {
+--         kind = "mru"
+--       }
+--     }, {
+--       name = { "file_rec" },
+--       options = {
+--         converters = { "converter_devicon" }
+--       },
+--       params = {
+--         ignoredDirectories = { "node_modules", ".git", "dist", "direnv" }
+--       }
+--     } },
+--   sync = false,
+--   syncLimit = 0,
+--   syncTimeout = 0,
+--   ui = "ff",
+--   uiOptions = {
+--     ff = {
+--       actions = vim.empty_dict(),
+--       defaultAction = "default",
+--       filterInputFunc = "input",
+--       filterInputOptsFunc = "",
+--       filterPrompt = "",
+--       filterUpdateCallback = "",
+--       filterUpdateMax = 0,
+--       persist = false,
+--       toggle = false
+--     }
+--   },
+--   uiParams = {
+--     ff = {
+--       autoAction = {
+--         name = "preview"
+--       },
+--       autoResize = false,
+--       cursorPos = 0,
+--       displaySourceName = "long",
+--       displayTree = false,
+--       exprParams = { "previewCol", "previewRow", "previewHeight", "previewWidth", "winCol", "winRow", "winHeight", "winWidth" },
+--       filterFloatingPosition = "top",
+--       floatingBorder = "rounded",
+--       floatingTitle = "list",
+--       floatingTitlePos = "left",
+--       focus = true,
+--       highlights = vim.empty_dict(),
+--       ignoreEmpty = false,
+--       immediateAction = "",
+--       maxDisplayItems = 1000,
+--       maxHighlightItems = 100,
+--       maxWidth = 200,
+--       onPreview = 0,
+--       overwriteStatusline = true,
+--       overwriteTitle = false,
+--       pathFilter = "",
+--       previewCol = "&columns * 5.1 / 10",
+--       previewFloating = true,
+--       previewFloatingBorder = "rounded",
+--       previewFloatingTitle = "Preview",
+--       previewFloatingTitlePos = "left",
+--       previewFloatingZindex = 100,
+--       previewFocusable = true,
+--       previewHeight = "&lines * 6 / 10",
+--       previewMaxSize = 1000000,
+--       previewRow = "&lines * 2 / 10",
+--       previewSplit = "vertical",
+--       previewWidth = "&columns * 4 / 10",
+--       previewWindowOptions = { { "&signcolumn", "no" }, { "&foldcolumn", 0 }, { "&foldenable", 0 }, { "&number", 0 }, { "&wrap", 0 } },
+--       prompt = "> ",
+--       replaceCol = 0,
+--       reversed = false,
+--       split = "floating",
+--       splitDirection = "botright",
+--       startAutoAction = true,
+--       winCol = "&columns * 1 / 10",
+--       winHeight = "&lines * 6 / 10",
+--       winRow = "&lines * 2 / 10",
+--       winWidth = "&columns * 4 / 10"
+--     }
+--   },
+--   unique = false
 -- }
