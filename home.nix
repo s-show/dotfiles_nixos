@@ -1,12 +1,6 @@
 { config, pkgs, lib, inputs, ... }:
 
 let
-  # Package sets
-  nixpkgs-stable = inputs.nixpkgs.legacyPackages.${pkgs.system};
-  oldNixpkgs = import (builtins.fetchTarball {
-    url = "https://github.com/NixOS/nixpkgs/archive/c5dd43934613ae0f8ff37c59f61c507c2e8f980d.tar.gz";
-  }) { };
-
   # Common Neovim wrapper arguments
   commonWrapperArgs = {
     wrapRc = false;
@@ -19,32 +13,12 @@ let
   };
   # Neovim source packages
   neovim-sources = {
-    # v0.10.4 from specific nixpkgs commit
-    v0104 = oldNixpkgs.neovim-unwrapped;
-    # Stable version from inputs
-    # flake.nix の overlay 設定により neovim-unwrapped が nightly 版に置き換えられているので、
-    # nixpkgsの安定版を明示的に取得
-    stable = nixpkgs-stable.neovim-unwrapped;
     # Nightly version from overlay
     nightly = pkgs.neovim-unwrapped;
   };
 
   # Neovim nightly version from overlay
-  neovim_0104 = oldNixpkgs.wrapNeovimUnstable neovim-sources.v0104 commonWrapperArgs;
-
-  # Neovim stable version
-  neovim-stable = nixpkgs-stable.wrapNeovimUnstable neovim-sources.stable commonWrapperArgs;
-
-  # Neovim nightly version from overlay
   neovim-nightly = pkgs.wrapNeovimUnstable neovim-sources.nightly commonWrapperArgs;
-
-  # Create wrapper script for nvim-stable
-  nvim-stable-wrapper = pkgs.writeShellScriptBin "nvim-stable" ''
-    exec ${neovim-stable}/bin/nvim "$@"
-  '';
-  nvim-0104-wrapper = pkgs.writeShellScriptBin "nvim-0104" ''
-    exec ${neovim_0104}/bin/nvim "$@"
-  '';
 
   # wsl-notify-send パッケージをインポート
   wsl-notify-send = import ./home/packages/wsl-notify-send.nix { inherit pkgs lib; };
@@ -133,8 +107,6 @@ in
 
       # Neovim packages
       neovim-nightly # nvim コマンドで nightly 版を起動
-      nvim-stable-wrapper # nvim-stable コマンドで安定版を起動
-      nvim-0104-wrapper # nvim-0104 コマンドで v0.10.4 を起動
 
       # misc tools
       wsl-notify-send
