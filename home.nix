@@ -52,16 +52,6 @@ let
   # node2nix を組み込む
   nodePkgs = pkgs.callPackage ./home/node2nix { inherit pkgs; };
 
-  # zellij のプラグインをインストール
-  zellijForgotWasm = pkgs.fetchurl {
-    url = "https://github.com/karimould/zellij-forgot/releases/latest/download/zellij_forgot.wasm";
-    hash = "sha256-MRlBRVGdvcEoaFtFb5cDdDePoZ/J2nQvvkoyG6zkSds=";
-  };
-  zjpane = pkgs.fetchurl {
-    url = "https://github.com/FuriouZz/zjpane/releases/latest/download/zjpane.wasm ";
-    hash = "sha256-N2u0nPY//EpnJ6YoFGgoS7taL3S/SxfrE2qKfgywqt4=";
-  };
-
   # User configuration constants
   username = "s-show";
   homeDirectory = "/home/${username}";
@@ -103,7 +93,6 @@ in
 
       # Shell and terminal
       starship
-      zellij
       nb
       superfile
       sheldon
@@ -185,12 +174,6 @@ in
     # ZSH
     ".config/zsh".source = mkDotfileSymlink "home/zsh";
     ".config/sheldon/plugins.toml".source = mkDotfileSymlink "home/plugins.toml";
-    # Zellij
-    ".config/zellij/config.kdl".source = mkDotfileSymlink "home/zellij/config.kdl";
-    ".config/zellij/layouts/layout_vertical.kdl".source =
-      mkDotfileSymlink "home/zellij/layout_vertical.kdl";
-    ".config/zellij/plugins/zellij_forgot.wasm".source = zellijForgotWasm;
-    ".config/zellij/plugins/zjpane.wasm".source = zjpane;
     # my script
     ".local/bin/flakes-update".source = mkDotfileSymlink "home/scripts/flakes-update.sh";
     ".local/bin/flakes-and-node2nix-update".source =
