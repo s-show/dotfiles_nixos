@@ -5,6 +5,7 @@ return {
   event = {
     "InsertEnter", "CmdlineEnter"
   },
+  lazy = true,
   config = function()
     -- pum.vim の <CR> と衝突させないためにデフォルトルールを無効化
     vim.g.lexima_no_default_rules = 1
