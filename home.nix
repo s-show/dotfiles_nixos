@@ -64,6 +64,7 @@ in
       # node2nix
       # nodePkgs."vscode-languageserver-protocol-3.17.5"
       delta
+      ghq
 
       # Shell and terminal
       starship

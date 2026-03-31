@@ -9,3 +9,4 @@ bindkey -e
 
 # Custom keybindings
 # bindkey -s '^X^I' 'editprompt -e nvim_ime\n'  # Ctrl+X Ctrl+I: Launch nvim_ime
+bindkey ^] ghq-fzf-cd

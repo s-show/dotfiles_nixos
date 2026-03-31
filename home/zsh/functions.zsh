@@ -19,3 +19,19 @@ precmd() {
   print -P "\e]133;D;\a"
 }
 PROMPT=$'%{\e]133;A\a%}'$PROMPT$'%{\e]133;B\a%}'
+
+# ghq 
+ghq-fzf-cd() {
+  local selected_dir=$(ghq list --full-path | fzf --prompt="Repository> ")
+  if [ -n "$selected_dir" ];
+  then
+    # ZLE のバッファの内容を "cd ${selected_dir}" に置き換える
+    BUFFER="cd ${selected_dir}"
+    zle accept-line
+    zle clear-screen
+  else
+    zle redisplay
+  fi
+}
+
+zle -N ghq-fzf-cd
