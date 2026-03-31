@@ -13,6 +13,17 @@ let
       hash = "sha256-UPWsa7sFy6P3Jo3KFEvZrz4M4IVDhKI7T1LNAtWqTT4=";
     };
   };
+  tmux-toggle-scratch = pkgs.tmuxPlugins.mkTmuxPlugin {
+    pluginName = "tmux-toggle-scratch";
+    rtpFilePath = "tmux-toggle-scratch.tmux";
+    version = "28f9ab4";
+    src = pkgs.fetchFromGitHub {
+      owner = "momo-lab";
+      repo = "tmux-toggle-scratch";
+      rev = "28f9ab4f37cbb90a7da9419f14ab487648b22386";
+      hash = "sha256-lzNMwf5o+Mg5vqLfdf+JU+MgetXbEyQQsPI+kRRnEIE=";
+    };
+  };
 in
 {
   programs.tmux = {
@@ -49,7 +60,7 @@ in
       set-option -gw window-status-format '#(if [ "#{window_bell_flag}" = "1" ]; then
         echo " 󱅫 #{window_index} #{window_name} "; else echo "#{window_index} #{window_name} ";
       fi)'
-      
+
       # set -g @status-left "\
       # #{?client_prefix,PREFIX ,\
       # #{?pane_in_mode,COPY ,\
@@ -84,8 +95,12 @@ in
       bind-key -n S-Up select-pane -U
       bind-key -n S-Down select-pane -D
 
-      # popup
-      bind-key u display-popup -d '#{pane_current_path}' -w 70% -h 70% -E
+      # tmux-toggle-scratch: @__toggle-scratch-session-name が呼び出し元セッションにセットされるため
+      # ポップアップ内から参照できない問題を回避する
+      # セッション名が *@scratch に一致するかでポップアップ内外を判定してオーバーライド
+      bind-key -T root F12 if-shell -F "#{m:*@scratch,#{session_name}}" \
+        "detach-client" \
+        "run-shell '${tmux-toggle-scratch}/share/tmux-plugins/tmux-toggle-scratch/scripts/show-scratch-popup.bash'"
     '';
     plugins = with pkgs; [
       {
@@ -139,6 +154,9 @@ in
         '';
       }
       {
+        plugin = tmux-toggle-scratch;
+      }
+      {
         plugin = tmuxPlugins.continuum;
         extraConfig = ''
           set -g @continuum-restore 'on'
@@ -165,7 +183,6 @@ in
       {
         plugin = tmux-menus;
         extraConfig = ''
-          set -g @plugin 'jaclu/tmux-menus'
           set -g @menus_use_cache 'No'
         '';
       }
