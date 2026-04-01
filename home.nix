@@ -96,6 +96,9 @@ in
       bash-language-server
       kdlfmt
 
+      # tree-sitter
+      tree-sitter
+
       # Media and display
       libsixel
       timg
