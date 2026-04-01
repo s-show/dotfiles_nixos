@@ -54,8 +54,17 @@ if ok then
   extui.enable({
     enable = true,    -- extuiを有効化
     msg = {
-      target = 'cmd', -- 'cmd'か'msg'だがcmdheight=0だとどっちでも良い？（記事後述）
-      timeout = 5000, -- boxメッセージの表示時間 ミリ秒
+      target = 'msg',
+      cmd = { -- Options related to messages in the cmdline window.
+        height = 0.5 -- Maximum height while expanded for messages beyond 'cmdheight'.
+      },
+      dialog = { -- Options related to dialog window.
+        height = 0.5, -- Maximum height.
+      },
+      msg = { -- Options related to msg window.
+        height = 0.5, -- Maximum height.
+        timeout = 4000, -- Time a message is visible in the message window.
+      },
     },
   })
 
@@ -64,15 +73,14 @@ if ok then
   local extui_colorscheme = "dayfox"
 
   -- extuiのカラースキームを自動設定
-  local augroup = vim.api.nvim_create_augroup("atusy-extui-cmdline", {})
+  local augroup = vim.api.nvim_create_augroup("extui-cmdline", {})
   vim.api.nvim_create_autocmd("CmdlineEnter", {
     group = augroup,
     callback = function()
       if not require("vim._core.ui2").cfg.enable then
         return
       end
-      local tabpage = vim.api.nvim_get_current_tabpage()
-      local extuiwins = require("vim._core.ui2").wins
+      local extuiwins = extui.wins
       for _, w in pairs(extuiwins) do
         require("styler").set_theme(w, { colorscheme = extui_colorscheme })
       end
