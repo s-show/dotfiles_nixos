@@ -65,6 +65,7 @@ in
       # nodePkgs."vscode-languageserver-protocol-3.17.5"
       delta
       ghq
+      zoxide
 
       # Shell and terminal
       starship
