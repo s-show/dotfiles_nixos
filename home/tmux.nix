@@ -68,6 +68,8 @@ in
       # }}}\
       # [#S]"
 
+      set-option -g default-terminal "screen-256color"
+
       # クリップボードを有効化
       set -g set-clipboard on
 
@@ -75,13 +77,13 @@ in
       set -g renumber-windows on
 
       # 分割時に現在のパスを引き継ぐ
-      bind v split-window -h -c "#{pane_current_path}"
       bind | split-window -h -c "#{pane_current_path}"
-      bind s split-window -v -c "#{pane_current_path}"
       bind - split-window -v -c "#{pane_current_path}"
 
-      # Alt-i で pane 選択のインデックスを表示
-      bind-key -n M-i display-panes
+      #Alt-w で pane 選択のインデックスを表示
+      bind-key -n M-w if-shell -F "#{==:#{window_panes},2}" \
+          "select-pane -t :.+" \
+          "display-panes" 
 
       # Windows / Sessions control
       bind-key -n M-Left previous-window

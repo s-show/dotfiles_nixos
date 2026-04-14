@@ -22,7 +22,6 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
--- require("lazy").setup("plugins")
 require("lazy").setup({
   dev = {
     path = "~/my_neovim_plugins",
@@ -41,6 +40,7 @@ require('setting.pum')
 require('setting.ddc')
 require('setting.skkeleton')
 require('setting.clipboard')
+require('setting.send_text_tmux_pane')
 
 vim.api.nvim_create_autocmd("BufWinEnter", {
   pattern = "*.md",

@@ -20,13 +20,24 @@ vim.opt.whichwrap:append {
 vim.cmd('source ~/.config/nvim/lua/setting/keymapping.vim')
 
 -- ファイル操作系
--- ,ww で保存
+-- <leader>ww で保存
 vim.keymap.set('n', '<leader>ww', "<Cmd>update<CR>")
 
 vim.keymap.set('i', '/',
   [[complete_info(['mode']).mode == 'files' && complete_info(['selected']).selected >= 0 ? '<c-x><c-f>' : '/']],
   { expr = true }
 )
+
+-- jj -> Escape
+-- j を押したら直ちに j を入力し、続けて j を押せば Escape を発行する
+-- jj の手前で undo ブロックを区切る
+vim.keymap.set('i', 'j', 'j<Plug>(g)', { desc = "jj -> Escape" })
+vim.keymap.set('i', '<Plug>(g)j', '<BS><Esc>')
+vim.keymap.set('i', '<Plug>(g)', '<Nop>')
+
+-- 挿入モードでEmacsライクの左右移動
+vim.keymap.set("i", "<C-b>", "<C-g>U<Left>")
+vim.keymap.set("i", "<C-f>", "<C-g>U<Right>")
 
 -- 大文字の Y で行末までヤンク
 vim.keymap.set('n', 'Y', 'y$', { silent = true })
