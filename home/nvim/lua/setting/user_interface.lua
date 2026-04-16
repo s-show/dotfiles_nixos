@@ -28,10 +28,10 @@ vim.opt.breakindent = true
 vim.opt.formatoptions = 'l'
 vim.opt.lbr = true
 vim.opt.guicursor = table.concat({
-  "n-v:block",    -- ノーマル/ビジュアル/コマンドライン
-  "i-c-t:ver25",  -- 挿入/コマンドライン/ターミナルモード
-  "r-cr:hor50",   -- 置換モード
-  "o:hor75",      -- オペレータペンディングモード
+  "n-v:block",   -- ノーマル/ビジュアル/コマンドライン
+  "i-c-t:ver25", -- 挿入/コマンドライン/ターミナルモード
+  "r-cr:hor50",  -- 置換モード
+  "o:hor75",     -- オペレータペンディングモード
 }, ",")
 
 --=======================================================================================
@@ -52,17 +52,21 @@ vim.opt.pumheight = 15
 local ok, extui = pcall(require, 'vim._core.ui2')
 if ok then
   extui.enable({
-    enable = true,    -- extuiを有効化
+    enable = true, -- extuiを有効化
     msg = {
-      target = 'msg',
-      cmd = { -- Options related to messages in the cmdline window.
-        height = 0.5 -- Maximum height while expanded for messages beyond 'cmdheight'.
+      targets = {
+        'cmd',
+        'msg',
+        'pager'
       },
-      dialog = { -- Options related to dialog window.
-        height = 0.5, -- Maximum height.
+      cmd = {           -- Options related to messages in the cmdline window.
+        height = 0.5    -- Maximum height while expanded for messages beyond 'cmdheight'.
       },
-      msg = { -- Options related to msg window.
-        height = 0.5, -- Maximum height.
+      dialog = {        -- Options related to dialog window.
+        height = 0.5,   -- Maximum height.
+      },
+      msg = {           -- Options related to msg window.
+        height = 0.5,   -- Maximum height.
         timeout = 4000, -- Time a message is visible in the message window.
       },
     },
@@ -70,22 +74,26 @@ if ok then
 
   vim.opt.cmdheight = 0
 
-  local extui_colorscheme = "dayfox"
+  -- local extui_colorscheme = "dayfox"
+  -- local set_ui2_colorscheme = 0
 
   -- extuiのカラースキームを自動設定
-  local augroup = vim.api.nvim_create_augroup("extui-cmdline", {})
-  vim.api.nvim_create_autocmd("CmdlineEnter", {
-    group = augroup,
-    callback = function()
-      if not require("vim._core.ui2").cfg.enable then
-        return
-      end
-      local extuiwins = extui.wins
-      for _, w in pairs(extuiwins) do
-        require("styler").set_theme(w, { colorscheme = extui_colorscheme })
-      end
-    end,
-  })
+  -- local augroup = vim.api.nvim_create_augroup("extui-cmdline", {})
+  -- vim.api.nvim_create_autocmd("CmdlineEnter", {
+  --   group = augroup,
+  --   callback = function()
+  --     if set_ui2_colorscheme ~= 0 then
+  --       if not require("vim._core.ui2").cfg.enable then
+  --         return
+  --       end
+  --       local extuiwins = extui.wins
+  --       for _, w in pairs(extuiwins) do
+  --         require("styler").set_theme(w, { colorscheme = extui_colorscheme })
+  --       end
+  --       set_ui2_colorscheme = 1
+  --     end
+  --   end,
+  -- })
 
   local function hide_msgbox()
     -- 表示中のウィンドウ一覧を取得

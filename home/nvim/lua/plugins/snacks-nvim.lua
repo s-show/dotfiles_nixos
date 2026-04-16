@@ -9,7 +9,7 @@ return {
     -- refer to the configuration section below
     bigfile = { enabled = false },
     dashboard = {
-      enabled = true,
+      enabled = false,
       width = 54,
       row = nil,
       col = nil,

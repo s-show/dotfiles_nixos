@@ -2,7 +2,6 @@
 if vim.fn.has('nvim-0.11') == 1 then
   vim.lsp.config('*', {
     capabilities = require('ddc_source_lsp').make_client_capabilities(),
-    -- capabilities = require('blink.cmp').get_lsp_capabilities(),
   })
 
   -- 常に有効にする LSP
@@ -61,12 +60,12 @@ if vim.fn.has('nvim-0.11') == 1 then
               enabled_lsp[config.lsp] = true
             end
             -- 現在のバッファに LSP をアタッチ
-            vim.schedule(function()
-              local lsp_config = vim.lsp.config[config.lsp]
-              if lsp_config then
-                vim.lsp.start(lsp_config, { bufnr = args.buf })
-              end
-            end)
+            -- vim.schedule(function()
+            --   local lsp_config = vim.lsp.config[config.lsp]
+            --   if lsp_config then
+            --     vim.lsp.start(lsp_config, { bufnr = args.buf })
+            --   end
+            -- end)
           end
         end
       end
@@ -75,7 +74,6 @@ if vim.fn.has('nvim-0.11') == 1 then
   local _, result = pcall(vim.lsp.document_color.enable, true, 0, { style = 'virtual' })
 else
   local capabilities = require("ddc_source_lsp").make_client_capabilities()
-  -- local capabilities = require("blink.cmp").get_lsp_capabilities()
   capabilities.textDocument.completion.completionItem.snippetSupport = true
 end
 

@@ -25,11 +25,12 @@ vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
   dev = {
-    path = "~/my_neovim_plugins",
+    path = "~/ghq/github.com/s-show",
     patterns = {
       -- 'extend_word_motion.nvim',
       -- 'ft_mapper.nvim',
       -- 'ddu-source-source',
+      -- 'fyler.nvim'
     },
   },
   spec = {
