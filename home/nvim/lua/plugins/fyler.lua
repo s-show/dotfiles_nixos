@@ -41,7 +41,7 @@ return {
                 self:exec_action("n_collapse_node")
               end
             end,
-            ["<right>"] = function (self)
+            ["<right>"] = function(self)
               local current_node = self:cursor_node_entry()
               if not current_node then
                 return
@@ -54,7 +54,7 @@ return {
                 return
               end
             end,
-            ["<C-p>"] = function (self)
+            ["<C-p>"] = function(self)
               local current_node = self:cursor_node_entry()
               local stat = vim.uv.fs_stat(current_node.path)
               if not stat then
@@ -101,7 +101,7 @@ return {
             cursorline = true
           }
         }
-      }
+      },
     },
     keys = {
       { "-", "<Cmd>Fyler kind=float<Cr>", desc = "Open Fyler View" },

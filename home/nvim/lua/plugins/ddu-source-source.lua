@@ -1,4 +1,4 @@
 return {
   "https://github.com/4513ECHO/ddu-source-source/",
-  dev = true,
+  dev = false,
 }
