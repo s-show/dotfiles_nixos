@@ -23,8 +23,6 @@ let
   # wsl-notify-send パッケージをインポート
   wsl-notify-send = import ./home/packages/wsl-notify-send.nix { inherit pkgs lib; };
 
-  # node2nix を組み込む
-  # nodePkgs = pkgs.callPackage ./home/node2nix { inherit pkgs; };
   # kakehashi をインポート
   kakehashi = import ./home/packages/kakehashi.nix { inherit pkgs lib; };
 
@@ -163,6 +161,7 @@ in
     ".local/bin/statusline-command".source = mkDotfileSymlink "home/scripts/statusline-command.sh";
     ".local/bin/claude_wrapper".source = mkDotfileSymlink "home/scripts/claude_wrapper.sh";
     ".local/bin/gemini_wrapper".source = mkDotfileSymlink "home/scripts/gemini_wrapper.sh";
+    ".local/bin/open_prompt_pane".source = mkDotfileSymlink "home/scripts/open_prompt_pane.sh";
     # tmux-which-key
     ".config/tmux/plugins/tmux-which-key/config.yaml".source = mkDotfileSymlink "home/tmux/tmux-which-key/config.yaml";
     ".local/share/tmux/plugins/tmux-which-key/init.tmux".source = mkDotfileSymlink "home/tmux/tmux-which-key/init.tmux";
@@ -173,6 +172,22 @@ in
     prepareGithook = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
       cp "${homeDirectory}/.dotfiles/home/git-pre-commit" \
          "${homeDirectory}/.dotfiles/.git/hooks/pre-commit"
+    '';
+    # 自作スクリプトに実行権限を付与する
+    makeScriptsExecutable = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      chmod +x \
+        "${homeDirectory}/.dotfiles/home/scripts/nvim_ime.sh" \
+        "${homeDirectory}/.dotfiles/home/scripts/nvim_demo.sh" \
+        "${homeDirectory}/.dotfiles/home/scripts/nvim_minimum.sh" \
+        "${homeDirectory}/.dotfiles/home/scripts/flakes-update.sh" \
+        "${homeDirectory}/.dotfiles/home/scripts/flakes-and-node2nix-update.sh" \
+        "${homeDirectory}/.dotfiles/home/scripts/notify.sh" \
+        "${homeDirectory}/.dotfiles/home/scripts/wrap_nb.sh" \
+        "${homeDirectory}/.dotfiles/home/scripts/statusline-command.sh" \
+        "${homeDirectory}/.dotfiles/home/scripts/claude_wrapper.sh" \
+        "${homeDirectory}/.dotfiles/home/scripts/gemini_wrapper.sh" \
+        "${homeDirectory}/.dotfiles/home/scripts/open_prompt_pane.sh" \
+        "${homeDirectory}/.dotfiles/home/tmux/tmux-which-key/init.tmux"
     '';
   };
 
