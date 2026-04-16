@@ -25,6 +25,8 @@ let
 
   # node2nix を組み込む
   # nodePkgs = pkgs.callPackage ./home/node2nix { inherit pkgs; };
+  # kakehashi をインポート
+  kakehashi = import ./home/packages/kakehashi.nix { inherit pkgs lib; };
 
   # User configuration constants
   username = "s-show";
@@ -96,6 +98,7 @@ in
       nixfmt-rfc-style
       bash-language-server
       kdlfmt
+      kakehashi
 
       # tree-sitter
       tree-sitter
