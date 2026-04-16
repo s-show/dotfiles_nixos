@@ -161,8 +161,8 @@ in
     ".local/bin/claude_wrapper".source = mkDotfileSymlink "home/scripts/claude_wrapper.sh";
     ".local/bin/gemini_wrapper".source = mkDotfileSymlink "home/scripts/gemini_wrapper.sh";
     # tmux-which-key
-    ".config/tmux/plugins/tmux-which-key/config.yaml".source = mkDotfileSymlink "home/tmux-which-key/config.yaml";
-    ".local/share/tmux/plugins/tmux-which-key/init.tmux".source = mkDotfileSymlink "home/tmux-which-key/init.tmux";
+    ".config/tmux/plugins/tmux-which-key/config.yaml".source = mkDotfileSymlink "home/tmux/tmux-which-key/config.yaml";
+    ".local/share/tmux/plugins/tmux-which-key/init.tmux".source = mkDotfileSymlink "home/tmux/tmux-which-key/init.tmux";
   };
 
   # Home activation scripts

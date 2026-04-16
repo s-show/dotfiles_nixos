@@ -40,6 +40,32 @@ local function send_key_tmux_pane(key)
   end
 end
 
+local function copy_mode_check()
+  if file_exist(file_path) then
+    local pane_id = get_tmux_src_pane(file_path)
+    local cmd_str = "tmux display-message -p -t %s '#{pane_in_mode}'"
+    local pane_mode = vim.fn.system(
+      string.format(cmd_str, vim.fn.shellescape(pane_id))
+    )
+    if pane_mode == "copy-mode" then
+      return true
+    else
+      return false
+    end
+  end
+end
+
+local function scroll_src_pane(key)
+  if copy_mode_check() == false then
+    local pane_id = get_tmux_src_pane(file_path)
+    local cmd_str = "tmux copy-mode -t %s"
+    vim.fn.system(
+      string.format(cmd_str, vim.fn.shellescape(pane_id))
+    )
+  end
+  send_key_tmux_pane(key)
+end
+
 vim.keymap.set("n", "<C-s>", send_buf_text_tmux_pane, { desc = "Send buf text to tmux pane" })
 vim.keymap.set("n", "<C-g>q", function()
     send_buf_text_tmux_pane()
@@ -49,6 +75,11 @@ vim.keymap.set("n", "<C-g>q", function()
 )
 vim.keymap.set("n", "<Up>", function() send_key_tmux_pane('Up') end, { desc = "Send <up> cursor to tmux pane" })
 vim.keymap.set("n", "<Down>", function() send_key_tmux_pane('Down') end, { desc = "Send <down> cursor to tmux pane" })
-vim.keymap.set("n", "<C-g><ESC>", function() send_key_tmux_pane('Escape') end, { desc = "Send <Escape> cursor to tmux pane" })
-vim.keymap.set("n", "<C-g>c", function() send_key_tmux_pane('C-c') end, { desc = "Send <Ctrl-c> cursor to tmux pane" })
-vim.keymap.set("n", "<Enter>", function() send_key_tmux_pane('Enter') end, { desc = "Send <Enter> cursor to tmux pane" })
+vim.keymap.set("n", "<C-g><ESC>", function() send_key_tmux_pane('Escape') end,
+  { desc = "Send <Escape> cursor to tmux pane" })
+vim.keymap.set("n", "<C-g>c", function() send_key_tmux_pane('C-c') end, { desc = "Send <Ctrl-c> to tmux pane" })
+vim.keymap.set("n", "<C-g>u", function() send_key_tmux_pane('C-u') end, { desc = "Send <Ctrl-u> to tmux pane" })
+vim.keymap.set("n", "<Enter>", function() send_key_tmux_pane('Enter') end, { desc = "Send <Enter> to tmux pane" })
+vim.keymap.set("n", "<BS>", function() send_key_tmux_pane('BSpace') end, { desc = "Send <BackSpace> to tmux pane" })
+vim.keymap.set("n", "<M-u>", function () scroll_src_pane('C-u') end, { desc = "scroll tmux pane" })
+vim.keymap.set("n", "<M-d>", function () scroll_src_pane('C-d') end, { desc = "scroll tmux pane" })
