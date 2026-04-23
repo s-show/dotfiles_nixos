@@ -141,6 +141,7 @@ in
     # App
     ".config/starship.toml".source = mkDotfileSymlink "home/starship.toml";
     ".config/superfile".source = mkDotfileSymlink "home/superfile";
+    ".config/tmux/tmux.conf".source = mkDotfileSymlink "home/tmux/tmux.conf";
     # Neovim
     ".config/nvim".source = mkDotfileSymlink "home/nvim";
     ".config/nvim_ime".source = mkDotfileSymlink "home/nvim_ime";
@@ -162,6 +163,7 @@ in
     ".local/bin/claude_wrapper".source = mkDotfileSymlink "home/scripts/claude_wrapper.sh";
     ".local/bin/gemini_wrapper".source = mkDotfileSymlink "home/scripts/gemini_wrapper.sh";
     ".local/bin/open_prompt_pane".source = mkDotfileSymlink "home/scripts/open_prompt_pane.sh";
+    ".local/bin/tmux_pane_resize".source = mkDotfileSymlink "home/scripts/tmux_pane_resize.sh";
     # tmux-which-key
     ".config/tmux/plugins/tmux-which-key/config.yaml".source = mkDotfileSymlink "home/tmux/tmux-which-key/config.yaml";
     ".local/share/tmux/plugins/tmux-which-key/init.tmux".source = mkDotfileSymlink "home/tmux/tmux-which-key/init.tmux";
@@ -187,6 +189,7 @@ in
         "${homeDirectory}/.dotfiles/home/scripts/claude_wrapper.sh" \
         "${homeDirectory}/.dotfiles/home/scripts/gemini_wrapper.sh" \
         "${homeDirectory}/.dotfiles/home/scripts/open_prompt_pane.sh" \
+        "${homeDirectory}/.dotfiles/home/scripts/tmux_pane_resize.sh" \
         "${homeDirectory}/.dotfiles/home/tmux/tmux-which-key/init.tmux"
     '';
   };
@@ -209,6 +212,5 @@ in
     ./home/fzf.nix
     ./home/git.nix
     ./home/direnv.nix
-    ./home/tmux.nix
   ];
 }

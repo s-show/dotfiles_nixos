@@ -34,6 +34,7 @@ in
     keyMode = "vi";
     historyLimit = 20000;
     baseIndex = 1;
+    terminal = "xterm-256color";
     extraConfig = ''
       # status-left の表示長を拡張（日時 + mode-indicator を表示するため）
       set -g status-left-length 40
@@ -68,8 +69,6 @@ in
       # }}}\
       # [#S]"
 
-      set-option -g default-terminal "screen-256color"
-
       # クリップボードを有効化
       set -g set-clipboard on
 
@@ -103,6 +102,16 @@ in
       bind-key -T root F12 if-shell -F "#{m:*@scratch,#{session_name}}" \
         "detach-client" \
         "run-shell '${tmux-toggle-scratch}/share/tmux-plugins/tmux-toggle-scratch/scripts/show-scratch-popup.bash'"
+
+      # Forward extended key sequences to applications
+      set -s extended-keys on
+
+      # Tell tmux your outer terminal supports extended keys
+      # Adjust the glob to match your terminal's $TERM value
+      set -as terminal-features 'xterm*:extkeys'
+
+      # Use CSI u encodeing format
+      set -s extended-keys-format csi-u
     '';
     plugins = with pkgs; [
       {
