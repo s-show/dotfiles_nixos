@@ -24,7 +24,7 @@ let
   wsl-notify-send = import ./home/packages/wsl-notify-send.nix { inherit pkgs lib; };
 
   # kakehashi をインポート
-  kakehashi = import ./home/packages/kakehashi.nix { inherit pkgs lib; };
+  # kakehashi = import ./home/packages/kakehashi.nix { inherit pkgs lib; };
 
   # User configuration constants
   username = "s-show";
@@ -96,7 +96,6 @@ in
       nixfmt-rfc-style
       bash-language-server
       kdlfmt
-      kakehashi
 
       # tree-sitter
       tree-sitter
