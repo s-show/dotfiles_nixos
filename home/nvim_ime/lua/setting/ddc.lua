@@ -29,7 +29,7 @@ vim.fn["ddc#custom#patch_global"]({
     file = {
       mark = 'F',
       isVolatile = true,
-      forceCompletionPattern = [[\S/\S*]],
+      forceCompletionPattern = [[\S/\S*|@\.\s*]],
       minAutoCompleteLength = 1000,
     },
   },

@@ -90,3 +90,5 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 
 -- <ctrl-c> で 終了させる
 vim.keymap.set('i', '<C-c>', '<Cmd>wq<CR>')
+
+vim.opt.confirm = true

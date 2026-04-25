@@ -63,6 +63,7 @@ require('setting.quickrun_codeblock')
 require('setting.quickfix-preview')
 require('setting.cmdwin')
 require('setting.vim-gin')
+require('setting.operate_tmux')
 vim.cmd('source ~/.config/nvim/lua/setting/helpfile_formatter.vim')
 vim.cmd('source ~/.config/nvim/lua/setting/AbbrevCmd.vim')
 

@@ -40,7 +40,7 @@ require('setting.pum')
 require('setting.ddc')
 require('setting.skkeleton')
 require('setting.clipboard')
-require('setting.send_text_tmux_pane')
+require('setting.operate_tmux')
 
 vim.api.nvim_create_autocmd("BufWinEnter", {
   pattern = "*.md",
