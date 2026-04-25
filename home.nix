@@ -121,6 +121,7 @@ in
       gemini-cli
       codex
       claude-code
+      opencode
 
       # Path to windows App
       (pkgs.writeShellScriptBin "clip.exe" ''
