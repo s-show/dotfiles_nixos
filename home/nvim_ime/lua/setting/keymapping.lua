@@ -58,3 +58,34 @@ vim.keymap.set('n', 'X', '"_D$', { silent = true })
 -- Visual <, >で連続してインデントを操作
 vim.keymap.set('x', '<', '<gv', { silent = true })
 vim.keymap.set('x', '>', '>gv', { silent = true })
+
+--=======================================================================================
+-- tmux 操作系
+--=======================================================================================
+local tmux_operate = require('util.operate_tmux')
+
+vim.keymap.set("n", "<C-s>", function () tmux_operate.send_prompt_tmux_pane(tmux_operate.aitool_pane_path) end,  { desc = "Send buf text to tmux pane" })
+vim.keymap.set("i", "<C-s>", function()
+  vim.cmd('stopinsert')
+  tmux_operate.send_prompt_tmux_pane(tmux_operate.aitool_pane_path)
+end, { desc = "Send buf text to tmux pane" })
+vim.keymap.set("n", "<C-g>q", function()
+  vim.cmd('quit!')
+end, { desc = "Send buf text to tmux pane & vim quit!" })
+vim.keymap.set("n", "<Up>", function() tmux_operate.send_key_tmux_frontend('Up') end, { desc = "Send <up> cursor to tmux pane" })
+vim.keymap.set("n", "<Down>", function() tmux_operate.send_key_tmux_frontend('Down') end, { desc = "Send <down> cursor to tmux pane" })
+vim.keymap.set("n", "<C-g><ESC>", function() tmux_operate.send_key_tmux_frontend('Escape') end,
+  { desc = "Send <Escape> cursor to tmux pane" })
+vim.keymap.set("n", "<C-g>c", function() tmux_operate.send_key_tmux_frontend('C-c') end, { desc = "Send <Ctrl-c> to tmux pane" })
+vim.keymap.set("n", "<C-g>u", function() tmux_operate.send_key_tmux_frontend('C-u') end, { desc = "Send <Ctrl-u to tmux pane" })
+vim.keymap.set("n", "<Enter>", function() tmux_operate.send_key_tmux_frontend('Enter') end, { desc = "Send <Enter> to tmux pane" })
+vim.keymap.set("n", "<S-Tab>", function() tmux_operate.send_key_tmux_frontend('S-Tab') end, { desc = "Send <Enter> to tmux pane" })
+vim.keymap.set("n", "<BS>", function() tmux_operate.send_key_tmux_frontend('BSpace') end, { desc = "Send <BackSpace> to tmux pane" })
+vim.keymap.set("n", "<PageUp>", function() tmux_operate.scroll_src_pane('PageUp') end, { desc = "scroll tmux pane(up)" })
+vim.keymap.set("n", "<PageDown>", function() tmux_operate.scroll_src_pane('PageDown') end, { desc = "scroll tmux pane(down)" })
+vim.keymap.set("n", "<M-u>", function() tmux_operate.scroll_src_pane('C-u') end, { desc = "scroll tmux pane(up)" })
+vim.keymap.set("n", "<M-d>", function() tmux_operate.scroll_src_pane('C-d') end, { desc = "scroll tmux pane(down)" })
+vim.keymap.set("n", "<M-j>", function() tmux_operate.scroll_src_pane('j') end, { desc = "scroll tmux pane(up)" })
+vim.keymap.set("n", "<M-k>", function() tmux_operate.scroll_src_pane('k') end, { desc = "scroll tmux pane(down)" })
+vim.keymap.set("n", "<M-e>", function() tmux_operate.scroll_src_pane('C-e') end, { desc = "scroll tmux pane(up)" })
+vim.keymap.set("n", "<M-y>", function() tmux_operate.scroll_src_pane('C-y') end, { desc = "scroll tmux pane(down)" })

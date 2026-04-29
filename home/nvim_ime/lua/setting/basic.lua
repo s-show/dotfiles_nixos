@@ -91,4 +91,8 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 -- <ctrl-c> で 終了させる
 vim.keymap.set('i', '<C-c>', '<Cmd>wq<CR>')
 
+-- 保存せずに終了しようとしたらダイアログを表示する
 vim.opt.confirm = true
+
+vim.bo.swapfile = false
+vim.bo.ft = 'markdown'

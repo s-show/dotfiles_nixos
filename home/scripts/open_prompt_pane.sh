@@ -8,5 +8,5 @@ prompt_pane=$(tmux split-window -c "#{pane_current_path}" -P -p 25 -F '#{pane_in
 
 # 分割元と分割したペインの情報を一時ファイルに保存する
 # 複数ウィンドウに対応するため、一時ファイルのファイル名を現在のウィンドウ番号と関連付ける。
-echo "${src_pane}" > /tmp/src_pane_"${current_win}"
-echo "${prompt_pane}" > /tmp/prompt_pane_"${current_win}"
+echo "${src_pane}" > /tmp/nvim_ime_aitool_pane_"${current_win}"
+echo "${prompt_pane}" > /tmp/nvim_ime_input_pane_"${current_win}"

@@ -183,3 +183,14 @@ vim.keymap.set( "v", "A",
     desc = "行選択モードでも複数行に挿入できる A",
   }
 )
+
+--=======================================================================================
+-- tmux 操作系
+--=======================================================================================
+local tmux_operate = require('util.operate_tmux')
+vim.keymap.set("n", "<M-u>", function() tmux_operate.scroll_src_pane('C-u') end, { desc = "scroll tmux pane(up)" })
+vim.keymap.set("n", "<M-d>", function() tmux_operate.scroll_src_pane('C-d') end, { desc = "scroll tmux pane(down)" })
+vim.keymap.set("n", "<M-j>", function() tmux_operate.scroll_src_pane('j') end, { desc = "scroll tmux pane(up)" })
+vim.keymap.set("n", "<M-k>", function() tmux_operate.scroll_src_pane('k') end, { desc = "scroll tmux pane(down)" })
+vim.keymap.set("n", "<M-e>", function() tmux_operate.scroll_src_pane('C-e') end, { desc = "scroll tmux pane(up)" })
+vim.keymap.set("n", "<M-y>", function() tmux_operate.scroll_src_pane('C-y') end, { desc = "scroll tmux pane(down)" })

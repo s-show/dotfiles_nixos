@@ -150,6 +150,7 @@ in
     ".local/bin/nvim_ime".source = mkDotfileSymlink "home/scripts/nvim_ime.sh";
     ".local/bin/nvim_demo".source = mkDotfileSymlink "home/scripts/nvim_demo.sh";
     ".local/bin/nvim_minimum".source = mkDotfileSymlink "home/scripts/nvim_minimum.sh";
+    "${homeDirectory}/.dotfiles/home/nvim_ime/lua/util/operate_tmux.lua".source = mkDotfileSymlink "home/nvim/lua/util/operate_tmux.lua";
     # ZSH
     ".config/zsh".source = mkDotfileSymlink "home/zsh";
     ".config/sheldon/plugins.toml".source = mkDotfileSymlink "home/plugins.toml";
