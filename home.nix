@@ -209,7 +209,7 @@ in
 
   # Import additional modules
   imports = [
-    ./home/zsh.nix
+    ./home/zsh/zsh.nix
     ./home/fzf.nix
     ./home/git.nix
     ./home/direnv.nix

@@ -10,3 +10,4 @@ export CEREBRAS_API_KEY=$(cat "/run/secrets/CEREBRAS_API_KEY")
 export GEMINI_API_KEY=$(cat "/run/secrets/GEMINI_API_KEY")
 export BRAVE_SEARCH_API_KEY=$(cat "/run/secrets/BRAVE_SEARCH_API_KEY")
 export GITHUB_MCP_PAT=$(cat "/run/secrets/GITHUB_MCP_PAT")
+export TLDR_LANGUAGE="ja"

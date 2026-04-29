@@ -1,7 +1,7 @@
 { pkgs, lib, config, ... }:
 let
   # wsl-notify-send パッケージをインポート
-  wsl-notify-send = import ./packages/wsl-notify-send.nix { inherit pkgs lib; };
+  wsl-notify-send = import ../packages/wsl-notify-send.nix { inherit pkgs lib; };
 in
 {
   programs.zsh = {

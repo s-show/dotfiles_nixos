@@ -118,5 +118,15 @@ export default defineConfig(({ projectRoot, currentDirectory }) => ({
       callback: "cut -z -c 3-",
       callbackZero: true,
     },
+    {
+      name: "tldr list",
+      patterns: [
+        "^tldr $",
+      ],
+      sourceCommand: "tldr --list",
+      options: {
+        "--prompt": "'tldr --list >'",
+      },
+    },
   ],
 }));
