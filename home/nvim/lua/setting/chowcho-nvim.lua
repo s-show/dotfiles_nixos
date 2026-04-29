@@ -1,7 +1,7 @@
 local chowcho = require('chowcho')
 chowcho.setup({
   -- Must be a single character. The length of the array is the maximum number of windows that can be moved.
-  labels = { "A", "B", "C", "D", "E", "F", "G", "H", "I" },
+  labels = { "1", "2", "3", "4", "5", "6", "G", "H", "I" },
   use_exclude_default = true,
   ignore_case = true,
   selector = {
@@ -10,35 +10,19 @@ chowcho.setup({
       icon_enabled = true,
       color = {
         label = {
-          active = "#ff9966",
-          inactive = "#a52a2a",
+          active = "#DBD944",
+          inactive = "#44A1DB",
         },
         text = {
-          active = "#a4c639",
-          inactive = "#87a96b",
+          active = "#DBD944",
+          inactive = "#44A1DB",
         },
         border = {
-          active = "#ffbf00",
-          inactive = "#e9d66b",
+          active = "#faf0e6",
+          inactive = "#ffe4c4",
         },
       },
       zindex = 1,
-    },
-    statusline = {
-      color = {
-        label = {
-          active = "#fefefe",
-          inactive = "#d0d0d0",
-        },
-        text = {
-          active = "#fefefe",
-          inactive = "#d0d0d0",
-        },
-        background = {
-          active = "#3d7172",
-          inactive = "#203a3a",
-        },
-      },
     },
   },
 })

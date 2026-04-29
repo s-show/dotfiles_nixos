@@ -66,6 +66,13 @@ in
       delta
       ghq
       zoxide
+      cheat
+      tldr
+      duf
+      dust
+      procs
+      broot
+      yazi
 
       # Shell and terminal
       starship

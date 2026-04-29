@@ -25,6 +25,8 @@ vim.api.nvim_create_autocmd("ModeChanged", {
 -- コマンド履歴の保存件数を1000件にする
 vim.opt.history = 1000
 
+vim.opt.autoread = true
+
 -- カーソル下の単語をハイライトする
 -- https://zenn.dev/itmammoth/articles/e6d84bc346c78a#1.-%E3%82%AB%E3%83%BC%E3%82%BD%E3%83%AB%E4%B8%8B%E3%81%AE%E5%8D%98%E8%AA%9E%E3%82%92%E3%83%8F%E3%82%A4%E3%83%A9%E3%82%A4%E3%83%88%E3%81%99%E3%82%8B 参照
 vim.keymap.set('n', '<space><space>', function()
