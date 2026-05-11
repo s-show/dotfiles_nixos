@@ -100,7 +100,7 @@ in
       vim-language-server
       # vscode-langservers-extracted
       nixd
-      nixfmt-rfc-style
+      nixfmt
       bash-language-server
       kdlfmt
 
@@ -125,10 +125,11 @@ in
 
       # AI coding tools
       inputs.serena.packages.${pkgs.system}.default
-      gemini-cli
-      codex
-      claude-code
-      opencode
+      inputs.llm-agents.packages.${pkgs.system}.codex
+      inputs.llm-agents.packages.${pkgs.system}.claude-code
+      inputs.llm-agents.packages.${pkgs.system}.gemini-cli
+      # inputs.llm-agents.packages.${pkgs.system}.opencode
+      rtk
 
       # Path to windows App
       (pkgs.writeShellScriptBin "clip.exe" ''
@@ -217,10 +218,29 @@ in
 
   # Import additional modules
   imports = [
+    inputs.agent-skills-nix.homeManagerModules.default
     ./home/zsh/zsh.nix
     ./home/fzf.nix
     ./home/git.nix
     ./home/direnv.nix
     ./home/opencode/opencode.nix
   ];
+
+  programs.agent-skills = {
+    enable = true;
+    sources = {
+      local = {
+        path = inputs.self + "/home/agent-skills";
+      };
+      security = {
+        input = "claude-security-skills";
+        subdir = "skills";
+      };
+    };
+    skills.enableAll = true;
+    targets.claude = {
+      dest = "${homeDirectory}/.claude/skills";
+      structure = "symlink-tree";
+    };
+  };
 }

@@ -8,6 +8,12 @@
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
     serena.url = "github:oraios/serena";
     serena.inputs.nixpkgs.follows = "nixpkgs";
+    llm-agents.url = "github:numtide/llm-agents.nix";
+    agent-skills-nix.url = "github:Kyure-A/agent-skills-nix";
+    agent-skills-nix.inputs.nixpkgs.follows = "nixpkgs";
+    agent-skills-nix.inputs.home-manager.follows = "home-manager";
+    claude-security-skills.url = "github:sabakan0123/claude-security-skills";
+    claude-security-skills.flake = false;
   };
 
   outputs =
@@ -51,4 +57,8 @@
         }) (builtins.attrNames systems)
       );
     };
+    nixConfig = {
+    extra-substituters = [ "https://cache.numtide.com" ];
+    extra-trusted-public-keys = [ "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g=" ];
+  };
 }
