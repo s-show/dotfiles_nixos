@@ -1,8 +1,8 @@
 -- テストで古いバージョンの Neovim を起動したときのエラー回避
 if vim.fn.has('nvim-0.11') == 1 then
-  vim.lsp.config('*', {
-    capabilities = require('ddc_source_lsp').make_client_capabilities(),
-  })
+  -- local capabilities = require('ddc_source_lsp').make_client_capabilities()
+  local capabilities = require('blink.cmp').get_lsp_capabilities()
+  vim.lsp.config('*', { capabilities })
 
   -- 常に有効にする LSP
   local always_enabled = {

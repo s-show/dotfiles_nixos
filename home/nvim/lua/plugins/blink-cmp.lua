@@ -30,14 +30,14 @@ return {
           module = "blink-cmp-skkeleton",
         },
       },
-      -- min_keyword_length = function(ctx)
-      --   -- :wq, :qa -> menu doesn't popup
-      --   -- :Lazy, :wqa -> menu popup
-      --   if ctx.mode == "cmdline" and ctx.line:find("^%l+$") ~= nil then
-      --     return 3
-      --   end
-      --   return 0
-      -- end,
+      min_keyword_length = function(ctx)
+        -- :wq, :qa -> menu doesn't popup
+        -- :Lazy, :wqa -> menu popup
+        if ctx.mode == "cmdline" and ctx.line:find("^%l+$") ~= nil then
+          return 3
+        end
+        return 0
+      end,
     },
     completion = {
       menu = {
@@ -63,14 +63,24 @@ return {
     },
     cmdline = {
       keymap = {
-        preset = 'inherit',
+        ['<Tab>'] = { 'show_and_insert_or_accept_single', 'select_next' },
+        ['<S-Tab>'] = { 'show_and_insert_or_accept_single', 'select_prev' },
+        ['<C-space>'] = { 'show', 'fallback' },
+        ['<C-n>'] = { 'select_next', 'fallback' },
+        ['<C-p>'] = { 'select_prev', 'fallback' },
+        ['<Down>'] = { 'select_next', 'fallback' },
+        ['<Up>'] = { 'select_prev', 'fallback' },
+        ['<Right>'] = { 'select_next', 'fallback' },
+        ['<Left>'] = { 'select_prev', 'fallback' },
+        ['<C-y>'] = { 'select_and_accept', 'fallback' },
+        ['<C-e>'] = { 'cancel', 'fallback' },
+        ['<Enter>'] = { 'accept_and_enter', 'fallback' }
       },
       completion = {
         menu = {
           auto_show = true,
         },
       },
-    }
+    },
   },
 }
-
