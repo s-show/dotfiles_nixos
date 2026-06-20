@@ -156,9 +156,11 @@ in
     ".config/opencode/plugins".source = mkDotfileSymlink "home/opencode/plugins";
     # Neovim
     ".config/nvim".source = mkDotfileSymlink "home/nvim";
+    ".config/nvim_md".source = mkDotfileSymlink "home/nvim_md";
     ".config/nvim_ime".source = mkDotfileSymlink "home/nvim_ime";
     ".config/nvim_demo".source = mkDotfileSymlink "home/nvim_demo";
     ".config/nvim_minimum".source = mkDotfileSymlink "home/nvim_minimum";
+    ".local/bin/nvim_md".source = mkDotfileSymlink "home/scripts/nvim_md.sh";
     ".local/bin/nvim_ime".source = mkDotfileSymlink "home/scripts/nvim_ime.sh";
     ".local/bin/nvim_demo".source = mkDotfileSymlink "home/scripts/nvim_demo.sh";
     ".local/bin/nvim_minimum".source = mkDotfileSymlink "home/scripts/nvim_minimum.sh";
@@ -194,6 +196,7 @@ in
     # 自作スクリプトに実行権限を付与する
     makeScriptsExecutable = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
       chmod +x \
+        "${homeDirectory}/.dotfiles/home/scripts/nvim_md.sh" \
         "${homeDirectory}/.dotfiles/home/scripts/nvim_ime.sh" \
         "${homeDirectory}/.dotfiles/home/scripts/nvim_demo.sh" \
         "${homeDirectory}/.dotfiles/home/scripts/nvim_minimum.sh" \
