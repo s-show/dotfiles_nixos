@@ -159,7 +159,8 @@ in
     ".local/bin/nvim_ime".source = mkDotfileSymlink "home/scripts/nvim_ime.sh";
     ".local/bin/nvim_demo".source = mkDotfileSymlink "home/scripts/nvim_demo.sh";
     ".local/bin/nvim_minimum".source = mkDotfileSymlink "home/scripts/nvim_minimum.sh";
-    "${homeDirectory}/.dotfiles/home/nvim_ime/lua/util/operate_tmux.lua".source = mkDotfileSymlink "home/nvim/lua/util/operate_tmux.lua";
+    "${homeDirectory}/.dotfiles/home/nvim_ime/lua/util/operate_tmux.lua".source =
+      mkDotfileSymlink "home/nvim/lua/util/operate_tmux.lua";
     # ZSH
     ".config/zsh".source = mkDotfileSymlink "home/zsh";
     ".config/sheldon/plugins.toml".source = mkDotfileSymlink "home/plugins.toml";
@@ -175,8 +176,10 @@ in
     ".local/bin/open_prompt_pane".source = mkDotfileSymlink "home/scripts/open_prompt_pane.sh";
     ".local/bin/tmux_pane_resize".source = mkDotfileSymlink "home/scripts/tmux_pane_resize.sh";
     # tmux-which-key
-    ".config/tmux/plugins/tmux-which-key/config.yaml".source = mkDotfileSymlink "home/tmux/tmux-which-key/config.yaml";
-    ".local/share/tmux/plugins/tmux-which-key/init.tmux".source = mkDotfileSymlink "home/tmux/tmux-which-key/init.tmux";
+    ".config/tmux/plugins/tmux-which-key/config.yaml".source =
+      mkDotfileSymlink "home/tmux/tmux-which-key/config.yaml";
+    ".local/share/tmux/plugins/tmux-which-key/init.tmux".source =
+      mkDotfileSymlink "home/tmux/tmux-which-key/init.tmux";
   };
 
   # Home activation scripts

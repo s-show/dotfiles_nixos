@@ -137,7 +137,7 @@ end
 --- 指定したペインにテキストを送信する
 --- 直接送信だと改行コードが失われるので一時ファイルを経由している
 ---@param pane_path string
----@param text string
+---@param text string?
 function M.send_prompt_tmux_pane(pane_path, text)
   if M.file_exist(pane_path) then
     local current_win_id = M.get_tmux_current_window_id()
@@ -191,6 +191,20 @@ function M.send_key_tmux_frontend(key)
   end
 end
 
+local function exchange_key(key)
+  local exchange_keys = {}
+  exchange_keys["C-u"] = "C-M-u"
+  exchange_keys["C-d"] = "C-M-d"
+  exchange_keys["C-e"] = "C-M-e"
+  exchange_keys["C-y"] = "C-M-y"
+  vim.print(exchange_keys[key])
+  if exchange_keys.key == nil then
+    return key
+  else
+    return exchange_keys.key
+  end
+end
+
 --- AI ツールが起動しているペインをスクロールする
 --- 必要な情報を収集して send_key_tmux 関数に渡す役目を担っている
 ---@param key string
@@ -199,12 +213,14 @@ function M.scroll_src_pane(key)
     local current_win_id = M.get_tmux_current_window_id()
     local pane_id = M.get_tmux_pane_id(M.aitool_pane_path)
     local _, aitool_name = M.aitool_exist()
+    vim.print(aitool_name)
 
     -- OpenCode はコピーモードになっているとスクロールできないのでコピーモードを解除しておく
     if aitool_name == 'opencode' then
       if M.copy_mode_check(current_win_id, pane_id) then
         M.copy_mode_off(current_win_id, pane_id)
       end
+      key = exchange_key(key)
     else
       -- OpenCode 以外はコピーモードでなければスクロールできないのでコピーモードに移行しておく
       if M.copy_mode_check(current_win_id, pane_id) == false then
