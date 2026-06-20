@@ -25,7 +25,7 @@ in
     };
 
     # カスタム設定を追加
-    initExtra = ''
+    initContent = ''
       # Sheldon plugin manager
       if command -v sheldon &> /dev/null; then
         eval "$(sheldon source)"

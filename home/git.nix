@@ -1,18 +1,22 @@
 { pkgs, ... }:
 {
   programs.git = {
-    enable = true;
-    userName = "s-show";
-    userEmail = "s1shimz@gmail.com";
-    delta = {
-      enable = true;
-      options = {
-        side-by-side = true;
-        syntax-theme = "GitHub";
-        keep-plus-minus-markers = true;
+    settings = {
+      user = {
+        email = "s1shimz@gmail.com";
+        name = "s-show";
       };
     };
-    extraConfig = {
+    enable = true;
+    # delta = {
+    #   enable = true;
+    #   options = {
+    #     side-by-side = true;
+    #     syntax-theme = "GitHub";
+    #     keep-plus-minus-markers = true;
+    #   };
+    # };
+    settings = {
       delta = {
         navigate = true;
       };
@@ -20,6 +24,11 @@
         conflictStyle = "zdiff3";
       };
     };
+  };
+
+  programs.delta = {
+    enable = true;
+    enableGitIntegration = true;
   };
 
   # GitHub CLI
