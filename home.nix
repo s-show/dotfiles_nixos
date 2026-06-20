@@ -129,7 +129,7 @@ in
       inputs.llm-agents.packages.${pkgs.system}.claude-code
       inputs.llm-agents.packages.${pkgs.system}.gemini-cli
       # inputs.llm-agents.packages.${pkgs.system}.opencode
-      rtk
+      inputs.rtk-nixpkgs.legacyPackages.${pkgs.system}.rtk
 
       # Path to windows App
       (pkgs.writeShellScriptBin "clip.exe" ''
