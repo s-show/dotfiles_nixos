@@ -21,8 +21,6 @@ return {
               if not parent_ref_id then
                 return
               end
-              vim.print(self.files.trie.value)
-              vim.print(parent_ref_id)
               if self.files.trie.value == parent_ref_id then
                 self:exec_action("n_goto_parent")
               else

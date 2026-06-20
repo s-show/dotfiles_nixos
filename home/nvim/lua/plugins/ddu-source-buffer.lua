@@ -1,3 +1,3 @@
 return {
-  "Shougo/ddu-source-file_rec",
+  "https://github.com/shun/ddu-source-buffer",
 }

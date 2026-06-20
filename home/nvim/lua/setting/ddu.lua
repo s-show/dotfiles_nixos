@@ -107,14 +107,6 @@ vim.fn["ddu#custom#patch_local"]("smart", {
       },
     },
   },
-  -- sourceOptions = {
-  --   buffer = {
-  --     matchers = { 'matcher_relative' },
-  --   },
-  --   mr = {
-  --     matchers = { 'matcher_relative' },
-  --   },
-  -- },
   unique = true,
   postFilters = {
     'sorter_mtime',
@@ -281,30 +273,6 @@ vim.fn["ddu#custom#patch_local"]("mr", {
   },
 })
 
-vim.fn["ddu#custom#patch_local"]("source", {
-  uiParams = {
-    ff = {
-      previewFloating = false,
-      winHeight = '&lines / 2',
-      winWidth = '&columns / 3',
-      winRow = '&lines / 4',
-      winCol = '&columns / 6 * 2',
-      displaySourceName = "no",
-    }
-  },
-  sources = {
-    {
-      name = { "source" },
-    },
-  },
-  sourceOptions = {
-    source = {
-      defaultAction = "execute",
-      sorters = { 'sorter_alpha' }
-    }
-  }
-})
-
 vim.fn["ddu#custom#patch_local"]("colorscheme", {
   uiParams = {
     ff = {
@@ -382,6 +350,30 @@ vim.fn["ddu#custom#patch_local"]("nb", {
       }
     },
   },
+})
+
+vim.fn["ddu#custom#patch_local"]("source", {
+  uiParams = {
+    ff = {
+      previewFloating = false,
+      winHeight = '&lines / 2',
+      winWidth = '&columns / 3',
+      winRow = '&lines / 4',
+      winCol = '&columns / 6 * 2',
+      displaySourceName = "no",
+    }
+  },
+  sources = {
+    {
+      name = { "source" },
+    },
+  },
+  sourceOptions = {
+    source = {
+      defaultAction = "execute",
+      sorters = { 'sorter_alpha' }
+    }
+  }
 })
 
 local ddu_vim_autocmd_group = vim.api.nvim_create_augroup('ddu_vim', {})

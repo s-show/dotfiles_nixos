@@ -34,6 +34,7 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
     vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
     -- indentation, provided by nvim-treesitter
     vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+    vim.wo.foldmethod = "manual"
   end,
 })
 

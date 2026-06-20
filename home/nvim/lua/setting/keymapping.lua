@@ -90,9 +90,9 @@ vim.keymap.set('n', '<leader>tt', function()
 vim.keymap.set('n', 'H',
   function()
     if vim.fn.line('.') == vim.fn.line('w0') then
-      return '<PageUp>H<Plug>(H)'
+      return '<PageUp>H'
     else
-      return 'H<Plug>(H)'
+      return 'H'
     end
   end,
   {
@@ -104,17 +104,17 @@ vim.keymap.set('n', 'H',
 vim.keymap.set('n', 'L',
   function()
     if vim.fn.line('.') == vim.fn.line('w$') then
-      return '<PageDown>Lzb<Plug>(L)'
+      return '<PageDown>Lzb'
     else
-      return 'L<Plug>(L)'
+      return 'L'
     end
   end,
   {
     expr = true,
     desc = 'L to L and PageDown'
-  })
+  }
+)
 
--- [Vimでz連打でカーソル行を画面中央・上・下に移動させる](https://zenn.dev/vim_jp/articles/67ec77641af3f2) を Lua に書き直し -- [Vimでz連打でカーソル行を画面中央・上・下に移動させる](https://zenn.dev/vim_jp/articles/67ec77641af3f2) を Lua に書き直し
 -- [Vimでz連打でカーソル行を画面中央・上・下に移動させる](https://zenn.dev/vim_jp/articles/67ec77641af3f2) を Lua に書き直し
 vim.keymap.set('n', 'zz', 'zz<Plug>(z1)', { desc = "multiple z type 'recenter-top-bottom'" })
 vim.keymap.set('n', '<Plug>(z1)z', 'zt<plug>(z2)')

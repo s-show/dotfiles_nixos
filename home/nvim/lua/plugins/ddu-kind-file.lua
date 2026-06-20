@@ -1,3 +1,3 @@
 return {
-  "Shougo/ddu-kind-file",
+  "https://github.com/Shougo/ddu-kind-file",
 }
