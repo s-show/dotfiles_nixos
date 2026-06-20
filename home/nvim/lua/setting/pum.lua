@@ -16,6 +16,8 @@ vim.api.nvim_create_autocmd('InsertEnter', {
   end
 })
 
+-- abbrev モードの場合だけ一番目の候補を選択しないようにする
+-- abbrev モードを利用した英数字入力で意図しない変換が発生するのを防止するため。
 vim.api.nvim_create_autocmd(
   { 'User' },
   {

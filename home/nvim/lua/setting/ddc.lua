@@ -86,7 +86,6 @@ vim.fn["ddc#custom#patch_global"]({
         function(body)
           vim.fn["vsnip#anonymous"](body)
         end),
-      enableResolveItem = true,
       enableAdditionalTextEdit = true,
     },
     file = {
@@ -165,5 +164,4 @@ vim.api.nvim_create_autocmd(
   }
 )
 
-require('setting.ddc-codecompanion')()
 vim.fn['skkeleton#initialize']()
