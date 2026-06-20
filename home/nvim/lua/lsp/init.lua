@@ -32,12 +32,12 @@ if vim.fn.has('nvim-0.11') == 1 then
       markers = { 'package.json', 'tsconfig.json', 'deno.jsonc' },
     },
     {
-      filetypes = { 'html', 'css', 'typescriptreact', 'javascriptreact' },
+      filetypes = { 'html', 'css', 'typescriptreact', 'javascriptreact', 'eruby' },
       lsp = 'emmet_ls',
       markers = { 'package.json' },
     },
     {
-      filetypes = { 'ruby' },
+      filetypes = { 'ruby', 'eruby' },
       lsp = 'ruby_lsp',
       markers = { 'Gemfile', '.ruby-version' },
     },
@@ -177,6 +177,13 @@ vim.api.nvim_create_autocmd('LspAttach', {
     local client = vim.lsp.get_client_by_id(args.data.client_id)
     if client and client.server_capabilities.inlayHintProvider then
       vim.lsp.inlay_hint.enable(true, { bufnr = args.buf })
+    end
+    -- make_client_capabilities() が resolveSupport を広告するため clangd が
+    -- resolveProvider: true を返すが、実際の呼び出しは denops で unhandled rejection
+    -- になるため、capability を上書きして completionItem/resolve を抑制する
+    if client and client.name == 'clangd'
+      and client.server_capabilities.completionProvider then
+      client.server_capabilities.completionProvider.resolveProvider = false
     end
   end
 })
