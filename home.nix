@@ -128,6 +128,7 @@ in
       inputs.llm-agents.packages.${pkgs.system}.codex
       inputs.llm-agents.packages.${pkgs.system}.claude-code
       inputs.llm-agents.packages.${pkgs.system}.gemini-cli
+      inputs.llm-agents.packages.${pkgs.system}.pi
       # inputs.llm-agents.packages.${pkgs.system}.opencode
       inputs.rtk-nixpkgs.legacyPackages.${pkgs.system}.rtk
 
