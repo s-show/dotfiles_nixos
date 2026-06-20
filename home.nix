@@ -73,6 +73,8 @@ in
       procs
       broot
       yazi
+      betterleaks
+      git-filter-repo
 
       # Shell and terminal
       starship
