@@ -1,15 +1,25 @@
 # Repository Guidelines
 
 ## Project Structure & Module Organization
-This repository is a Nix Flakes-based dotfiles setup for NixOS on WSL. Core entry points are `flake.nix`, `configuration.nix`, and `home.nix`. Machine targets are defined in `flake.nix` as `desktop` and `zenbook`.
+This repository is a Nix Flakes-based dotfiles setup for NixOS on WSL. Core entry points are `flake.nix`, `configuration.nix`, and `home.nix`. Machine targets are defined in `flake.nix` as `desktop` (`x86_64-linux`) and `zenbook` (`aarch64-linux`).
+
+System-level secrets are managed with `sops-nix` via `secrets/secrets.yaml`; the age key pair must stay outside the repo at `~/.config/sops/age/keys.txt`.
 
 Most user-facing configuration lives under `home/`:
-- `home/nvim`, `home/nvim_ime`, `home/nvim_demo`, `home/nvim_minimum`: Neovim variants
-- `home/zsh`, `home/tmux-which-key`, `home/superfile`: shell and terminal tooling
-- `home/scripts`: helper scripts used by Home Manager symlinks
-- `home/packages`: local Nix package definitions
+- `home/nvim`, `home/nvim_ime`, `home/nvim_demo`, `home/nvim_minimum`: Neovim variants (main, Japanese IME optimized, demo, minimal)
+- `home/zsh`, `home/tmux`, `home/superfile`: shell and terminal tooling
+  - `home/zsh/zeno/`: zeno snippets and completions written in TypeScript
+  - `home/tmux/tmux-which-key/`: custom tmux-which-key config and init script
+- `home/scripts`: helper scripts used by Home Manager symlinks (AI tool wrappers, tmux pane resizers, etc.)
+- `home/packages`: local Nix package definitions (`wsl-notify-send.nix`)
+- `home/opencode/`: OpenCode plugins (`notification.js`, `env-protection.js`)
 
-Encrypted secrets live in `secrets/secrets.yaml`; age key material must stay outside the repo.
+Additional modules imported by `home.nix`:
+- `home/zsh/zsh.nix`
+- `home/fzf.nix`
+- `home/git.nix`
+- `home/direnv.nix`
+- `home/opencode/opencode.nix`
 
 ## Build, Test, and Development Commands
 - `nix flake check`: validate flake evaluation and module wiring
@@ -17,6 +27,7 @@ Encrypted secrets live in `secrets/secrets.yaml`; age key material must stay out
 - `nix flake update`: refresh flake inputs and update `flake.lock`
 - `./home/scripts/flakes-update.sh`: run the full system rebuild workflow
 - `nvim -u home/nvim/init.lua`: test the main Neovim config in isolation
+- `nvim -u home/nvim_ime/init.lua`: test the IME Neovim config in isolation
 
 Use the smallest command that proves the change. For example, a Zsh edit usually needs `nix flake check`, while a Neovim plugin change should also be smoke-tested with `nvim -u ...`.
 

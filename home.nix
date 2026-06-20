@@ -238,9 +238,15 @@ in
       };
     };
     skills.enableAll = true;
-    targets.claude = {
-      dest = "${homeDirectory}/.claude/skills";
-      structure = "symlink-tree";
+    targets = {
+      claude = {
+        dest = "${homeDirectory}/.claude/skills";
+        structure = "symlink-tree";
+      };
+      codex = {
+        dest = "${homeDirectory}/.codex/skills";
+        structure = "copy-tree";
+      };
     };
   };
 }
