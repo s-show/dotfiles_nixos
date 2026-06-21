@@ -180,6 +180,7 @@ in
     ".local/bin/gemini_wrapper".source = mkDotfileSymlink "home/scripts/gemini_wrapper.sh";
     ".local/bin/open_prompt_pane".source = mkDotfileSymlink "home/scripts/open_prompt_pane.sh";
     ".local/bin/tmux_pane_resize".source = mkDotfileSymlink "home/scripts/tmux_pane_resize.sh";
+    ".local/bin/get_winclipboard_image".source = mkDotfileSymlink "home/scripts/get_winclipboard_image.sh";
     # tmux-which-key
     ".config/tmux/plugins/tmux-which-key/config.yaml".source =
       mkDotfileSymlink "home/tmux/tmux-which-key/config.yaml";
@@ -209,6 +210,7 @@ in
         "${homeDirectory}/.dotfiles/home/scripts/gemini_wrapper.sh" \
         "${homeDirectory}/.dotfiles/home/scripts/open_prompt_pane.sh" \
         "${homeDirectory}/.dotfiles/home/scripts/tmux_pane_resize.sh" \
+        "${homeDirectory}/.dotfiles/home/scripts/get_winclipboard_image.sh" \
         "${homeDirectory}/.dotfiles/home/tmux/tmux-which-key/init.tmux"
     '';
   };
