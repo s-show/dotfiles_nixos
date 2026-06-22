@@ -114,6 +114,20 @@ vim.keymap.set('n', 'L',
     desc = 'L to L and PageDown'
   }
 )
+-- Gのマッピング（条件分岐あり）
+vim.keymap.set('n', 'G',
+  function()
+    if vim.fn.line('.') == vim.fn.line('w$') then
+      return '<C-o>'
+    else
+      return 'G'
+    end
+  end,
+  {
+    expr = true,
+    desc = 'G to G or Ctrl-o'
+  }
+)
 
 -- [Vimでz連打でカーソル行を画面中央・上・下に移動させる](https://zenn.dev/vim_jp/articles/67ec77641af3f2) を Lua に書き直し
 vim.keymap.set('n', 'zz', 'zz<Plug>(z1)', { desc = "multiple z type 'recenter-top-bottom'" })
