@@ -1,7 +1,7 @@
 -- 分割した設定ファイルを読み込む
 -- プラグインと設定ファイルの読み込み順を間違えるとエラーになるので、
 -- 読み込み順は適宜調整している。
-require('setting/keymapping')
+require('setting.keymapping')
 require('setting.user_interface')
 
 -- Bootstrap lazy.nvim
@@ -13,7 +13,6 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
     vim.api.nvim_echo({
       { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
       { out, "WarningMsg" },
-
       { "\nPress any key to exit..." },
     }, true, {})
     vim.fn.getchar()
@@ -23,10 +22,6 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
-  dev = {
-    path = "~/my_neovim_plugins",
-    patterns = { 'extend_word_motion.nvim' },
-  },
   spec = {
     import = 'plugins',
   }
@@ -36,3 +31,11 @@ require("lazy").setup({
 require('setting.colorscheme')
 require('setting.basic')
 require('setting.clipboard')
+
+-- 引数でファイルを渡してもノーマルモードで起動させるための設定
+vim.api.nvim_create_autocmd("VimEnter", {
+  pattern = "*.md",
+  callback = function()
+    vim.cmd('stopinsert')
+  end,
+})
