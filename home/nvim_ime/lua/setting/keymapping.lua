@@ -2,8 +2,6 @@
 vim.g.mapleader = " "
 
 -- カーソル操作系
--- vim.keymap.set('n', 'j', 'gj', { noremap = true })
--- vim.keymap.set('n', 'k', 'gk', { noremap = true })
 vim.keymap.set('n', '<Up>', 'gk')
 vim.keymap.set('n', '<Down>', 'gj')
 -- nvim-cmp が上下キーを使うので「Ctrl + 上下」で移動する
