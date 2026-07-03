@@ -90,6 +90,7 @@ in
       tmuxPlugins.tmux-thumbs
       tmuxPlugins.gruvbox
       tmuxPlugins.tmux-nova
+      zellij
 
       # Programming languages and runtimes
       lua51Packages.luarocks-nix
@@ -154,6 +155,7 @@ in
     ".config/superfile".source = mkDotfileSymlink "home/superfile";
     ".config/tmux/tmux.conf".source = mkDotfileSymlink "home/tmux/tmux.conf";
     ".config/opencode/plugins".source = mkDotfileSymlink "home/opencode/plugins";
+    ".config/zellij".source = mkDotfileSymlink "home/zellij";
     # Neovim
     ".config/nvim".source = mkDotfileSymlink "home/nvim";
     ".config/nvim_md".source = mkDotfileSymlink "home/nvim_md";
