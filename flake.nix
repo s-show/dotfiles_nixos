@@ -13,6 +13,8 @@
     agent-skills-nix.url = "github:Kyure-A/agent-skills-nix";
     agent-skills-nix.inputs.nixpkgs.follows = "nixpkgs";
     agent-skills-nix.inputs.home-manager.follows = "home-manager";
+    nixos-wsl.url = "github:nix-community/NixOS-WSL";
+    nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
     claude-security-skills.url = "github:sabakan0123/claude-security-skills";
     claude-security-skills.flake = false;
   };
@@ -33,6 +35,7 @@
           system = system;
           modules = [
             ./configuration.nix
+            inputs.nixos-wsl.nixosModules.default
             inputs.sops-nix.nixosModules.sops
             # Home ManagerをNixOSモジュールとして統合
             inputs.home-manager.nixosModules.home-manager

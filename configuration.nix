@@ -19,8 +19,7 @@ in
   networking.hostName = hostname;
 
   imports = [
-    # include NixOS-WSL modules
-    <nixos-wsl/modules>
+    # NixOS-WSL modules are imported via flake input in flake.nix
   ];
 
   sops.defaultSopsFile = ./secrets/secrets.yaml;
@@ -74,6 +73,7 @@ in
   nixpkgs.config.allowUnfree = true;
   users.users.s-show = {
     isNormalUser = true;
+    uid = 1001;
     extraGroups = [
       "wheel"
       "docker"
