@@ -102,7 +102,7 @@ return {
       },
     },
     keys = {
-      { "-", "<Cmd>Fyler kind=float<Cr>", desc = "Open Fyler View" },
+      { "-", "<Cmd>Fyler kind=floating<Cr>", desc = "Open Fyler View" },
     }
   }
 }
