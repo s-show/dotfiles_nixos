@@ -1,1 +1,1 @@
-/nix/store/pczwwh0i56iqvvhyzfavjcarp7vy19if-home-manager-files/.dotfiles/home/nvim_ime/lua/util/operate_tmux.lua
+/nix/store/glfyl28lz1crgq162ax7jdi4di1ahpcq-home-manager-files/.dotfiles/home/nvim_ime/lua/util/operate_tmux.lua
