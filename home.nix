@@ -91,6 +91,7 @@ in
       tmuxPlugins.gruvbox
       tmuxPlugins.tmux-nova
       zellij
+      herdr
 
       # Programming languages and runtimes
       lua51Packages.luarocks-nix
